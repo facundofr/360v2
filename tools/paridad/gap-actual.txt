@@ -1,0 +1,56 @@
+
+===== frontend (PRODUCCION): 229 endpoints, 15 SIN ruta backend =====
+  /admin/dashboard/completo                                    <- frontend/src/components/features/admin/DashboardAdmin.jsx
+  /admin/lista-precios/importar                                <- frontend/src/components/features/admin/ListaPreciosAdmin.jsx
+  /afiliaciones/sw.js                                          <- frontend/src/main.jsx
+  /api/vafirma/estado/:p                                       <- frontend/src/components/buttons/BotonConsultarFirma.jsx, frontend/src/hooks/useEstadoFirmaPoliza.js
+  /api/whatsapp/cierre-conversacion                            <- frontend/src/components/features/vendedor/WhatsAppVista.jsx
+  /api/whatsapp/informacion-adicional                          <- frontend/src/components/features/vendedor/WhatsAppVista.jsx
+  /api/whatsapp/plantillas                                     <- frontend/src/components/features/vendedor/WhatsAppVista.jsx
+  /api/whatsapp/saludo-inicial                                 <- frontend/src/components/features/vendedor/WhatsAppVista.jsx
+  /api/whatsapp/seguimiento-cotizacion                         <- frontend/src/components/features/vendedor/WhatsAppVista.jsx
+  /api/whatsapp/seguimiento-poliza                             <- frontend/src/components/features/vendedor/WhatsAppVista.jsx
+  /auth/renew-session                                          <- frontend/src/components/common/SessionManager.jsx
+  /nacionalidades                                              <- frontend/src/services/nacionalidadService.js
+  /performance/metrics                                         <- frontend/src/components/features/admin/MonitoringDashboard.jsx
+  /polizas/:p/temporal                                         <- frontend/src/components/features/vendedor/PolizaForm.jsx
+  /supervisor/metricas                                         <- frontend/src/components/features/supervisor/VendedoresSupervisor.jsx
+
+===== frontendv-2: 216 endpoints, 10 SIN ruta backend =====
+  /:p/polizas/:p/documentos                                    <- frontendv-2/src/components/modals/CargaDocumentosModal.tsx
+  /admin/:p/:p                                                 <- frontendv-2/src/features/admin/components/UsuariosAdmin.tsx, frontendv-2/src/features/admin/components/VendedoresAdmin.tsx
+  /admin/lista-precios/importar                                <- frontendv-2/src/features/admin/components/ListaPreciosAdmin.tsx
+  /api/vafirma/estado/:p                                       <- frontendv-2/src/components/buttons/BotonConsultarFirma.tsx
+  /api:p                                                       <- frontendv-2/src/components/modals/ModalExportacion.tsx
+  /nacionalidades                                              <- frontendv-2/src/services/nacionalidadService.ts
+  /performance/metrics                                         <- frontendv-2/src/features/admin/components/MonitoringDashboard.tsx
+  /polizas/:p/enviar-:p                                        <- frontendv-2/src/features/vendedor/components/PolizaForm.tsx
+  /supervisor/metricas                                         <- frontendv-2/src/features/supervisor/components/SupervisorVendedoresView.tsx
+  /sw.js                                                       <- frontendv-2/src/main.tsx
+
+===== GAP REAL: endpoints backend usados en PROD y NO en V2 (25) =====
+  /admin/disable-user/:p                                       <- frontend/src/components/features/admin/UsuariosAdmin.jsx
+  /admin/enable-user/:p                                        <- frontend/src/components/features/admin/UsuariosAdmin.jsx
+  /admin/lista-precios/aumentar/todos                          <- frontend/src/components/features/admin/ListaPreciosAdmin.jsx
+  /admin/lista-precios/disminuir/todos                         <- frontend/src/components/features/admin/ListaPreciosAdmin.jsx
+  /admin/vendedores/:p                                         <- frontend/src/components/features/admin/VendedoresAdmin.jsx
+  /admin/vendedores/:p/toggle-status                           <- frontend/src/components/features/admin/VendedoresAdmin.jsx
+  /admin/vendedores/asignar-supervisor                         <- frontend/src/components/features/admin/VendedoresAdmin.jsx
+  /admin/whatsapp/conversacion/:p/mensajes                     <- frontend/src/components/features/admin/ProspectosAdmin.jsx
+  /admin/whatsapp/conversaciones/:p                            <- frontend/src/components/features/admin/ProspectosAdmin.jsx
+  /chat/plantillas                                             <- frontend/src/components/common/WhatsAppChat.jsx
+  /polizas/:p/enviar-email                                     <- frontend/src/components/features/vendedor/poliza-form/PasoResumen.jsx
+  /polizas/:p/enviar-whatsapp                                  <- frontend/src/components/features/vendedor/poliza-form/PasoResumen.jsx, frontend/src/components/features/vendedor/ProspectosDashboard.jsx
+  /polizas/documentos/:p/actualizar                            <- frontend/src/components/features/vendedor/ProspectosDashboard.jsx
+  /prospectos                                                  <- frontend/src/components/features/vendedor/ProspectosDashboard.jsx
+  /supervisor/disable-vendedor/:p                              <- frontend/src/components/features/supervisor/VendedoresSupervisor.jsx
+  /supervisor/enable-vendedor/:p                               <- frontend/src/components/features/supervisor/VendedoresSupervisor.jsx
+  /supervisor/polizas/:p/documentos/estadisticas               <- frontend/src/components/supervisor/CargaMultipleDocumentos.jsx, frontend/src/components/supervisor/PolizaDetalleSupervisor.jsx
+  /supervisor/polizas/:p/documentos/multiple                   <- frontend/src/components/supervisor/CargaMultipleDocumentos.jsx
+  /supervisor/polizas/documentos/:p                            <- frontend/src/components/features/supervisor/PolizasSupervisor.jsx
+  /supervisor/polizas/documentos/:p/actualizar                 <- frontend/src/components/features/supervisor/PolizasSupervisor.jsx
+  /supervisor/polizas/documentos/:p/preview                    <- frontend/src/components/features/supervisor/PolizasSupervisor.jsx, frontend/src/components/supervisor/CargaMultipleDocumentos.jsx
+  /tipos_afiliacion                                            <- frontend/src/components/features/vendedor/ProspectosDashboard.jsx
+  /vendedor/polizas/:p/documentos                              <- frontend/src/components/features/vendedor/ProspectosDashboard.jsx
+  /vendedor/polizas/documentos/:p/download                     <- frontend/src/components/features/vendedor/ProspectosDashboard.jsx
+  /vendedor/polizas/documentos/:p/preview                      <- frontend/src/components/features/vendedor/ProspectosDashboard.jsx

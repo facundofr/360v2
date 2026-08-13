@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sin conexión - Cober360</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #8B7EC8, #2D3047);
+      color: white;
+      text-align: center;
+      padding: 50px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .container { max-width: 420px; }
+    .logo {
+      width: 80px; height: 80px;
+      background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 1.5rem; color: #8B7EC8; font-weight: 700;
+    }
+    .icon { font-size: 3.5rem; margin-bottom: 1.5rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 1rem; }
+    p { opacity: 0.9; line-height: 1.7; margin-bottom: 2rem; }
+    button {
+      background: white; color: #2D3047; border: none;
+      padding: 12px 28px; border-radius: 8px;
+      font-weight: 600; cursor: pointer; font-size: 1rem;
+      transition: transform 0.2s, background 0.2s;
+    }
+    button:hover { background: #f0f0f0; transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">C360</div>
+    <div class="icon">📡</div>
+    <h1>Sin conexión</h1>
+    <p>
+      No hay conexión a internet. Algunas funciones pueden no estar
+      disponibles hasta que se restablezca la red.
+    </p>
+    <button onclick="window.location.reload()">Reintentar conexión</button>
+  </div>
+</body>
+</html>

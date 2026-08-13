@@ -1,0 +1,7 @@
+[
+  { "id": 1, "header": "Q1 Report", "type": "Executive Summary", "status": "In Progress", "target": "1,000", "limit": "2,000", "reviewer": "Assign reviewer" },
+  { "id": 2, "header": "Marketing Plan", "type": "Table of Contents", "status": "Done", "target": "500", "limit": "1,200", "reviewer": "Eddie Lake" },
+  { "id": 3, "header": "Tech Spec", "type": "Technical Approach", "status": "In Progress", "target": "750", "limit": "1,500", "reviewer": "Assign reviewer" },
+  { "id": 4, "header": "Design Doc", "type": "Design", "status": "Not Started", "target": "300", "limit": "900", "reviewer": "Assign reviewer" },
+  { "id": 5, "header": "Budget", "type": "Capabilities", "status": "Done", "target": "2,000", "limit": "3,500", "reviewer": "Jamik Tashpulatov" }
+]
