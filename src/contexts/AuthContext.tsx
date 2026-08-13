@@ -14,6 +14,7 @@ import {
   persistSessionId,
   clearSession,
 } from "@/lib/auth"
+import { purgarCacheApi } from "@/lib/cache"
 
 export type { AuthUser, Role }
 
@@ -179,6 +180,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } finally {
+      // Esperamos la purga de la caché de API antes de soltar la sesión.
+      // `clearSession()` también la dispara, pero sin await; acá sí podemos
+      // garantizarla porque el logout no hace navegación dura: sólo
+      // `setUser(null)` y el redirect lo resuelve React Router en un re-render.
+      await purgarCacheApi()
+
       clearSession()
       delete axios.defaults.headers.common["Authorization"]
       setUser(null)

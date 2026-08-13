@@ -2,9 +2,26 @@
 // El default es PRODUCCIÓN. Para apuntar al entorno de test
 // (https://wspflows.cober.online) hay que setear VITE_API_BASE_URL explícitamente.
 // Nunca invertir esto: un build sin .env debe fallar hacia producción, no hacia test.
-const BASE = import.meta.env.VITE_API_BASE_URL ?? "https://360.cober.online"
+//
+// ⚠️ NO usar `??` acá. Sólo cae con null/undefined, y una variable declarada con
+// valor VACÍO (típico en el panel de Vercel) pasa derecho: `BASE` quedaba "",
+// `API_URL` quedaba "/api", y el login pegaba contra el propio dominio del
+// front. Ahí el rewrite del SPA lo mandaba a index.html y devolvía
+// 405 Method Not Allowed en el POST. Se trata vacío/espacios como ausente.
+const BASE_ENV = (import.meta.env.VITE_API_BASE_URL ?? "").trim().replace(/\/$/, "")
 
-export const API_URL = `${BASE}/api`
+/**
+ * Modo same-origin: con `VITE_API_SAME_ORIGIN=true` el front pega a `/api`
+ * relativo y el hosting hace de proxy hacia el backend (ver `vercel.json`).
+ * Sirve para evitar CORS sin tocar la whitelist del backend.
+ */
+const SAME_ORIGIN = String(import.meta.env.VITE_API_SAME_ORIGIN ?? "") === "true"
+
+const BASE = BASE_ENV || "https://360.cober.online"
+
+// Con proxy, las llamadas HTTP van relativas; el WebSocket NO, porque los
+// rewrites de Vercel no hacen upgrade a WS: siempre apunta al backend real.
+export const API_URL = SAME_ORIGIN ? "/api" : `${BASE}/api`
 export const WS_URL  = BASE
 // Igual que `frontend/src/components/config.js` (prod usa 4001).
 export const LOCAL_API_URL = "http://localhost:4001"

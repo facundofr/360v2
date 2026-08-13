@@ -48,13 +48,23 @@ self.addEventListener("activate", (event) => {
 })
 
 // ─── Helpers de estrategia ────────────────────────────────────────────────────
+
+/**
+ * La Cache API rechaza cualquier método que no sea GET. El handler de fetch ya
+ * filtra las mutaciones, pero estos helpers se guardan igual para que no vuelva
+ * a colarse un `cache.put()` con un POST desde otro punto de entrada.
+ */
+function sePuedeCachear(request, response) {
+  return request.method === "GET" && !!response && response.status === 200
+}
+
 async function networkFirstWithTimeout(request, cacheName, timeout = TIMEOUTS.FAST_API) {
   const controller = new AbortController()
   const id = setTimeout(() => controller.abort(), timeout)
   try {
     const response = await fetch(request.clone(), { signal: controller.signal })
     clearTimeout(id)
-    if (response && response.status === 200) {
+    if (sePuedeCachear(request, response)) {
       const cache = await caches.open(cacheName)
       cache.put(request.clone(), response.clone())
     }
@@ -72,7 +82,7 @@ async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName)
   const cached = await cache.match(request)
   const fetchPromise = fetch(request.clone())
-    .then((res) => { if (res && res.status === 200) cache.put(request.clone(), res.clone()); return res })
+    .then((res) => { if (sePuedeCachear(request, res)) cache.put(request.clone(), res.clone()); return res })
     .catch(() => undefined)
   return cached || fetchPromise
 }
@@ -83,11 +93,11 @@ async function cacheFirstWithUpdate(request, cacheName) {
   if (cached) {
     const date = new Date(cached.headers.get("date") || 0)
     if (date > new Date(Date.now() - 60 * 60 * 1000)) return cached
-    fetch(request.clone()).then((res) => { if (res && res.status === 200) cache.put(request.clone(), res.clone()) }).catch(() => {})
+    fetch(request.clone()).then((res) => { if (sePuedeCachear(request, res)) cache.put(request.clone(), res.clone()) }).catch(() => {})
     return cached
   }
   const response = await fetch(request.clone())
-  if (response && response.status === 200) cache.put(request.clone(), response.clone())
+  if (sePuedeCachear(request, response)) cache.put(request.clone(), response.clone())
   return response
 }
 
@@ -135,6 +145,15 @@ function getStrategy(request) {
 self.addEventListener("fetch", (event) => {
   if (!event.request.url.startsWith("http")) return
   if (event.request.url.includes("chrome-extension")) return
+
+  // La Cache API SÓLO admite GET: `cache.put()` con un POST/PUT/DELETE tira
+  // "Request method 'POST' is unsupported" y, como el error ocurre dentro del
+  // respondWith, rompe la promesa de la request. Un login (POST /auth/login)
+  // quedaba enganchado ahí.
+  //
+  // Además no tendría sentido cachear mutaciones: se dejan pasar directo a la
+  // red sin que el service worker las toque.
+  if (event.request.method !== "GET") return
 
   const url = new URL(event.request.url)
   if (

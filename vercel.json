@@ -1,10 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "VITE_BASE_PATH=/ pnpm run build",
+  "buildCommand": "VITE_BASE_PATH=/ VITE_API_SAME_ORIGIN=true pnpm run build",
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!assets/|icons/|data/|manifest\\.json|sw\\.js|firebase-messaging-sw\\.js|offline\\.html|favicon\\.ico).*)",
+      "//": "Proxy del API. Va PRIMERO: gana el primer rewrite que matchea. Sin esto, /api/auth/login caía en el catch-all del SPA, se servía index.html y el POST devolvía 405 Method Not Allowed. Además evita CORS: para el navegador todo es mismo origen, así que no hace falta agregar el dominio de Vercel a `allowedOrigins` del backend.",
+      "source": "/api/:path*",
+      "destination": "https://360.cober.online/api/:path*"
+    },
+    {
+      "source": "/((?!api/|assets/|icons/|data/|manifest\\.json|sw\\.js|firebase-messaging-sw\\.js|offline\\.html|favicon\\.ico).*)",
       "destination": "/index.html"
     }
   ],

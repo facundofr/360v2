@@ -13,6 +13,8 @@
 // y viceversa: cualquier despliegue gradual o rollback deslogea a todos.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { purgarCacheApiSync } from "@/lib/cache"
+
 export type Role = "backoffice" | "admin" | "supervisor" | "vendedor"
 
 export interface AuthUser {
@@ -155,6 +157,11 @@ function writeDiscreteKeys(u: AuthUser): void {
 
 /** Persiste la sesión en AMBOS formatos. Único punto de escritura. */
 export function persistSession(token: string, user: AuthUser): void {
+  // Al ENTRAR se descarta la caché de API del service worker. Es la garantía
+  // real de que nadie ve datos del usuario anterior: no depende de que ese
+  // usuario haya cerrado sesión (puede haber cerrado el navegador y listo).
+  purgarCacheApiSync()
+
   localStorage.setItem(K.token, token)
   writeDiscreteKeys(user)
   localStorage.setItem(K.blob, JSON.stringify(user))
@@ -181,6 +188,15 @@ export function persistToken(token: string): void {
 export function clearSession(): void {
   Object.values(K).forEach((k) => localStorage.removeItem(k))
   LEGACY_KEYS.forEach((k) => localStorage.removeItem(k))
+
+  // Y la caché de API del service worker, que sobrevive al logout porque la
+  // CacheStorage es por origen. Sin esto, un logout seguido de una pérdida de
+  // red le mostraría al siguiente usuario los prospectos, pólizas y
+  // declaraciones de salud del anterior.
+  //
+  // Best-effort: si la redirección al login descarga la página antes de que
+  // termine, el `purgarCacheApiSync()` de `persistSession()` lo cubre.
+  purgarCacheApiSync()
 }
 
 // ─── Migración de claves viejas ───────────────────────────────────────────────
