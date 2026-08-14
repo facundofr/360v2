@@ -23,9 +23,15 @@ const BASE = BASE_ENV || "https://360.cober.online"
 // rewrites de Vercel no hacen upgrade a WS: siempre apunta al backend real.
 export const API_URL = SAME_ORIGIN ? "/api" : `${BASE}/api`
 export const WS_URL  = BASE
-// Igual que `frontend/src/components/config.js` (prod usa 4001).
-export const LOCAL_API_URL = "http://localhost:4001"
-export const LOCAL_WS_URL  = "http://localhost:4001"
+
+// NOTA: producción define además `LOCAL_API_URL = "http://localhost:4001"` y lo
+// usa en `ENDPOINTS.PERFORMANCE` (`MonitoringDashboard.jsx:33`). Eso sólo
+// funcionaría si el navegador corriera EN el servidor, así que en producción esa
+// llamada falla igual. Acá no se replica: `MonitoringDashboard.tsx` pega a
+// `${API_URL}/performance/metrics`, que va por el mismo origen que el resto.
+//
+// (Ese endpoint hoy devuelve 404: `/api/performance` está comentado en
+// `backend/server.js:297`. Es una limitación del backend, no del front.)
 
 /*
   Path bajo el que se sirve la app.
@@ -42,8 +48,24 @@ export const BASENAME = import.meta.env.BASE_URL.replace(/\/$/, "")
 // ─── reCAPTCHA v3 ─────────────────────────────────────────────────────────────
 // La *site key* es pública por diseño (viaja en el HTML). El secreto vive sólo
 // en el backend. Default igual a producción (`frontend/src/main.jsx`).
+//
+// ⚠️ LA SITE KEY ESTÁ ATADA AL DOMINIO. Google valida contra la lista de dominios
+// registrados para esa key, así que un token generado desde un dominio no
+// registrado (por ejemplo el de Vercel) falla la verificación del backend:
+//
+//   POST /auth/login → 400 { code: "RECAPTCHA_FAILED" }
+//
+// El backend sólo valida el token SI viene (`authController.js:111`); si no
+// viene, deja pasar el login. Por eso un despliegue en un dominio nuevo tiene
+// que registrar ese dominio en la consola de reCAPTCHA, o usar una key propia
+// vía `VITE_RECAPTCHA_SITE_KEY`.
+//
+// Se usa `.trim() || default` y no `??`: una variable declarada VACÍA en el panel
+// de Vercel tiene que caer al default, no propagarse como "" (mismo problema que
+// tuvo `VITE_API_BASE_URL`).
 export const RECAPTCHA_SITE_KEY =
-  import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LewluErAAAAAD1lny938pNyTuR7QxIR3UaJG5S3"
+  (import.meta.env.VITE_RECAPTCHA_SITE_KEY ?? "").trim() ||
+  "6LeZkdAsAAAAAD1Zve_OSVq20EXJeIq-Dxw5ju21"
 
 // NOTA: el Asistente de Procedimientos se consulta a través del backend
 // (`POST /api/chatbot/mensaje`), igual que en producción. No exponemos su
@@ -57,6 +79,5 @@ export const ENDPOINTS = {
   TIPOS_AFILIACION: `${API_URL}/tipos_afiliacion`,
   POLIZAS: `${API_URL}/polizas`,
   LEAD: `${API_URL}/lead`,
-  PERFORMANCE: `${LOCAL_API_URL}/performance`,
   BASE_URL: WS_URL,
 } as const
