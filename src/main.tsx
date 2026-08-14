@@ -1,7 +1,6 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
 import "./index.css"
 import App from "./App.tsx"
 import PwaUpdateToast from "@/components/common/PwaUpdateToast"
@@ -11,7 +10,7 @@ import { ConfirmProvider } from "@/components/common/confirm-dialog"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { NotificationProvider } from "@/contexts/NotificationContext"
 import { initSentry } from "@/lib/sentry"
-import { RECAPTCHA_SITE_KEY, BASENAME } from "@/lib/config"
+import { BASENAME } from "@/lib/config"
 
 initSentry()
 
@@ -106,22 +105,7 @@ const appTree = (
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {RECAPTCHA_SITE_KEY ? (
-      <GoogleReCaptchaProvider
-        reCaptchaKey={RECAPTCHA_SITE_KEY}
-        language="es"
-        useRecaptchaNet={false}
-        useEnterprise={false}
-        scriptProps={{ async: true, defer: true, appendTo: "head" }}
-      >
-        {appTree}
-        <PwaUpdateToast />
-      </GoogleReCaptchaProvider>
-    ) : (
-      <>
-        {appTree}
-        <PwaUpdateToast />
-      </>
-    )}
+    {appTree}
+    <PwaUpdateToast />
   </StrictMode>
 )

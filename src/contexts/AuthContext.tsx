@@ -21,7 +21,7 @@ export type { AuthUser, Role }
 interface AuthContextValue {
   user: AuthUser | null
   loading: boolean
-  login: (email: string, password: string, recaptchaToken?: string) => Promise<AuthUser>
+  login: (email: string, password: string) => Promise<AuthUser>
   logout: (showMessage?: boolean) => Promise<void>
   hasPermission: (allowedRoles: Role[]) => boolean
   getDashboardRoute: () => string
@@ -85,14 +85,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = React.useCallback(
-    async (email: string, password: string, recaptchaToken?: string): Promise<AuthUser> => {
+    async (email: string, password: string): Promise<AuthUser> => {
       setLoading(true)
       try {
-        const response = await axios.post(`${API_URL}/auth/login`, {
-          email,
-          password,
-          ...(recaptchaToken ? { recaptchaToken } : {}),
-        })
+        const response = await axios.post(`${API_URL}/auth/login`, { email, password })
 
         const { token, user: apiUser } = response.data
 

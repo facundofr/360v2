@@ -2,7 +2,6 @@ import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import axios from "axios"
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3"
 
 import { LoginForm } from "@/features/auth/components/login-form"
 import ThemeToggle from "@/components/common/theme-toggle"
@@ -62,7 +61,6 @@ function mapApiError(err: unknown): FieldErrors {
 export default function LoginPage() {
   const navigate = useNavigate()
   const { login, loading, user } = useAuth()
-  const { executeRecaptcha } = useGoogleReCaptcha()
   const [errors, setErrors] = React.useState<FieldErrors>({})
 
   // Si ya está autenticado, redirigir a su dashboard
@@ -86,15 +84,7 @@ export default function LoginPage() {
     setErrors({})
 
     try {
-      let recaptchaToken: string | undefined
-      if (executeRecaptcha) {
-        try {
-          recaptchaToken = await executeRecaptcha("login")
-        } catch {
-          // no bloquear login si falla recaptcha
-        }
-      }
-      const user = await login(email, password, recaptchaToken)
+      const user = await login(email, password)
       toast.success(`¡Bienvenido, ${user.name}!`)
       navigate(ROLE_REDIRECT[user.role])
     } catch (err: unknown) {

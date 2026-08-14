@@ -2,7 +2,6 @@ import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import axios from "axios"
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3"
 
 import { SignupForm } from "@/features/auth/components/signup-form"
 import ThemeToggle from "@/components/common/theme-toggle"
@@ -11,7 +10,6 @@ import { ENDPOINTS } from "@/lib/config"
 
 export default function SignupPage() {
   const navigate = useNavigate()
-  const { executeRecaptcha } = useGoogleReCaptcha()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -34,20 +32,7 @@ export default function SignupPage() {
       return
     }
     try {
-      // Obtener token reCAPTCHA
-      let recaptchaToken: string | undefined
-      if (executeRecaptcha) {
-        try {
-          recaptchaToken = await executeRecaptcha("register")
-        } catch {
-          // No bloquear el registro si falla reCAPTCHA
-        }
-      }
-
-      const res = await axios.post(`${ENDPOINTS.AUTH}/register`, {
-        ...data,
-        ...(recaptchaToken ? { recaptchaToken } : {}),
-      })
+      const res = await axios.post(`${ENDPOINTS.AUTH}/register`, data)
       const msg = (res.data as { message?: string })?.message
       toast.success(msg ?? "Cuenta creada. Revisá tu email para verificarla.")
       navigate("/verify-email")
