@@ -150,7 +150,7 @@ export default function MonotributoAdmin() {
                     <TableCell>
                       <div className="flex gap-1">
                         <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(cat)} title="Editar"><Edit2 className="size-3.5" /></Button>
-                        <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminar(cat)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
+                        <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(cat)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
                       </div>
                     </TableCell>
                   </TableRow>

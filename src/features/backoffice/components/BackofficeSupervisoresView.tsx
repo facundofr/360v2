@@ -6,6 +6,7 @@ import { Search, Users, UserPlus, UserCheck, Eye, ToggleLeft, ToggleRight, Refre
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
+import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -170,52 +171,15 @@ export function BackofficeSupervisoresView() {
 
       {/* Stats rápidos */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-blue-50"><ShieldCheck className="size-5 text-blue-600" aria-hidden="true" /></div>
-              <div>
-                <p className="text-2xl font-bold tabular-nums leading-none">{supervisores.length}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Total supervisores</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-green-50"><Users className="size-5 text-green-600" aria-hidden="true" /></div>
-              <div>
-                <p className="text-2xl font-bold tabular-nums leading-none">{supervisores.filter(s => s.is_enabled !== false).length}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Activos</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-violet-50"><UserCheck className="size-5 text-violet-600" aria-hidden="true" /></div>
-              <div>
-                <p className="text-2xl font-bold tabular-nums leading-none">{supervisores.reduce((acc, s) => acc + (s.total_vendedores ?? 0), 0)}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Total vendedores</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className={`overflow-hidden ${vendedoresSin.length > 0 ? "border-amber-200" : ""}`}>
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className={`rounded-xl p-2.5 ${vendedoresSin.length > 0 ? "bg-amber-50" : "bg-gray-50"}`}>
-                <UserPlus className={`size-5 ${vendedoresSin.length > 0 ? "text-amber-600" : "text-gray-500"}`} aria-hidden="true" />
-              </div>
-              <div>
-                <p className={`text-2xl font-bold tabular-nums leading-none ${vendedoresSin.length > 0 ? "text-amber-600" : ""}`}>{vendedoresSin.length}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Sin supervisor</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard icon={ShieldCheck} label="Total supervisores" value={supervisores.length} />
+        <StatCard icon={Users} label="Activos" value={supervisores.filter(s => s.is_enabled !== false).length} />
+        <StatCard icon={UserCheck} label="Total vendedores" value={supervisores.reduce((acc, s) => acc + (s.total_vendedores ?? 0), 0)} />
+        <StatCard
+          icon={UserPlus}
+          label="Sin supervisor"
+          value={vendedoresSin.length}
+          tone={vendedoresSin.length > 0 ? "warn" : "neutral"}
+        />
       </div>
 
       {/* Búsqueda */}
@@ -262,9 +226,9 @@ export function BackofficeSupervisoresView() {
                       <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">{sup.email ?? "—"}</TableCell>
                       <TableCell className="text-center font-semibold">{sup.total_vendedores ?? "—"}</TableCell>
                       <TableCell className="text-center hidden md:table-cell">{sup.total_prospectos ?? "—"}</TableCell>
-                      <TableCell className="text-center hidden md:table-cell text-green-600 font-semibold">{sup.ventas ?? "—"}</TableCell>
+                      <TableCell className="text-center hidden md:table-cell font-semibold">{sup.ventas ?? "—"}</TableCell>
                       <TableCell>
-                        <Badge variant={sup.is_enabled !== false ? "outline" : "secondary"} className={sup.is_enabled !== false ? "border-green-500 text-green-600" : ""}>
+                        <Badge variant={sup.is_enabled !== false ? "ok" : "secondary"}>
                           {sup.is_enabled !== false ? "Activo" : "Inactivo"}
                         </Badge>
                       </TableCell>
@@ -280,7 +244,7 @@ export function BackofficeSupervisoresView() {
                           )}
                           <Tooltip><TooltipTrigger asChild>
                             <Button size="icon"
-                              className={`size-8 ${sup.is_enabled !== false ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`}
+                              className="size-8 bg-muted text-foreground border hover:bg-accent"
                               aria-label={sup.is_enabled !== false ? "Deshabilitar supervisor" : "Habilitar supervisor"}
                               disabled={savingToggle === sup.id}
                               onClick={() => toggleEstado(sup)}>
@@ -312,19 +276,11 @@ export function BackofficeSupervisoresView() {
               {/* Estadísticas del supervisor */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: "Total prospectos", value: detalle.estadisticas?.total_prospectos, icon: <Users className="size-5" />, iconBg: "bg-blue-50", iconColor: "text-blue-600" },
-                  { label: "Ventas del mes", value: detalle.estadisticas?.ventas_mes, icon: <TrendingUp className="size-5" />, iconBg: "bg-green-50", iconColor: "text-green-600" },
-                  { label: "Pólizas", value: detalle.estadisticas?.polizas, icon: <FileText className="size-5" />, iconBg: "bg-indigo-50", iconColor: "text-indigo-600" },
+                  { label: "Total prospectos", value: detalle.estadisticas?.total_prospectos, icon: Users },
+                  { label: "Ventas del mes", value: detalle.estadisticas?.ventas_mes, icon: TrendingUp },
+                  { label: "Pólizas", value: detalle.estadisticas?.polizas, icon: FileText },
                 ].map(m => (
-                  <Card key={m.label}>
-                    <CardContent className="p-3 flex items-center gap-2">
-                      <div className={`rounded-lg p-1.5 ${m.iconBg}`}><span className={m.iconColor}>{m.icon}</span></div>
-                      <div>
-                        <p className="text-lg font-bold leading-none">{m.value ?? "—"}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{m.label}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <StatCard key={m.label} icon={m.icon} label={m.label} value={m.value ?? "—"} />
                 ))}
               </div>
               <Separator />
@@ -363,11 +319,10 @@ export function BackofficeSupervisoresView() {
                             <Badge variant="secondary">{v.prospectos ?? "—"}</Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Badge variant="secondary" className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400">{v.ventas ?? "—"}</Badge>
+                            <Badge variant="ok">{v.ventas ?? "—"}</Badge>
                           </TableCell>
                           <TableCell>
-                            <Badge variant={v.is_enabled !== false ? "outline" : "secondary"}
-                              className={v.is_enabled !== false ? "border-green-500 text-green-600 text-xs" : "text-xs"}>
+                            <Badge variant={v.is_enabled !== false ? "ok" : "secondary"} className="text-xs">
                               {v.is_enabled !== false ? "Activo" : "Inactivo"}
                             </Badge>
                           </TableCell>
@@ -377,7 +332,7 @@ export function BackofficeSupervisoresView() {
                                 <Button
                                   size="icon"
                                   variant="outline"
-                                  className={`size-7 ${v.is_enabled !== false ? "border-red-300 text-red-500 hover:bg-red-50" : "border-green-400 text-green-600 hover:bg-green-50"}`}
+                                  className="size-7"
                                   disabled={savingToggleVendedor === v.id}
                                   onClick={() => toggleVendedorEnEquipo(v)}
                                   aria-label={v.is_enabled !== false ? "Deshabilitar vendedor" : "Habilitar vendedor"}

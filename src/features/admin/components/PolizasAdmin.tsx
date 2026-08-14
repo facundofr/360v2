@@ -237,13 +237,13 @@ export default function PolizasAdmin() {
   }
 
   const estadoBadge = (estado?: string) => {
-    const colors: Record<string, string> = {
-      activa: "bg-green-100 text-green-800",
-      pendiente: "bg-yellow-100 text-yellow-800",
-      vencida: "bg-red-100 text-red-800",
-      cancelada: "bg-gray-100 text-gray-800",
+    const variants: Record<string, "ok" | "warn" | "risk" | "secondary"> = {
+      activa: "ok",
+      pendiente: "warn",
+      vencida: "risk",
+      cancelada: "secondary",
     }
-    return <Badge className={colors[estado?.toLowerCase() ?? ""] ?? ""}>{estado ?? "—"}</Badge>
+    return <Badge variant={variants[estado?.toLowerCase() ?? ""] ?? "secondary"}>{estado ?? "—"}</Badge>
   }
 
   return (
@@ -257,17 +257,17 @@ export default function PolizasAdmin() {
             <p className="text-xs text-muted-foreground">Total pólizas</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <CheckCircle className="size-4 mx-auto mb-1 text-emerald-500" />
+            <CheckCircle className="size-4 mx-auto mb-1 text-state-ok-text" />
             <p className="text-2xl font-bold text-foreground">{estadisticas.activas ?? 0}</p>
             <p className="text-xs text-muted-foreground">Activas</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <Clock className="size-4 mx-auto mb-1 text-amber-500" />
+            <Clock className="size-4 mx-auto mb-1 text-state-warn-text" />
             <p className="text-2xl font-bold text-foreground">{estadisticas.pendientes ?? 0}</p>
             <p className="text-xs text-muted-foreground">Pendientes</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <AlertCircle className="size-4 mx-auto mb-1 text-red-500" />
+            <AlertCircle className="size-4 mx-auto mb-1 text-state-risk-text" />
             <p className="text-2xl font-bold text-foreground">{estadisticas.vencidas ?? 0}</p>
             <p className="text-xs text-muted-foreground">Vencidas</p>
           </CardContent></Card>
@@ -278,22 +278,22 @@ export default function PolizasAdmin() {
       {estadisticasDocs && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <Card><CardContent className="p-3 text-center">
-            <Paperclip className="size-4 mx-auto mb-1 text-sky-500" />
+            <Paperclip className="size-4 mx-auto mb-1 text-muted-foreground" />
             <p className="text-2xl font-bold text-foreground">{estadisticasDocs.total_documentos ?? 0}</p>
             <p className="text-xs text-muted-foreground">Documentos</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <CheckCircle className="size-4 mx-auto mb-1 text-emerald-500" />
+            <CheckCircle className="size-4 mx-auto mb-1 text-state-ok-text" />
             <p className="text-2xl font-bold text-foreground">{estadisticasDocs.polizas_con_documentos ?? 0}</p>
             <p className="text-xs text-muted-foreground">Pólizas con docs</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <AlertCircle className="size-4 mx-auto mb-1 text-amber-500" />
+            <AlertCircle className="size-4 mx-auto mb-1 text-state-warn-text" />
             <p className="text-2xl font-bold text-foreground">{estadisticasDocs.polizas_sin_documentos ?? 0}</p>
             <p className="text-xs text-muted-foreground">Pólizas sin docs</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <FileText className="size-4 mx-auto mb-1 text-indigo-500" />
+            <FileText className="size-4 mx-auto mb-1 text-muted-foreground" />
             <p className="text-2xl font-bold text-foreground">
               {estadisticasDocs.tamano_total_mb != null ? `${estadisticasDocs.tamano_total_mb} MB` : "—"}
             </p>
@@ -375,7 +375,7 @@ export default function PolizasAdmin() {
                       {pol.pdf_hash ? <span className="font-mono text-xs text-muted-foreground">{pol.pdf_hash.slice(0, 8)}...</span> : "—"}
                     </TableCell>
                     <TableCell className="w-16">
-                      <span className="inline-flex items-center justify-center size-6 rounded-full bg-green-500 text-white text-xs font-bold">
+                      <span className={`inline-flex items-center justify-center size-6 rounded-full text-xs font-bold ${(pol.docs_count ?? 0) > 0 ? "bg-state-ok text-white" : "bg-muted text-muted-foreground"}`}>
                         {pol.docs_count ?? 0}
                       </span>
                     </TableCell>
@@ -395,7 +395,7 @@ export default function PolizasAdmin() {
                             <RotateCcw className="size-3.5" />
                           </Button>
                         ) : (
-                          <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminarPoliza(pol)}>
+                          <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminarPoliza(pol)}>
                             <Trash2 className="size-3.5" />
                           </Button>
                         )}
@@ -429,7 +429,7 @@ export default function PolizasAdmin() {
         <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FolderOpen className="size-4 text-yellow-500" />
+              <FolderOpen className="size-4 text-muted-foreground" />
               Documentos de Póliza N° {docModal.poliza?.numero_poliza ?? docModal.poliza?.numero_poliza_oficial ?? docModal.poliza?.id}
             </DialogTitle>
           </DialogHeader>
@@ -437,17 +437,17 @@ export default function PolizasAdmin() {
           {/* Info cards: Cliente / Vendedor / Supervisor */}
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-lg border p-3 space-y-1">
-              <p className="text-sm font-medium flex items-center gap-1.5"><User className="size-3.5 text-blue-500" /> Cliente</p>
+              <p className="text-sm font-medium flex items-center gap-1.5"><User className="size-3.5 text-muted-foreground" /> Cliente</p>
               <p className="text-sm">{docModal.poliza?.prospecto_nombre} {docModal.poliza?.prospecto_apellido}</p>
               {docModal.poliza?.prospecto_email && <p className="text-xs text-muted-foreground">{docModal.poliza.prospecto_email}</p>}
             </div>
             <div className="rounded-lg border p-3 space-y-1">
-              <p className="text-sm font-medium flex items-center gap-1.5"><User className="size-3.5 text-yellow-600" /> Vendedor</p>
+              <p className="text-sm font-medium flex items-center gap-1.5"><User className="size-3.5 text-muted-foreground" /> Vendedor</p>
               <p className="text-sm">{[docModal.poliza?.vendedor_nombre, docModal.poliza?.vendedor_apellido].filter(Boolean).join(" ") || "Sin vendedor"}</p>
               {docModal.poliza?.vendedor_email && <p className="text-xs text-muted-foreground">{docModal.poliza.vendedor_email}</p>}
             </div>
             <div className="rounded-lg border p-3 space-y-1">
-              <p className="text-sm font-medium flex items-center gap-1.5"><User className="size-3.5 text-blue-400" /> Supervisor</p>
+              <p className="text-sm font-medium flex items-center gap-1.5"><User className="size-3.5 text-muted-foreground" /> Supervisor</p>
               <p className="text-sm">{docModal.poliza?.supervisor_nombre ?? "Sin supervisor asignado"}</p>
               {docModal.poliza?.supervisor_email && <p className="text-xs text-muted-foreground">{docModal.poliza.supervisor_email}</p>}
             </div>
@@ -481,7 +481,7 @@ export default function PolizasAdmin() {
                     <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => descargarDocumento(doc.id, doc.nombre_original)}>
                       <Download className="size-3.5" />
                     </Button>
-                    <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminarDocumento(doc.id)}>
+                    <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminarDocumento(doc.id)}>
                       <Trash2 className="size-3.5" />
                     </Button>
                   </div>

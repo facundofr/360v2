@@ -331,7 +331,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
             </Button>
           )}
           <div className="flex items-center gap-2 mb-2">
-            <MessageCircle className="size-5 text-green-600" />
+            <MessageCircle className="size-5 text-muted-foreground" />
             <h2 className="font-semibold">WhatsApp</h2>
           </div>
           {/* Estadísticas del chat (GET /chat/estadisticas) */}
@@ -348,7 +348,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                 </Badge>
               )}
               {(estadisticas.sin_responder ?? 0) > 0 && (
-                <Badge className="text-[10px] bg-amber-500 hover:bg-amber-500">
+                <Badge variant="warn" className="text-[10px]">
                   {estadisticas.sin_responder} sin responder
                 </Badge>
               )}
@@ -379,8 +379,8 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                 className={`w-full text-left px-4 py-3 border-b hover:bg-muted/50 transition-colors flex items-start gap-3 ${conversacionActual?.id === conv.id ? "bg-muted" : ""}`}
                 onClick={() => abrirConversacion(conv)}
               >
-                <div className="size-9 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center shrink-0">
-                  <MessageCircle className="size-4 text-green-600" />
+                <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <MessageCircle className="size-4 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
@@ -395,7 +395,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                   )}
                 </div>
                 {(conv.mensajes_no_leidos ?? 0) > 0 && (
-                  <Badge className="bg-green-600 shrink-0 text-xs">
+                  <Badge variant="warn" className="shrink-0 text-xs">
                     {conv.mensajes_no_leidos}
                   </Badge>
                 )}
@@ -430,8 +430,8 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
               >
                 <ArrowLeft className="size-4" />
               </Button>
-              <div className="size-9 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center">
-                <MessageCircle className="size-4 text-green-600" />
+              <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center">
+                <MessageCircle className="size-4 text-primary" />
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm">
@@ -490,7 +490,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                   <div key={msg.id ?? i} className={`flex ${esEnviado(msg) ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${
                       esEnviado(msg)
-                        ? "bg-green-600 text-white"
+                        ? "bg-primary text-primary-foreground"
                         : "bg-muted text-foreground"
                     } ${msg.estado_entrega === "fallido" ? "opacity-50" : ""}`}>
                       {msg.archivo_url ? (
@@ -515,14 +515,14 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                         <p className="whitespace-pre-wrap">{msg.mensaje ?? msg.texto}</p>
                       )}
                       <div className="flex items-center justify-end gap-1 mt-0.5">
-                        <span className={`text-[10px] ${esEnviado(msg) ? "text-green-100" : "text-muted-foreground"}`}>
+                        <span className={`text-[10px] ${esEnviado(msg) ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                           {formatHora(msg.created_at)}
                         </span>
                         {esEnviado(msg) && (
-                          msg.estado_entrega === "leido" ? <CheckCheck className="size-3 text-green-200" /> :
-                          msg.estado_entrega === "entregado" ? <CheckCheck className="size-3 text-green-100" /> :
+                          msg.estado_entrega === "leido" ? <CheckCheck className="size-3 text-primary-foreground" /> :
+                          msg.estado_entrega === "entregado" ? <CheckCheck className="size-3 text-primary-foreground/70" /> :
                           msg.estado_entrega === "enviando" ? null :
-                          <Check className="size-3 text-green-100" />
+                          <Check className="size-3 text-primary-foreground/70" />
                         )}
                       </div>
                     </div>
@@ -574,7 +574,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                 }}
               />
               <Button
-                className="bg-green-600 hover:bg-green-700 shrink-0 h-9"
+                className="shrink-0 h-9"
                 disabled={(!nuevoMensaje.trim() && !archivoSeleccionado) || enviando}
                 onClick={enviarMensaje}
               >

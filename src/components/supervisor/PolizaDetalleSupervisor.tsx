@@ -163,7 +163,7 @@ export default function PolizaDetalleSupervisor({ polizaId }: Props) {
                     {docs.map((doc) => (
                       <div key={doc.id} className="flex items-center justify-between bg-muted/30 rounded px-3 py-2">
                         <div className="flex items-center gap-2 text-sm">
-                          <CheckCircle className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                          <CheckCircle className="h-3.5 w-3.5 text-state-ok-text shrink-0" />
                           <span className="truncate max-w-[200px]">{doc.nombre}</span>
                           {doc.tamanio && <span className="text-xs text-muted-foreground">({formatBytes(doc.tamanio)})</span>}
                         </div>

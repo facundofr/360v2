@@ -256,12 +256,12 @@ export function SubirDocumentosLibresModal({ open, onOpenChange, poliza, apiCont
                 </Label>
                 {item.file ? (
                   <div className="flex items-center gap-2 p-2 border rounded bg-background">
-                    <FileText className="size-4 text-green-600 shrink-0" />
+                    <FileText className="size-4 text-state-ok-text shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium truncate">{item.file.name}</p>
                       <p className="text-[10px] text-muted-foreground">{formatBytes(item.file.size)}</p>
                     </div>
-                    <CheckCircle className="size-4 text-green-600 shrink-0" />
+                    <CheckCircle className="size-4 text-state-ok-text shrink-0" />
                     <Button variant="link" size="sm" className="h-auto p-0 text-xs" onClick={() => {
                       setItems(prev => prev.map(i => i.id === item.id ? { ...i, file: null } : i))
                       if (fileInputRefs.current[item.id]) {

@@ -66,7 +66,7 @@ export function BotonDescargarPolizaFirmada({
     <Button
       size={size}
       variant="outline"
-      className={`text-green-700 border-green-300 hover:bg-green-50 dark:text-green-400 dark:border-green-700 ${className}`}
+      className={`text-state-ok-text border-state-ok/30 hover:bg-state-ok-soft ${className}`}
       onClick={handleDescargar}
       disabled={descargando}
       title="Descargar póliza firmada"

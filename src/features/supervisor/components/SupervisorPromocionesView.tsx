@@ -79,9 +79,9 @@ export function SupervisorPromocionesView() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {[
-          { label: "Total",          value: promociones.length,  icon: <Tag className="size-4" />,          cls: "text-blue-600",  bg: "bg-blue-50 dark:bg-blue-950" },
-          { label: "Activas",        value: totalActivas,         icon: <CheckCircle2 className="size-4" />, cls: "text-green-600", bg: "bg-green-50 dark:bg-green-950" },
-          { label: "Inactivas",      value: promociones.length - totalActivas, icon: <XCircle className="size-4" />, cls: "text-gray-500", bg: "bg-gray-50 dark:bg-gray-950" },
+          { label: "Total",          value: promociones.length,  icon: <Tag className="size-4" />,          cls: "text-muted-foreground",  bg: "bg-muted" },
+          { label: "Activas",        value: totalActivas,         icon: <CheckCircle2 className="size-4" />, cls: "text-state-ok-text", bg: "bg-state-ok-soft" },
+          { label: "Inactivas",      value: promociones.length - totalActivas, icon: <XCircle className="size-4" />, cls: "text-muted-foreground", bg: "bg-muted" },
         ].map(s => (
           <Card key={s.label} className="overflow-hidden">
             <CardContent className="p-0">
@@ -122,8 +122,8 @@ export function SupervisorPromocionesView() {
       </div>
 
       {/* Info banner */}
-      <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-800 px-4 py-3">
-        <p className="text-sm text-blue-800 dark:text-blue-300">
+      <div className="rounded-lg border bg-muted px-4 py-3">
+        <p className="text-sm text-muted-foreground">
           <strong>Modo Lectura:</strong> Como supervisor podés visualizar todas las promociones disponibles. Para crear o editar promociones, contactá al área de Back Office.
         </p>
       </div>
@@ -173,7 +173,7 @@ export function SupervisorPromocionesView() {
                       </TableCell>
                       <TableCell className="text-center">
                         {promo.activa ? (
-                          <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 border-0">
+                          <Badge variant="ok">
                             <CheckCircle2 className="size-3 mr-1" />Activa
                           </Badge>
                         ) : (
@@ -207,7 +207,7 @@ export function SupervisorPromocionesView() {
                   )}
                 </div>
                 {promo.activa ? (
-                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 border-0 shrink-0">
+                  <Badge variant="ok" className="shrink-0">
                     Activa
                   </Badge>
                 ) : (

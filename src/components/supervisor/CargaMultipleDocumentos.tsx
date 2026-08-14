@@ -160,7 +160,7 @@ export default function CargaMultipleDocumentos({ polizaId, open, onOpenChange, 
                       {existentesDelTipo.map((doc) => (
                         <div key={doc.id} className="flex items-center justify-between bg-muted/40 rounded px-2 py-1">
                           <span className="text-xs flex items-center gap-1">
-                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            <CheckCircle className="h-3 w-3 text-state-ok-text" />
                             {doc.nombre}
                             {doc.tamanio && <span className="text-muted-foreground ml-1">({formatBytes(doc.tamanio)})</span>}
                           </span>
@@ -178,9 +178,9 @@ export default function CargaMultipleDocumentos({ polizaId, open, onOpenChange, 
 
                   {/* Nuevos archivos seleccionados */}
                   {files.map((f, i) => (
-                    <div key={i} className="flex items-center justify-between bg-blue-50 dark:bg-blue-950/20 rounded px-2 py-1">
+                    <div key={i} className="flex items-center justify-between bg-muted rounded px-2 py-1">
                       <span className="text-xs flex items-center gap-1">
-                        <FileText className="h-3 w-3 text-blue-500" />
+                        <FileText className="h-3 w-3 text-muted-foreground" />
                         {f.name}
                         <span className="text-muted-foreground ml-1">({formatBytes(f.size)})</span>
                       </span>

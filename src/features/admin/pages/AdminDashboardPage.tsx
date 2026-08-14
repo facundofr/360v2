@@ -2,11 +2,11 @@
 import { useNavigate } from "react-router-dom"
 import {
   Users, UserCheck, TrendingUp, FileText,
-  LogOut, ShieldCheck, ChevronRight, LayoutDashboard,
+  ShieldCheck, ChevronRight, LayoutDashboard,
   Tag, Archive, ArrowLeftRight, DollarSign, Building2,
-  Calculator, Activity, Sun, Moon, MessageCircle
+  Calculator, Activity, MessageCircle
 } from "lucide-react"
-import { useTheme } from "@/components/common/theme-provider"
+import { DashboardShell } from "@/components/common/DashboardShell"
 
 import DashboardMetricasAdmin from "../components/DashboardMetricasAdmin"
 import UsuariosAdmin from "../components/UsuariosAdmin"
@@ -28,41 +28,10 @@ import MetricasAvanzadas from "../components/MetricasAvanzadas"
 import MonitoringDashboard from "../components/MonitoringDashboard"
 
 import {
-  SidebarProvider, Sidebar, SidebarContent, SidebarHeader,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger,
-  SidebarInset, SidebarFooter
+  SidebarContent,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
 } from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/contexts/AuthContext"
-import { useSidebar } from "@/components/ui/sidebar"
-import { X as XIcon } from "lucide-react"
-import { AppVersion } from "@/components/common/AppVersion"
-import Logo from "@/components/ui/logo"
-
-function AdminMobileControls() {
-  const { setOpenMobile } = useSidebar()
-  return (
-    <div className="flex flex-col items-end">
-      <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpenMobile(false)} aria-label="Cerrar menú"><XIcon className="size-4"/></Button>
-    </div>
-  )
-}
-
-function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme()
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="h-8 w-8 text-muted-foreground hover:text-foreground"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      title={resolvedTheme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-    >
-      {resolvedTheme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
-    </Button>
-  )
-}
 
 type Vista =
   | "dashboard-metricas"
@@ -150,68 +119,16 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <SidebarProvider>
-      <Sidebar variant="inset" className="border-r-0">
-        {/* Header: gradiente brand #78358b */}
-        <SidebarHeader className="pb-0">
-          <div className="relative overflow-hidden rounded-t-lg bg-gradient-to-br from-primary via-primary to-[#3d1a4d] px-4 pt-5 pb-4">
-            {/* Círculos decorativos */}
-            <div className="pointer-events-none absolute -top-6 -right-6 size-24 rounded-full bg-white/10" />
-            <div className="pointer-events-none absolute -bottom-4 -left-4 size-16 rounded-full bg-white/8" />
-            <div className="relative flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 ring-2 ring-white/30 backdrop-blur-sm overflow-hidden">
-                  <Logo className="h-9 w-9" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-tight text-white">Admin</p>
-                  <p className="text-[11px] leading-tight text-[#d4a8e0]">{user?.name ?? "Panel"}</p>
-                </div>
-              </div>
-              <AdminMobileControls />
-            </div>
-            <div className="mt-3 flex items-center gap-2">
-              <Badge className="bg-white/20 text-white border-0 text-[10px] font-semibold hover:bg-white/30">
-                Administrador
-              </Badge>
-            </div>
-          </div>
-        </SidebarHeader>
-
-        <SidebarNavContent />
-
-        <SidebarFooter className="border-t p-3">
-          <div className="flex items-center gap-2 px-1 py-1.5">
-            <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15 dark:bg-primary/25">
-              <span className="text-xs font-bold text-primary dark:text-purple-300">
-                {(user?.name ?? "A").charAt(0).toUpperCase()}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate">{user?.name ?? "Admin"}</p>
-              <p className="text-[10px] text-muted-foreground truncate">{user?.email ?? ""}</p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-destructive"
-              onClick={() => logout().then(() => navigate("/login"))}
-              title="Cerrar sesión"
-            >
-              <LogOut className="size-3.5" />
-            </Button>
-          </div>
-          <AppVersion className="px-1 pt-1 group-data-[collapsible=icon]:hidden" />
-        </SidebarFooter>
-      </Sidebar>
-
-      <SidebarInset className="min-w-0 overflow-x-hidden">
-        <header className="flex items-center gap-3 border-b px-4 py-3 sticky top-0 bg-background z-10">
-          <SidebarTrigger />
-          <h1 className="font-semibold flex-1">{menuItems.find(m => m.id === vista)?.label ?? "Admin"}</h1>
-          <ThemeToggle />
-        </header>
-
+    <DashboardShell
+      roleLabel="Admin"
+      roleBadgeLabel="Administrador"
+      logoClassName="h-9 w-9"
+      userName={user?.name}
+      userEmail={user?.email}
+      onLogout={() => logout().then(() => navigate("/login"))}
+      navContent={<SidebarNavContent />}
+      headerTitle={menuItems.find(m => m.id === vista)?.label ?? "Admin"}
+    >
         <div className="p-4 space-y-4">
           {/* DASHBOARD METRICAS */}
           {vista === "dashboard-metricas" && <DashboardMetricasAdmin />}
@@ -265,8 +182,7 @@ export default function AdminDashboardPage() {
           {vista === "seguridad" && <SecurityDashboard />}
           {vista === "validacion-whatsapp" && <ValidacionWhatsappAdmin />}
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </DashboardShell>
   )
 }
 

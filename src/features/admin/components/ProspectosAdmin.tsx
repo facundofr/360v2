@@ -397,7 +397,7 @@ export default function ProspectosAdmin() {
                         <div className="text-xs text-muted-foreground">ID: {p.id}</div>
                       </TableCell>
                       <TableCell>
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold max-w-[120px] truncate ${p.vendedor_id ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold max-w-[120px] truncate ${p.vendedor_id ? "bg-state-ok-soft text-state-ok-text" : "bg-state-warn-soft text-state-warn-text"}`}>
                           {getVendedorLabel(p).length > 14 ? getVendedorLabel(p).slice(0, 14) + "..." : getVendedorLabel(p)}
                         </span>
                       </TableCell>
@@ -419,7 +419,7 @@ export default function ProspectosAdmin() {
                       </TableCell>
                       <TableCell className="text-center">
                         {p.es_reciclado ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 text-sky-700 px-2 py-0.5 text-xs font-medium">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-muted text-muted-foreground px-2 py-0.5 text-xs font-medium">
                             <Recycle className="size-3" /> Refrito
                           </span>
                         ) : (
@@ -453,7 +453,7 @@ export default function ProspectosAdmin() {
                       <p className="text-xs text-muted-foreground">ID: {p.id}</p>
                     </div>
                     {p.es_reciclado && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 text-sky-700 px-2 py-0.5 text-xs font-medium shrink-0">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted text-muted-foreground px-2 py-0.5 text-xs font-medium shrink-0">
                         <Recycle className="size-3" /> Refrito
                       </span>
                     )}
@@ -683,7 +683,7 @@ export default function ProspectosAdmin() {
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">Descuento</p>
-                        <p className="font-medium text-red-500">{formatCurrency(descuento)}</p>
+                        <p className="font-medium">{formatCurrency(descuento)}</p>
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">Personas</p>

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -486,27 +487,15 @@ export function BackofficePolizasView() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
         {[
-          { label: "Total pólizas",    value: fmtNum(resumen.total_polizas),          icon: <FileText className="size-5" />,     iconBg: "bg-blue-50 dark:bg-blue-950",    iconColor: "text-blue-600" },
-          { label: "En proceso",        value: fmtNum(resumen.polizas_en_proceso),     icon: <AlertCircle className="size-5" />,   iconBg: "bg-amber-50 dark:bg-amber-950",  iconColor: "text-amber-600" },
-          { label: "Activas",           value: fmtNum(resumen.polizas_activas),        icon: <CheckCircle2 className="size-5" />,  iconBg: "bg-green-50 dark:bg-green-950",  iconColor: "text-green-600" },
-          { label: "Finalizadas",       value: fmtNum(resumen.polizas_finalizadas),    icon: <XCircle className="size-5" />,       iconBg: "bg-red-50 dark:bg-red-950",      iconColor: "text-red-600" },
-          { label: "Facturación",       value: metricas.facturacion_total_formateada ?? "—", icon: <DollarSign className="size-5" />, iconBg: "bg-emerald-50 dark:bg-emerald-950", iconColor: "text-emerald-600" },
-          { label: "Tasa finalización", value: metricas.finalization_rate ?? "—",     icon: <Percent className="size-5" />,       iconBg: "bg-cyan-50 dark:bg-cyan-950",    iconColor: "text-cyan-600" },
-          { label: "Ticket promedio",   value: metricas.ticket_promedio_formateado ?? "—", icon: <TrendingUp className="size-5" />, iconBg: "bg-violet-50 dark:bg-violet-950", iconColor: "text-violet-600" },
+          { label: "Total pólizas",    value: fmtNum(resumen.total_polizas),          icon: FileText,     tone: "neutral" as const },
+          { label: "En proceso",        value: fmtNum(resumen.polizas_en_proceso),     icon: AlertCircle,  tone: "warn" as const },
+          { label: "Activas",           value: fmtNum(resumen.polizas_activas),        icon: CheckCircle2, tone: "ok" as const },
+          { label: "Finalizadas",       value: fmtNum(resumen.polizas_finalizadas),    icon: XCircle,      tone: "risk" as const },
+          { label: "Facturación",       value: metricas.facturacion_total_formateada ?? "—", icon: DollarSign, tone: "neutral" as const },
+          { label: "Tasa finalización", value: metricas.finalization_rate ?? "—",     icon: Percent,       tone: "neutral" as const },
+          { label: "Ticket promedio",   value: metricas.ticket_promedio_formateado ?? "—", icon: TrendingUp, tone: "neutral" as const },
         ].map(s => (
-          <Card key={s.label} className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="flex items-center gap-3 p-4">
-                <div className={`rounded-xl p-2.5 ${s.iconBg} shrink-0`}>
-                  <span className={s.iconColor} aria-hidden="true">{s.icon}</span>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xl font-bold tabular-nums leading-none">{s.value}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5 truncate">{s.label}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard key={s.label} icon={s.icon} label={s.label} value={s.value} tone={s.tone} />
         ))}
       </div>
 
@@ -686,7 +675,7 @@ export function BackofficePolizasView() {
                         </div>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        <p className="font-semibold text-sm text-green-600">{pol.total_final != null ? fmtPeso(pol.total_final) : "—"}</p>
+                        <p className="font-semibold text-sm">{pol.total_final != null ? fmtPeso(pol.total_final) : "—"}</p>
                       </TableCell>
                       <TableCell className="hidden md:table-cell text-xs text-muted-foreground">{fmtFecha(pol.created_at)}</TableCell>
                       <TableCell>
@@ -769,7 +758,7 @@ export function BackofficePolizasView() {
                       <p className="text-xs text-primary truncate font-medium">👔 {pol.supervisor_nombre}</p>
                     )}
                     <div className="flex items-center justify-between pt-1">
-                      <span className="font-bold text-sm text-green-600">{pol.total_final != null ? fmtPeso(pol.total_final) : "—"}</span>
+                      <span className="font-bold text-sm">{pol.total_final != null ? fmtPeso(pol.total_final) : "—"}</span>
                       <span className="text-xs text-muted-foreground">{fmtFecha(pol.created_at)}</span>
                     </div>
                   </CardContent>
@@ -878,7 +867,7 @@ export function BackofficePolizasView() {
       {/* Modal: WhatsApp */}
       <Dialog open={whatsappModal} onOpenChange={setWhatsappModal}>
         <DialogContent className="max-w-xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader><DialogTitle><MessageCircle className="inline size-4 mr-2 text-lime-500" />WhatsApp — {polizaSeleccionada?.prospecto_nombre} {polizaSeleccionada?.prospecto_apellido}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle><MessageCircle className="inline size-4 mr-2 text-muted-foreground" />WhatsApp — {polizaSeleccionada?.prospecto_nombre} {polizaSeleccionada?.prospecto_apellido}</DialogTitle></DialogHeader>
           {loadingWA ? <Skeleton className="h-40 w-full" /> : mensajesWA.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">Sin mensajes</p>
           ) : (
@@ -887,7 +876,7 @@ export function BackofficePolizasView() {
                 const esEnviado = m.tipo === "enviado"
                 return (
                   <div key={i} className={`flex ${esEnviado ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${esEnviado ? "bg-lime-100 text-lime-900" : "bg-muted"}`}>
+                    <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${esEnviado ? "bg-primary/10" : "bg-muted"}`}>
                       <p>{String(m.contenido ?? m.mensaje ?? "")}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">{String(m.fecha_envio ?? "")}</p>
                     </div>
@@ -903,7 +892,7 @@ export function BackofficePolizasView() {
       <Dialog open={documentosModal} onOpenChange={setDocumentosModal}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle><FolderOpen className="inline size-4 mr-2 text-indigo-500" />Documentos — Póliza #{polizaSeleccionada?.id} {polizaSeleccionada?.prospecto_nombre} {polizaSeleccionada?.prospecto_apellido}</DialogTitle>
+            <DialogTitle><FolderOpen className="inline size-4 mr-2 text-muted-foreground" />Documentos — Póliza #{polizaSeleccionada?.id} {polizaSeleccionada?.prospecto_nombre} {polizaSeleccionada?.prospecto_apellido}</DialogTitle>
           </DialogHeader>
           {loadingDocumentos ? <Skeleton className="h-48 w-full" /> : (() => {
             const gruposDocumentos = Object.entries(documentos)
@@ -941,7 +930,7 @@ export function BackofficePolizasView() {
                                 </Button>
                               </TooltipTrigger><TooltipContent>Descargar</TooltipContent></Tooltip>
                               <Tooltip><TooltipTrigger asChild>
-                                <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0"
+                                <Button size="icon" variant="destructive" className="size-8"
                                   onClick={() => eliminarDocumento(Number(doc.id))}>
                                   <Trash2 className="size-3.5" />
                                 </Button>

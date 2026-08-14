@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { StatCard } from "@/components/common/StatCard"
+import { getUmbralEstado, ESTADO_TEXT } from "@/utils/getUmbralEstado"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
@@ -135,29 +137,29 @@ function agruparEmbudo(embudo: EmbudoItem[]) {
 }
 const CAT_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
   "Ventas Exitosas": {
-    bg: "bg-green-500/10",
-    text: "text-green-600 dark:text-green-400",
-    bar: "bg-green-500",
+    bg: "bg-state-ok-soft",
+    text: "text-state-ok-text",
+    bar: "bg-state-ok",
   },
   "Prospectos Iniciales": {
-    bg: "bg-blue-500/10",
-    text: "text-blue-600 dark:text-blue-400",
-    bar: "bg-blue-500",
+    bg: "bg-muted/50",
+    text: "text-muted-foreground",
+    bar: "bg-muted-foreground/40",
   },
   "En Proceso": {
-    bg: "bg-amber-500/10",
-    text: "text-amber-600 dark:text-amber-400",
-    bar: "bg-amber-500",
+    bg: "bg-state-warn-soft",
+    text: "text-state-warn-text",
+    bar: "bg-state-warn",
   },
   Rechazos: {
-    bg: "bg-red-500/10",
-    text: "text-red-600 dark:text-red-400",
-    bar: "bg-red-500",
+    bg: "bg-state-risk-soft",
+    text: "text-state-risk-text",
+    bar: "bg-state-risk",
   },
   Otros: {
     bg: "bg-muted/50",
     text: "text-muted-foreground",
-    bar: "bg-gray-400",
+    bar: "bg-muted-foreground/40",
   },
 }
 const tendenciasChartConfig = {
@@ -378,86 +380,10 @@ export function BackofficeMetricasView() {
 
       {/* KPI Cards resumen — totales del período seleccionado */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="shrink-0 rounded-xl bg-blue-500/10 p-2.5">
-                <Users
-                  className="size-4 text-blue-600 dark:text-blue-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="text-2xl leading-none font-bold tabular-nums">
-                  {fmt(totalNuevosProspectos)}
-                </p>
-                <p className="mt-1 truncate text-xs text-muted-foreground">
-                  Nuevos prospectos
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="shrink-0 rounded-xl bg-amber-500/10 p-2.5">
-                <Target
-                  className="size-4 text-amber-600 dark:text-amber-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="text-2xl leading-none font-bold tabular-nums">
-                  {fmt(totalCotizaciones)}
-                </p>
-                <p className="mt-1 truncate text-xs text-muted-foreground">
-                  Cotizaciones
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="shrink-0 rounded-xl bg-green-500/10 p-2.5">
-                <Activity
-                  className="size-4 text-green-600 dark:text-green-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="text-2xl leading-none font-bold tabular-nums">
-                  {fmt(totalVentasCerradas)}
-                </p>
-                <p className="mt-1 truncate text-xs text-muted-foreground">
-                  Ventas cerradas
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="overflow-hidden">
-          <CardContent className="p-0">
-            <div className="flex items-center gap-3 p-4">
-              <div className="shrink-0 rounded-xl bg-violet-500/10 p-2.5">
-                <DollarSign
-                  className="size-4 text-violet-600 dark:text-violet-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xl leading-none font-bold tabular-nums">
-                  {fmtCurrency(totalIngresos)}
-                </p>
-                <p className="mt-1 truncate text-xs text-muted-foreground">
-                  Ingresos del período
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <StatCard icon={Users} label="Nuevos prospectos" value={fmt(totalNuevosProspectos)} />
+        <StatCard icon={Target} label="Cotizaciones" value={fmt(totalCotizaciones)} tone="warn" />
+        <StatCard icon={Activity} label="Ventas cerradas" value={fmt(totalVentasCerradas)} tone="ok" />
+        <StatCard icon={DollarSign} label="Ingresos del período" value={fmtCurrency(totalIngresos)} />
       </div>
 
       {/* Tabs */}
@@ -659,17 +585,11 @@ export function BackofficeMetricasView() {
                     ) : (
                       vendedoresFiltrados.map((v, i) => {
                         const actividadColor =
-                          v.dias_sin_login <= 3
-                            ? "text-green-600 dark:text-green-400"
-                            : v.dias_sin_login <= 7
-                              ? "text-amber-600 dark:text-amber-400"
-                              : "text-red-500 dark:text-red-400"
+                          ESTADO_TEXT[getUmbralEstado(v.dias_sin_login, { warn: 4, risk: 8 })]
                         const convColor =
-                          v.tasa_conversion >= 15
-                            ? "text-green-600 dark:text-green-400"
-                            : v.tasa_conversion >= 10
-                              ? "text-amber-600 dark:text-amber-400"
-                              : "text-red-500 dark:text-red-400"
+                          ESTADO_TEXT[
+                            v.tasa_conversion >= 15 ? "ok" : v.tasa_conversion >= 10 ? "warn" : "risk"
+                          ]
                         return (
                           <tr
                             key={i}
@@ -692,10 +612,7 @@ export function BackofficeMetricasView() {
                               </Badge>
                             </td>
                             <td className="px-4 py-3 text-right">
-                              <Badge
-                                variant="secondary"
-                                className="border-0 bg-green-500/10 text-green-600 dark:text-green-400"
-                              >
+                              <Badge variant="ok">
                                 {fmt(v.total_ventas)}
                               </Badge>
                             </td>
@@ -871,28 +788,25 @@ export function BackofficeMetricasView() {
                         {items.map((alerta, i) => {
                           const styles = {
                             alta: {
-                              card: "border-red-500/30 bg-red-500/10",
+                              card: "border-state-risk/30 bg-state-risk-soft",
                               icon: (
-                                <AlertTriangle className="size-4 shrink-0 text-red-500 dark:text-red-400" />
+                                <AlertTriangle className="size-4 shrink-0 text-state-risk-text" />
                               ),
-                              badge:
-                                "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30",
+                              badge: "bg-state-risk-soft text-state-risk-text border-state-risk/30",
                             },
                             media: {
-                              card: "border-amber-500/30 bg-amber-500/10",
+                              card: "border-state-warn/30 bg-state-warn-soft",
                               icon: (
-                                <AlertTriangle className="size-4 shrink-0 text-amber-500 dark:text-amber-400" />
+                                <AlertTriangle className="size-4 shrink-0 text-state-warn-text" />
                               ),
-                              badge:
-                                "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30",
+                              badge: "bg-state-warn-soft text-state-warn-text border-state-warn/30",
                             },
                             baja: {
-                              card: "border-blue-500/30 bg-blue-500/10",
+                              card: "",
                               icon: (
-                                <TrendingDown className="size-4 shrink-0 text-blue-500 dark:text-blue-400" />
+                                <TrendingDown className="size-4 shrink-0 text-muted-foreground" />
                               ),
-                              badge:
-                                "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30",
+                              badge: "",
                             },
                           }[prioridad]
                           return (

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { StatCard } from "@/components/common/StatCard"
 import {
   Shield, AlertTriangle, Globe, Ban, CheckCircle,
   RefreshCw, Activity, Eye, Loader2,
@@ -38,11 +39,11 @@ interface SecurityAlert {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const EVENT_COLORS: Record<string, string> = {
-  IP_BLOCKED:          "text-red-600",
-  SUSPICIOUS_ACTIVITY: "text-yellow-600",
-  IP_WHITELISTED:      "text-green-600",
-  BLOCKED_HIGH_RISK:   "text-red-700",
-  BLOCKED_BLACKLISTED: "text-red-800",
+  IP_BLOCKED:          "text-state-risk-text",
+  SUSPICIOUS_ACTIVITY: "text-state-warn-text",
+  IP_WHITELISTED:      "text-state-ok-text",
+  BLOCKED_HIGH_RISK:   "text-state-risk-text",
+  BLOCKED_BLACKLISTED: "text-state-risk-text",
 }
 const eventColor = (t: string) => EVENT_COLORS[t] ?? "text-muted-foreground"
 
@@ -164,21 +165,12 @@ export default function SecurityDashboard() {
           {stats ? (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
               {[
-                { label: "IPs Bloqueadas",  value: stats.blacklistCount,   color: "red",    icon: Ban },
-                { label: "Sospechosas",     value: stats.suspiciousCount,  color: "yellow", icon: AlertTriangle },
-                { label: "Permitidas",      value: stats.whitelistCount,   color: "green",  icon: CheckCircle },
-                { label: "IPtables",        value: stats.iptablesBlocked ?? 0, color: "blue", icon: Globe },
-              ].map(({ label, value, color, icon: Icon }) => (
-                <Card key={label} className={`border-${color}-200 bg-${color}-50 dark:bg-${color}-950/20`}>
-                  <CardHeader className="pb-2 pt-4 px-4">
-                    <CardTitle className={`text-sm text-${color}-700 flex items-center gap-2`}>
-                      <Icon className="h-4 w-4" />{label}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-4">
-                    <span className={`text-3xl font-bold text-${color}-900 dark:text-${color}-300`}>{value}</span>
-                  </CardContent>
-                </Card>
+                { label: "IPs Bloqueadas",  value: stats.blacklistCount,   tone: "risk" as const,    icon: Ban },
+                { label: "Sospechosas",     value: stats.suspiciousCount,  tone: "warn" as const,    icon: AlertTriangle },
+                { label: "Permitidas",      value: stats.whitelistCount,   tone: "ok" as const,      icon: CheckCircle },
+                { label: "IPtables",        value: stats.iptablesBlocked ?? 0, tone: "neutral" as const, icon: Globe },
+              ].map(({ label, value, tone, icon }) => (
+                <StatCard key={label} icon={icon} label={label} value={value} tone={tone} />
               ))}
             </div>
           ) : (
@@ -212,10 +204,10 @@ export default function SecurityDashboard() {
         {/* Control IPs */}
         <TabsContent value="control">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-            <Card className="border-red-200">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-red-800 flex items-center gap-2 text-base">
-                  <Ban className="h-4 w-4" />Bloquear IP
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Ban className="h-4 w-4 text-muted-foreground" />Bloquear IP
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -235,10 +227,10 @@ export default function SecurityDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-green-200">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-green-800 flex items-center gap-2 text-base">
-                  <CheckCircle className="h-4 w-4" />Agregar a Whitelist
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <CheckCircle className="h-4 w-4 text-muted-foreground" />Agregar a Whitelist
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -253,7 +245,7 @@ export default function SecurityDashboard() {
                     <Input id="wl-reason" placeholder="IP corporativa" value={wlForm.reason}
                       onChange={(e) => setWlForm((p) => ({ ...p, reason: e.target.value }))} required />
                   </div>
-                  <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">Agregar a Whitelist</Button>
+                  <Button type="submit" className="w-full">Agregar a Whitelist</Button>
                 </form>
               </CardContent>
             </Card>

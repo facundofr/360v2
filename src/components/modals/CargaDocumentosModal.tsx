@@ -155,12 +155,12 @@ export default function CargaDocumentosModal({ polizaId, userRole = "supervisor"
                       <p className="text-xs text-muted-foreground">{tipo.description}</p>
                     </div>
                     {existentes.length > 0 ? (
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      <Badge variant="ok">
                         <CheckCircle className="size-3 mr-1" />
                         {existentes.length} cargado{existentes.length > 1 ? "s" : ""}
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-amber-600 border-amber-300">
+                      <Badge variant="warn">
                         <AlertCircle className="size-3 mr-1" />
                         Sin documentos
                       </Badge>

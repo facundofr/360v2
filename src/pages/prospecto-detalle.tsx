@@ -806,8 +806,8 @@ export default function ProspectoDetallePage() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <p className="font-medium text-sm">{cot.plan_nombre ?? `Plan #${cot.id}`}</p>
-                                  {yaGenerada && <Badge variant="outline" className="text-xs text-green-600 border-green-300">✓ Póliza</Badge>}
-                                  {cuponGenerado && <Badge variant="outline" className="text-xs text-blue-600 border-blue-300">Cupón ✓</Badge>}
+                                  {yaGenerada && <Badge variant="ok" className="text-xs">✓ Póliza</Badge>}
+                                  {cuponGenerado && <Badge variant="ok" className="text-xs">Cupón ✓</Badge>}
                                 </div>
                                 {cot.tipo_afiliacion_nombre && (
                                   <p className="text-xs text-muted-foreground">{cot.tipo_afiliacion_nombre}</p>
@@ -823,7 +823,7 @@ export default function ProspectoDetallePage() {
                                 )}
                               </div>
                               <div className="text-right shrink-0">
-                                <p className="font-bold text-green-600">
+                                <p className="font-bold">
                                   {formatCurrency(cot.total_final ?? cot.precio_final)}
                                 </p>
                                 {(cot.detalles?.length ?? 0) > 0 && (
@@ -914,7 +914,7 @@ export default function ProspectoDetallePage() {
                                         <td className="py-1 pr-3 text-muted-foreground capitalize">{d.vinculo ?? "—"}</td>
                                         <td className="py-1 pr-3 text-right">{d.edad ?? "—"}</td>
                                         <td className="py-1 pr-3 text-right">{formatCurrency(d.precio_base)}</td>
-                                        <td className="py-1 text-right font-medium text-green-600">{formatCurrency(d.precio_final)}</td>
+                                        <td className="py-1 text-right font-medium">{formatCurrency(d.precio_final)}</td>
                                       </tr>
                                     ))}
                                   </tbody>

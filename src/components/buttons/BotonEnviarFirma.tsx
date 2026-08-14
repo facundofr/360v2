@@ -92,7 +92,7 @@ export function BotonEnviarFirma({ poliza, onExito, userRole, disabled = false }
           <BotonDescargarPolizaFirmada polizaId={poliza.id} showLabel={false} />
         </div>
       ) : fueEnviada ? (
-        <div className="flex items-center gap-1.5 text-xs text-yellow-600 dark:text-yellow-400">
+        <div className="flex items-center gap-1.5 text-xs text-state-warn-text">
           <Clock className="size-3.5" />
           <span>Pendiente de firma</span>
         </div>
@@ -106,7 +106,7 @@ export function BotonEnviarFirma({ poliza, onExito, userRole, disabled = false }
         <DialogContent className="sm:max-w-xl lg:max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <CheckCircle className="size-5 text-blue-500" />
+              <CheckCircle className="size-5 text-primary" />
               Confirmar Datos del Prospecto
             </DialogTitle>
           </DialogHeader>
@@ -160,7 +160,7 @@ export function BotonEnviarFirma({ poliza, onExito, userRole, disabled = false }
             {/* Teléfono */}
             <div className="space-y-1.5">
               <Label className="text-xs uppercase tracking-wide flex items-center gap-1.5">
-                <Phone className="size-3.5 text-green-600" />
+                <Phone className="size-3.5 text-primary" />
                 Teléfono del Prospecto
               </Label>
               <Input
@@ -175,9 +175,9 @@ export function BotonEnviarFirma({ poliza, onExito, userRole, disabled = false }
             </div>
 
             {/* Sección importante */}
-            <div className="rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-700 px-4 py-3 text-sm">
+            <div className="rounded-lg border border-state-warn/30 bg-state-warn-soft px-4 py-3 text-sm">
               <p className="font-semibold flex items-center gap-1.5 mb-2">
-                <AlertTriangle className="size-4 text-amber-600" />
+                <AlertTriangle className="size-4 text-state-warn-text" />
                 Importante:
               </p>
               <ul className="space-y-1 text-muted-foreground text-xs list-none pl-0">

@@ -76,13 +76,13 @@ export default function PWAStatus() {
   return (
     <div className="fixed bottom-4 left-4 z-50 flex flex-col gap-1 text-xs">
       {/* Conectividad */}
-      <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full shadow border text-white ${isOnline ? "bg-green-600" : "bg-red-600"}`}>
+      <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full shadow border text-white ${isOnline ? "bg-state-ok" : "bg-state-risk"}`}>
         {isOnline ? <Wifi className="size-3" /> : <WifiOff className="size-3" />}
         {isOnline ? "Online" : "Offline"}
       </div>
 
       {/* SW Status */}
-      <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full shadow border ${swStatus === "active" ? "bg-blue-600 text-white" : "bg-gray-400 text-white"}`}>
+      <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full shadow border text-white ${swStatus === "active" ? "bg-primary" : "bg-muted-foreground"}`}>
         <Smartphone className="size-3" />
         SW: {swStatus}
       </div>

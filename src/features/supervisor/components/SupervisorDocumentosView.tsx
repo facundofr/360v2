@@ -63,29 +63,29 @@ export function SupervisorDocumentosView({ onIrAPolizas }: SupervisorDocumentosV
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm flex items-center gap-2">
-            <Info className="size-4 text-blue-500" />
+            <Info className="size-4 text-muted-foreground" />
             Tipos de documentos soportados
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-sm font-semibold text-violet-600 dark:text-violet-400 mb-2">Documentos de Cliente:</p>
+              <p className="text-sm font-semibold mb-2">Documentos de Cliente:</p>
               <ul className="space-y-1.5">
                 {tiposDocumentos.cliente.map(t => (
                   <li key={t} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <FileText className="size-3.5 text-violet-500 shrink-0" />
+                    <FileText className="size-3.5 text-muted-foreground shrink-0" />
                     {t}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <p className="text-sm font-semibold text-green-600 dark:text-green-400 mb-2">Documentos Internos:</p>
+              <p className="text-sm font-semibold mb-2">Documentos Internos:</p>
               <ul className="space-y-1.5">
                 {tiposDocumentos.internos.map(t => (
                   <li key={t} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <FileText className="size-3.5 text-green-500 shrink-0" />
+                    <FileText className="size-3.5 text-muted-foreground shrink-0" />
                     {t}
                   </li>
                 ))}
@@ -95,9 +95,9 @@ export function SupervisorDocumentosView({ onIrAPolizas }: SupervisorDocumentosV
 
           <Separator className="my-4" />
 
-          <div className="flex items-start gap-2 rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-800 px-4 py-3">
-            <Info className="size-4 text-blue-600 shrink-0 mt-0.5" />
-            <p className="text-xs text-blue-800 dark:text-blue-300">
+          <div className="flex items-start gap-2 rounded-lg border bg-muted px-4 py-3">
+            <Info className="size-4 text-muted-foreground shrink-0 mt-0.5" />
+            <p className="text-xs text-muted-foreground">
               <strong>Límites:</strong> Máximo 6 archivos por carga, 10MB por archivo. Formatos soportados: JPG, PNG, PDF, DOC, DOCX.
             </p>
           </div>

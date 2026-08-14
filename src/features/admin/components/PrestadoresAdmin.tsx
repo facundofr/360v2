@@ -206,7 +206,7 @@ export default function PrestadoresAdmin() {
                   <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{p.localidad ?? "—"}</TableCell>
                   <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{p.telefono ?? "—"}</TableCell>
                   <TableCell>
-                    <Badge variant={p.estado ? "default" : "secondary"} className={`text-xs ${p.estado ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}`}>
+                    <Badge variant={p.estado ? "ok" : "secondary"} className="text-xs">
                       {p.estado ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
@@ -214,10 +214,10 @@ export default function PrestadoresAdmin() {
                     <div className="flex gap-1">
                       <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => setDetalleModal(p)} title="Ver detalle"><Eye className="size-3.5" /></Button>
                       <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(p)} title="Editar"><Edit2 className="size-3.5" /></Button>
-                      <Button size="icon" className={`size-8 ${p.estado ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`} onClick={() => toggleEstado(p)} title={p.estado ? "Desactivar" : "Activar"}>
+                      <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(p)} title={p.estado ? "Desactivar" : "Activar"}>
                         {p.estado ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
                       </Button>
-                      <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminar(p)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
+                      <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(p)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

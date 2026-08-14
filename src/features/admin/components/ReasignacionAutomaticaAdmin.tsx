@@ -130,8 +130,8 @@ export default function ReasignacionAutomaticaAdmin() {
 
             <Card><CardContent className="p-4">
               <p className="text-xs text-muted-foreground uppercase mb-1">Promedio por hora</p>
-              <p className="text-sm font-semibold text-primary">Actividad {promedioActividad}%</p>
-              <p className="text-sm font-semibold text-blue-600">Cambio estado {promedioCambioEstado}%</p>
+              <p className="text-sm font-semibold">Actividad {promedioActividad}%</p>
+              <p className="text-sm font-semibold">Cambio estado {promedioCambioEstado}%</p>
             </CardContent></Card>
 
             <Card><CardContent className="p-4">
@@ -146,7 +146,7 @@ export default function ReasignacionAutomaticaAdmin() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
-                <CheckCircle className="size-4 text-green-500" />Efectividad por hora (hoy)
+                <CheckCircle className="size-4 text-muted-foreground" />Efectividad por hora (hoy)
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -161,7 +161,7 @@ export default function ReasignacionAutomaticaAdmin() {
                     <Tooltip formatter={(v: number) => `${v}%`} />
                     <Legend />
                     <Bar dataKey="porcentaje_cambio_estado" name="% Cambio de estado" fill="var(--primary)" radius={[4,4,0,0]} />
-                    <Bar dataKey="porcentaje_con_actividad" name="% Actividad" fill="#20c997" radius={[4,4,0,0]} />
+                    <Bar dataKey="porcentaje_con_actividad" name="% Actividad" fill="var(--chart-2)" radius={[4,4,0,0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -192,8 +192,8 @@ export default function ReasignacionAutomaticaAdmin() {
                     <TableRow key={i}>
                       <TableCell><Badge variant="secondary">{h.hora_ejecucion}</Badge></TableCell>
                       <TableCell className="text-right font-bold">{h.total_reasignados}</TableCell>
-                      <TableCell className="text-right text-green-600">{h.porcentaje_con_actividad ?? 0}%</TableCell>
-                      <TableCell className="text-right text-blue-600">{h.porcentaje_cambio_estado ?? 0}%</TableCell>
+                      <TableCell className="text-right">{h.porcentaje_con_actividad ?? 0}%</TableCell>
+                      <TableCell className="text-right">{h.porcentaje_cambio_estado ?? 0}%</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

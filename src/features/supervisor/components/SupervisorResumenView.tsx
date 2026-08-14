@@ -114,10 +114,10 @@ export function SupervisorResumenView() {
 
   const kpis = [
     { label: "Prospectos asignados", valor: resumen.totalAsignados, icon: ClipboardList, color: "text-primary" },
-    { label: "Nuevos hoy",           valor: resumen.nuevosDia,      icon: CalendarDays,  color: "text-sky-500" },
-    { label: "Nuevos esta semana",   valor: resumen.nuevosSemana,   icon: CalendarRange, color: "text-indigo-500" },
-    { label: "Nuevos este mes",      valor: resumen.nuevosMes,      icon: TrendingUp,    color: "text-amber-500" },
-    { label: "Ventas",               valor: resumen.totalVentas,    icon: Users,         color: "text-emerald-500" },
+    { label: "Nuevos hoy",           valor: resumen.nuevosDia,      icon: CalendarDays,  color: "text-muted-foreground" },
+    { label: "Nuevos esta semana",   valor: resumen.nuevosSemana,   icon: CalendarRange, color: "text-muted-foreground" },
+    { label: "Nuevos este mes",      valor: resumen.nuevosMes,      icon: TrendingUp,    color: "text-muted-foreground" },
+    { label: "Ventas",               valor: resumen.totalVentas,    icon: Users,         color: "text-state-ok-text" },
   ]
 
   const datosGrafico = resumen.prospectosPorEstado.map((p, i) => ({

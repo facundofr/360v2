@@ -32,12 +32,12 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-muted flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader
           className={`rounded-t-lg text-center space-y-2 p-6 text-white ${
             status === "success"
-              ? "bg-green-600"
+              ? "bg-state-ok"
               : status === "error"
                 ? "bg-destructive"
                 : "bg-primary"

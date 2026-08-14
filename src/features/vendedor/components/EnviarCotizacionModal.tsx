@@ -110,9 +110,9 @@ export function EnviarCotizacionModal({ open, onClose, cotizacion, prospecto }: 
   }
 
   const mensajeClasses = {
-    success: "bg-green-50 border-green-200 text-green-800 dark:bg-green-950/30 dark:text-green-300",
-    error: "bg-red-50 border-red-200 text-red-800 dark:bg-red-950/30 dark:text-red-300",
-    info: "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950/30 dark:text-blue-300",
+    success: "bg-state-ok-soft border-state-ok/30 text-state-ok-text",
+    error: "bg-state-risk-soft border-state-risk/30 text-state-risk-text",
+    info: "bg-muted text-muted-foreground",
   }
 
   return (
@@ -137,7 +137,7 @@ export function EnviarCotizacionModal({ open, onClose, cotizacion, prospecto }: 
               </p>
               <p>
                 <span className="text-muted-foreground">Total:</span>{" "}
-                <strong className="text-green-600">{formatCurrency(cotizacion.total_final)}</strong>
+                <strong>{formatCurrency(cotizacion.total_final)}</strong>
               </p>
             </div>
           )}

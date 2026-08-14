@@ -210,7 +210,7 @@ export default function MetricasVendedorView() {
                     <tr key={i} className="border-b hover:bg-muted/30">
                       <td className="py-2 font-medium">{v.vendedor}</td>
                       <td className="text-right py-2">{v.total_prospectos}</td>
-                      <td className="text-right py-2 text-emerald-600 font-medium">{v.ventas}</td>
+                      <td className="text-right py-2 font-medium">{v.ventas}</td>
                       <td className="text-right py-2">{v.tasa_conversion}%</td>
                     </tr>
                   ))}

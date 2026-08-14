@@ -140,7 +140,7 @@ export default function DetalleSupervisorView() {
             <CardTitle className="flex items-center gap-2">
               <UserCheck className="size-5" />
               {supervisor.name}
-              <Badge className={supervisor.activo ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+              <Badge variant={supervisor.activo ? "ok" : "risk"}>
                 {supervisor.activo ? "Activo" : "Inactivo"}
               </Badge>
             </CardTitle>
@@ -204,7 +204,7 @@ export default function DetalleSupervisorView() {
                     <TableCell className="hidden md:table-cell text-sm">{v.total_prospectos ?? 0}</TableCell>
                     <TableCell className="hidden md:table-cell text-sm">{v.total_polizas ?? 0}</TableCell>
                     <TableCell>
-                      <Badge className={v.activo ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+                      <Badge variant={v.activo ? "ok" : "risk"}>
                         {v.activo ? "Activo" : "Inactivo"}
                       </Badge>
                     </TableCell>

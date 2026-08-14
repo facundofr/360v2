@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { toast } from "sonner"
 import {
-  Users, TrendingUp, DollarSign, FileText, LogOut,
+  Users, DollarSign, FileText,
   Search, X, UserCheck, RefreshCw,
   ArrowRightLeft, Tag, FolderOpen,
-  TrendingDown, Minus, LayoutDashboard,
+  LayoutDashboard,
   ChevronRight, Download, Eye, MessageCircle, Loader2, Receipt, ClipboardList
 } from "lucide-react"
 import { SupervisorPolizasView } from "../components/SupervisorPolizasView"
@@ -22,9 +22,7 @@ import CargaMultipleDocumentos from "@/components/supervisor/CargaMultipleDocume
 import ModalExportacion from "@/components/modals/ModalExportacion"
 
 import {
-  SidebarProvider, Sidebar, SidebarContent, SidebarHeader,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger,
-  SidebarInset, SidebarFooter
+  SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -37,21 +35,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useAuth } from "@/contexts/AuthContext"
-import ThemeToggle from "@/components/common/theme-toggle"
-import { useSidebar } from "@/components/ui/sidebar"
-import Logo from "@/components/ui/logo"
+import { DashboardShell } from "@/components/common/DashboardShell"
+import { StatCard } from "@/components/common/StatCard"
 import { getBadgeEstado } from "@/utils/estadosHelper"
-
-function SupervisorMobileControls() {
-  const { setOpenMobile } = useSidebar()
-  return (
-    <div className="flex flex-col items-end">
-      <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpenMobile(false)} aria-label="Cerrar menú"><X className="size-4"/></Button>
-    </div>
-  )
-}
 import { ENDPOINTS, API_URL } from "@/lib/config"
-import { AppVersion } from "@/components/common/AppVersion"
 import { getAuthToken } from "@/lib/auth"
 
 const ESTADOS = [
@@ -156,7 +143,7 @@ function SidebarNavContent({
                 </div>
                 <div className="flex flex-1 flex-col items-start min-w-0">
                   <span className={`text-sm font-medium leading-tight ${
-                    active ? "text-violet-600 dark:text-violet-400" : ""
+                    active ? "text-primary dark:text-purple-400" : ""
                   }`}>{v.label}</span>
                   <span className="text-xs text-muted-foreground leading-tight truncate">{v.desc}</span>
                 </div>
@@ -394,83 +381,34 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
     return "#dc2626"
   }
 
+  const headerTitle =
+    vista === "dashboard" ? "Dashboard Supervisor"
+      : vista === "prospectos" ? "Gestión de Prospectos"
+      : vista === "vendedores" ? "Mis Vendedores"
+      : vista === "polizas" ? "Pólizas"
+      : vista === "documentos" ? "Documentos"
+      : vista === "chat" ? "Chat del equipo"
+      : vista === "resumen" ? "Resumen del equipo"
+      : vista === "cotizaciones" ? "Cotizaciones"
+      : vista === "metricas" ? "Métricas por vendedor"
+      : "Promociones"
+
   return (
-    <SidebarProvider>
-      <Sidebar variant="inset" className="border-r-0">
-        {/* Header: gradiente de identidad supervisor */}
-        <SidebarHeader className="pb-0">
-          <div className="relative overflow-hidden rounded-t-lg bg-gradient-to-br from-primary via-primary to-[#3d1a4d] px-4 pt-5 pb-4">
-            {/* Círculos decorativos */}
-            <div className="pointer-events-none absolute -top-6 -right-6 size-24 rounded-full bg-white/10" />
-            <div className="pointer-events-none absolute -bottom-4 -left-4 size-16 rounded-full bg-white/8" />
-            <div className="relative flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 ring-2 ring-white/30 backdrop-blur-sm overflow-hidden">
-                  <Logo className="h-7" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-tight text-white">Supervisor</p>
-                  <p className="text-[11px] leading-tight text-violet-200">{user?.name ?? "Panel"}</p>
-                </div>
-              </div>
-              <SupervisorMobileControls />
-            </div>
-            <div className="mt-3 flex items-center gap-2">
-              <Badge className="bg-white/20 text-white border-0 text-[10px] font-semibold hover:bg-white/30">
-                Supervisión
-              </Badge>
-            </div>
-          </div>
-        </SidebarHeader>
-
-        <SidebarNavContent vista={vista} setVista={setVista} setExportarModal={setExportarModal} />
-
-        <SidebarFooter className="border-t p-3">
-          <div className="flex items-center gap-2 px-1 py-1.5">
-            <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15 dark:bg-primary/25">
-              <span className="text-xs font-bold text-primary dark:text-purple-300">
-                {(user?.name ?? "S").charAt(0).toUpperCase()}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate">{user?.name ?? "Supervisor"}</p>
-              <p className="text-[10px] text-muted-foreground truncate">{user?.email ?? ""}</p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-destructive"
-              onClick={() => logout().then(() => navigate("/login"))}
-              title="Cerrar sesión"
-            >
-              <LogOut className="size-3.5" />
-            </Button>
-          </div>
-          <AppVersion className="px-1 pt-1 group-data-[collapsible=icon]:hidden" />
-        </SidebarFooter>
-      </Sidebar>
-
-      <SidebarInset className="min-w-0 overflow-x-hidden">
-        <header className="flex items-center gap-3 border-b px-4 py-3 sticky top-0 bg-background z-10">
-          <SidebarTrigger />
-          <h1 className="font-semibold flex-1">
-            {vista === "dashboard" ? "Dashboard Supervisor"
-              : vista === "prospectos" ? "Gestión de Prospectos"
-              : vista === "vendedores" ? "Mis Vendedores"
-              : vista === "polizas" ? "Pólizas"
-              : vista === "documentos" ? "Documentos"
-              : vista === "chat" ? "Chat del equipo"
-              : vista === "resumen" ? "Resumen del equipo"
-              : vista === "cotizaciones" ? "Cotizaciones"
-              : vista === "metricas" ? "Métricas por vendedor"
-              : "Promociones"}
-          </h1>
-          <ThemeToggle className="h-8 w-8" />
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={fetchData}>
-            <RefreshCw className="size-4" />
-          </Button>
-        </header>
-
+    <DashboardShell
+      roleLabel="Supervisor"
+      roleBadgeLabel="Supervisión"
+      logoClassName="h-7"
+      userName={user?.name}
+      userEmail={user?.email}
+      onLogout={() => logout().then(() => navigate("/login"))}
+      navContent={<SidebarNavContent vista={vista} setVista={setVista} setExportarModal={setExportarModal} />}
+      headerTitle={headerTitle}
+      headerActions={
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={fetchData} aria-label="Actualizar">
+          <RefreshCw className="size-4" />
+        </Button>
+      }
+    >
         <div className="p-4 space-y-4">
           {/* DASHBOARD */}
           {vista === "dashboard" && (
@@ -481,60 +419,37 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
                   {
                     label: "Total Prospectos",
                     value: estadisticas.totalProspectos ?? estadisticas.total_prospectos ?? prospectos.length,
-                    icon: <Users className="size-5" />,
-                    iconBg: "bg-blue-100 dark:bg-blue-950",
-                    iconCls: "text-blue-600 dark:text-blue-400",
+                    icon: Users,
                     cambio: estadisticas.cambioProspectosMes,
                   },
                   {
                     label: "Vendedores Activos",
                     value: estadisticas.vendedoresActivos ?? estadisticas.totalVendedores ?? estadisticas.total_vendedores ?? vendedores.filter(v => (v as unknown as Record<string,unknown>).is_enabled !== false).length,
-                    icon: <UserCheck className="size-5" />,
-                    iconBg: "bg-purple-100 dark:bg-purple-950",
-                    iconCls: "text-purple-600 dark:text-purple-400",
+                    icon: UserCheck,
                     cambio: estadisticas.cambioVendedores,
                   },
                   {
                     label: "Ventas Confirmadas",
                     value: estadisticas.ventasConfirmadas ?? estadisticas.total_ventas ?? prospectos.filter(p => p.estado === "Venta").length,
-                    icon: <DollarSign className="size-5" />,
-                    iconBg: "bg-orange-100 dark:bg-orange-950",
-                    iconCls: "text-orange-600 dark:text-orange-400",
+                    icon: DollarSign,
                     cambio: estadisticas.cambioVentas,
                   },
                   {
                     label: "Pólizas Generadas",
                     value: estadisticas.totalPolizas ?? estadisticas.total_polizas ?? 0,
-                    icon: <FileText className="size-5" />,
-                    iconBg: "bg-slate-100 dark:bg-slate-800",
-                    iconCls: "text-slate-600 dark:text-slate-400",
+                    icon: FileText,
                     cambio: estadisticas.cambioPolizas,
                   },
-                ].map(({ label, value, icon, iconBg, iconCls, cambio }) => {
-                  const isPos = (cambio ?? 0) > 0
-                  const isNeg = (cambio ?? 0) < 0
-                  return (
-                    <Card key={label} className="overflow-hidden">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0">
-                            <p className="text-xs text-muted-foreground leading-tight">{label}</p>
-                            <p className="text-2xl font-bold mt-1 tabular-nums">{loading ? "..." : value}</p>
-                            {cambio !== undefined && (
-                              <p className={`text-xs mt-1 flex items-center gap-0.5 font-medium ${isPos ? "text-green-600" : isNeg ? "text-red-500" : "text-muted-foreground"}`}>
-                                {isPos ? <TrendingUp className="size-3 shrink-0" /> : isNeg ? <TrendingDown className="size-3 shrink-0" /> : <Minus className="size-3 shrink-0" />}
-                                {isPos ? "+" : ""}{cambio}% vs mes anterior
-                              </p>
-                            )}
-                          </div>
-                          <div className={`rounded-full p-2.5 ${iconBg} shrink-0`}>
-                            <span className={iconCls}>{icon}</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
+                ].map(({ label, value, icon, cambio }) => (
+                  <StatCard
+                    key={label}
+                    icon={icon}
+                    label={label}
+                    value={loading ? "…" : value}
+                    subtitle={cambio !== undefined ? "vs. mes anterior" : undefined}
+                    trend={cambio !== undefined ? { value: cambio, positive: cambio >= 0 } : null}
+                  />
+                ))}
               </div>
 
               {/* Gráfico Tendencias Mensuales */}
@@ -587,7 +502,7 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
                                 {v.nombre ?? `${v.first_name ?? ""} ${v.last_name ?? ""}`.trim()}
                               </TableCell>
                               <TableCell className="text-right text-sm">{v.total_prospectos ?? "-"}</TableCell>
-                              <TableCell className="text-right text-sm font-semibold text-green-600">{v.ventas ?? "-"}</TableCell>
+                              <TableCell className="text-right text-sm font-semibold">{v.ventas ?? "-"}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -686,23 +601,23 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-1 flex-wrap">
-                              <Button variant="outline" size="icon" className="h-7 w-7 border-purple-400 text-purple-600 hover:bg-purple-50"
+                              <Button variant="outline" size="icon" className="h-7 w-7"
                                 title="Ver detalle" disabled={isBtnLoading(p.id, "detalle")} onClick={() => verDetalle(p)}>
                                 {isBtnLoading(p.id, "detalle") ? <Loader2 className="size-3.5 animate-spin" /> : <Eye className="size-3.5" />}
                               </Button>
-                              <Button variant="outline" size="icon" className="h-7 w-7 border-sky-400 text-sky-600 hover:bg-sky-50 hidden lg:inline-flex"
+                              <Button variant="outline" size="icon" className="h-7 w-7 hidden lg:inline-flex"
                                 title="Ver historial" disabled={isBtnLoading(p.id, "historial")} onClick={() => verHistorial(p)}>
                                 {isBtnLoading(p.id, "historial") ? <Loader2 className="size-3.5 animate-spin" /> : <UserCheck className="size-3.5" />}
                               </Button>
-                              <Button variant="outline" size="icon" className="h-7 w-7 border-green-400 text-green-600 hover:bg-green-50 hidden xl:inline-flex"
+                              <Button variant="outline" size="icon" className="h-7 w-7 hidden xl:inline-flex"
                                 title="Ver cotizaciones" disabled={isBtnLoading(p.id, "cotizaciones")} onClick={() => verCotizaciones(p)}>
                                 {isBtnLoading(p.id, "cotizaciones") ? <Loader2 className="size-3.5 animate-spin" /> : <DollarSign className="size-3.5" />}
                               </Button>
-                              <Button variant="outline" size="icon" className="h-7 w-7 border-amber-400 text-amber-600 hover:bg-amber-50"
+                              <Button variant="outline" size="icon" className="h-7 w-7"
                                 title="Reasignar vendedor" onClick={() => setModalReasignar({ open: true, prospecto: p })}>
                                 <ArrowRightLeft className="size-3.5" />
                               </Button>
-                              <Button variant="outline" size="icon" className="h-7 w-7 border-emerald-400 text-emerald-600 hover:bg-emerald-50 hidden lg:inline-flex"
+                              <Button variant="outline" size="icon" className="h-7 w-7 text-green-600 hover:bg-green-50 hidden lg:inline-flex"
                                 title="WhatsApp" disabled={isBtnLoading(p.id, "whatsapp")} onClick={() => abrirWhatsApp(p)}>
                                 {isBtnLoading(p.id, "whatsapp") ? <Loader2 className="size-3.5 animate-spin" /> : <MessageCircle className="size-3.5" />}
                               </Button>
@@ -731,7 +646,6 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
           {vista === "cotizaciones" && <SupervisorCotizacionesPorUsuario />}
           {vista === "promociones" && <SupervisorPromocionesView />}
         </div>
-      </SidebarInset>
 
       {/* Modal reasignar */}
       <Dialog open={modalReasignar.open} onOpenChange={(open: boolean) => setModalReasignar({ open, prospecto: open ? modalReasignar.prospecto : null })}>
@@ -889,7 +803,7 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
                     <p className="font-semibold">{planNombre ?? `Plan ${i + 1}`}</p>
                     {tipoAfil && <p className="text-muted-foreground">{tipoAfil}</p>}
                     {totalFinal != null && (
-                      <p className="text-green-600 font-bold">
+                      <p className="font-bold">
                         ${totalFinal.toLocaleString("es-AR")} / mes
                       </p>
                     )}
@@ -911,6 +825,6 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
         onOpenChange={setExportarModal}
         userRole="supervisor"
       />
-    </SidebarProvider>
+    </DashboardShell>
   )
 }

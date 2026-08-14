@@ -123,7 +123,7 @@ export function ChatVendedor() {
         <div className="fixed bottom-36 right-4 z-50 w-80 sm:w-96 rounded-2xl border bg-background shadow-2xl flex flex-col overflow-hidden"
           style={{ maxHeight: "min(480px, calc(100vh - 160px))" }}>
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-purple-600 text-white">
+          <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
             <div className="flex items-center gap-2">
               <Bot className="size-5" />
               <div>
@@ -214,7 +214,7 @@ export function ChatVendedor() {
                 <div
                   className={`rounded-2xl px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap ${
                     msg.role === "user"
-                      ? "bg-purple-600 text-white"
+                      ? "bg-primary text-primary-foreground"
                       : "bg-muted text-foreground"
                   }`}
                 >
@@ -262,7 +262,7 @@ export function ChatVendedor() {
               onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
             />
             <Button size="icon" onClick={handleSend} disabled={!input.trim() || loading}
-              className="bg-purple-600 hover:bg-purple-700 shrink-0">
+              className="bg-primary hover:bg-primary/90 shrink-0">
               <Send className="size-4" />
             </Button>
           </div>

@@ -188,7 +188,7 @@ export function PasoSaludTerminos({
                 </Badge>
               )}
               {respondidas(idx) === PREGUNTAS_SALUD.length && (
-                <Badge className="gap-1 bg-emerald-600 text-white hover:bg-emerald-600">
+                <Badge variant="ok" className="gap-1">
                   <CheckCircle2 className="size-3" />
                   Completo
                 </Badge>

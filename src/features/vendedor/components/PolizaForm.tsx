@@ -1117,11 +1117,11 @@ export function PolizaForm({ cotizacion, prospecto, open, onClose, onPolizaCread
     <div className="space-y-4">
       {polizaGenerada ? (
         <div className="space-y-4 py-4 text-center">
-          <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40">
-            <Check className="size-8 text-emerald-600" />
+          <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-state-ok-soft">
+            <Check className="size-8 text-state-ok-text" />
           </div>
           <div>
-            <p className="text-xl font-bold text-emerald-600">¡Póliza generada!</p>
+            <p className="text-xl font-bold text-state-ok-text">¡Póliza generada!</p>
             <p className="text-sm text-muted-foreground">
               Nº {String(dp.numero_poliza_vendedor || polizaGenerada.numero_poliza || polizaGenerada.id || "")}
             </p>
@@ -1188,7 +1188,7 @@ export function PolizaForm({ cotizacion, prospecto, open, onClose, onPolizaCread
                 <p><strong>Plan:</strong> {cotizacion.plan_nombre}</p>
                 {cotizacion.prestador_nombre && <p><strong>Prestador:</strong> {cotizacion.prestador_nombre}</p>}
                 <p><strong>Total final:</strong>{" "}
-                  <span className="font-bold text-emerald-600">
+                  <span className="font-bold">
                     {new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS" }).format(cotizacion.total_final ?? 0)}
                   </span>
                 </p>

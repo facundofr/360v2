@@ -217,7 +217,7 @@ export default function FormularioLeadPage() {
             disabled={guardandoPreferencia}
             onClick={() => registrarPreferencia("email")}
           >
-            <Mail className="size-4 mr-2 text-sky-600" />
+            <Mail className="size-4 mr-2 text-muted-foreground" />
             <span className="text-left">
               <span className="block font-medium">Email</span>
               <span className="block text-xs text-muted-foreground">{prospectoData?.correo || "A tu correo"}</span>
@@ -229,7 +229,7 @@ export default function FormularioLeadPage() {
             disabled={guardandoPreferencia}
             onClick={() => registrarPreferencia("llamada")}
           >
-            <PhoneCall className="size-4 mr-2 text-indigo-600" />
+            <PhoneCall className="size-4 mr-2 text-muted-foreground" />
             <span className="text-left">
               <span className="block font-medium">Llamada</span>
               <span className="block text-xs text-muted-foreground">Un agente te contacta</span>
@@ -242,15 +242,15 @@ export default function FormularioLeadPage() {
 
   if (enviado) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="w-full max-w-md shadow-xl text-center">
           <CardContent className="p-10 space-y-4">
             <div className="flex justify-center">
-              <div className="size-16 bg-green-100 rounded-full flex items-center justify-center">
-                <Users className="size-8 text-green-600" />
+              <div className="size-16 bg-state-ok-soft rounded-full flex items-center justify-center">
+                <Users className="size-8 text-state-ok-text" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-green-700">¡Solicitud enviada!</h2>
+            <h2 className="text-2xl font-bold text-state-ok-text">¡Solicitud enviada!</h2>
             <p className="text-muted-foreground">
               Recibimos tu información. Un asesor de COBER Salud se pondrá en contacto contigo a la brevedad.
             </p>

@@ -152,7 +152,7 @@ export function BackofficePromocionesView() {
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-blue-50"><Tag className="size-5 text-blue-600" aria-hidden="true" /></div>
+              <div className="rounded-xl p-2.5 bg-muted"><Tag className="size-5 text-muted-foreground" aria-hidden="true" /></div>
               <div>
                 <p className="text-2xl font-bold tabular-nums leading-none">{promociones.length}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Total</p>
@@ -163,9 +163,9 @@ export function BackofficePromocionesView() {
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-green-50"><CheckCircle2 className="size-5 text-green-600" aria-hidden="true" /></div>
+              <div className="rounded-xl p-2.5 bg-state-ok-soft"><CheckCircle2 className="size-5 text-state-ok-text" aria-hidden="true" /></div>
               <div>
-                <p className="text-2xl font-bold tabular-nums leading-none text-green-600">{promociones.filter(p => p.activa).length}</p>
+                <p className="text-2xl font-bold tabular-nums leading-none text-state-ok-text">{promociones.filter(p => p.activa).length}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Activas</p>
               </div>
             </div>
@@ -232,11 +232,11 @@ export function BackofficePromocionesView() {
                       <TableCell className="hidden sm:table-cell text-sm text-muted-foreground max-w-[200px] truncate">{p.descripcion ?? "—"}</TableCell>
                       <TableCell className="text-center">
                         {p.descuento_porcentaje !== undefined ? (
-                          <Badge variant="outline" className="border-green-500 text-green-600">{p.descuento_porcentaje}%</Badge>
+                          <Badge variant="ok">{p.descuento_porcentaje}%</Badge>
                         ) : "—"}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={p.activa ? "outline" : "secondary"} className={p.activa ? "border-green-500 text-green-600" : ""}>
+                        <Badge variant={p.activa ? "ok" : "secondary"}>
                           {p.activa ? "Activa" : "Inactiva"}
                         </Badge>
                       </TableCell>
@@ -248,7 +248,7 @@ export function BackofficePromocionesView() {
                           </TooltipTrigger><TooltipContent>Editar</TooltipContent></Tooltip>
                           <Tooltip><TooltipTrigger asChild>
                             <Button size="icon"
-                              className={`size-8 ${p.activa ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`}
+                              className="size-8 bg-muted text-foreground border hover:bg-accent"
                               aria-label={p.activa ? "Desactivar promoción" : "Activar promoción"}
                               disabled={savingToggle === p.id}
                               onClick={() => toggleActiva(p)}>
@@ -256,7 +256,7 @@ export function BackofficePromocionesView() {
                             </Button>
                           </TooltipTrigger><TooltipContent>{p.activa ? "Desactivar" : "Activar"}</TooltipContent></Tooltip>
                           <Tooltip><TooltipTrigger asChild>
-                            <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" aria-label="Eliminar promoción" onClick={() => eliminar(p)}><Trash2 className="size-3.5" aria-hidden="true" /></Button>
+                            <Button size="icon" variant="destructive" className="size-8" aria-label="Eliminar promoción" onClick={() => eliminar(p)}><Trash2 className="size-3.5" aria-hidden="true" /></Button>
                           </TooltipTrigger><TooltipContent>Eliminar</TooltipContent></Tooltip>
                         </div>
                       </TableCell>
@@ -276,7 +276,7 @@ export function BackofficePromocionesView() {
             <DialogTitle>{formData.id ? <><Edit className="inline size-4 mr-2" />Editar promoción</> : <><Plus className="inline size-4 mr-2" />Nueva promoción</>}</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4 pt-2">
-            {error && <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-md p-3">{error}</p>}
+            {error && <p className="text-sm text-state-risk-text bg-state-risk-soft border border-state-risk/30 rounded-md p-3">{error}</p>}
             <div>
               <Label className="text-sm mb-1.5 block">Nombre *</Label>
               <Input placeholder="Ej: Descuento verano" value={formData.nombre ?? ""} onChange={e => setFormData(f => ({ ...f, nombre: e.target.value }))} />
@@ -292,10 +292,10 @@ export function BackofficePromocionesView() {
                 <Input type="number" min={0} max={100} step={1} value={formData.descuento_porcentaje ?? 0}
                   onChange={e => setFormData(f => ({ ...f, descuento_porcentaje: Number(e.target.value) }))} className="flex-1" />
                 {(formData.descuento_porcentaje ?? 0) > 0 && (
-                  <div className="flex items-center gap-1.5 rounded-lg border border-green-200 bg-green-50 px-3 py-2">
-                    <Percent className="size-4 text-green-600" />
-                    <span className="font-bold text-green-700 text-lg">{formData.descuento_porcentaje}</span>
-                    <span className="text-xs text-green-600">de descuento</span>
+                  <div className="flex items-center gap-1.5 rounded-lg border border-state-ok/30 bg-state-ok-soft px-3 py-2">
+                    <Percent className="size-4 text-state-ok-text" />
+                    <span className="font-bold text-state-ok-text text-lg">{formData.descuento_porcentaje}</span>
+                    <span className="text-xs text-state-ok-text">de descuento</span>
                   </div>
                 )}
               </div>

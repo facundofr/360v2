@@ -173,7 +173,7 @@ export default function PromocionesAdmin() {
                     <Badge variant="outline" className="font-mono">{p.descuento_porcentaje}%</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={p.activa ? "default" : "secondary"} className={p.activa ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}>
+                    <Badge variant={p.activa ? "ok" : "secondary"}>
                       {p.activa ? "Activa" : "Inactiva"}
                     </Badge>
                   </TableCell>
@@ -181,10 +181,10 @@ export default function PromocionesAdmin() {
                   <TableCell>
                     <div className="flex gap-1">
                       <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirModal(p)} title="Editar"><Edit2 className="size-3.5" /></Button>
-                      <Button size="icon" className={`size-8 ${p.activa ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`} onClick={() => toggleActiva(p)} title={p.activa ? "Desactivar" : "Activar"}>
+                      <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleActiva(p)} title={p.activa ? "Desactivar" : "Activar"}>
                         {p.activa ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
                       </Button>
-                      <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminar(p)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
+                      <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(p)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

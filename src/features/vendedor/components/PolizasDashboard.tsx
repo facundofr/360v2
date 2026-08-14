@@ -58,18 +58,18 @@ function formatFecha(d?: string) {
 }
 
 function getEstadoBadge(estado?: string) {
-  const map: Record<string, string> = {
-    asesor: "bg-sky-100 text-sky-800",
-    supervisor: "bg-amber-100 text-amber-800",
-    auditoria: "bg-orange-100 text-orange-800",
-    aprobado: "bg-green-100 text-green-800",
-    rechazado: "bg-red-100 text-red-800",
-    vigente: "bg-emerald-100 text-emerald-800",
-    vencido: "bg-gray-100 text-gray-800",
+  const map: Record<string, "warn" | "ok" | "risk" | "secondary"> = {
+    asesor: "warn",
+    supervisor: "warn",
+    auditoria: "warn",
+    aprobado: "ok",
+    rechazado: "risk",
+    vigente: "ok",
+    vencido: "secondary",
   }
   const key = (estado ?? "").toLowerCase()
   return (
-    <Badge className={`text-xs ${map[key] ?? "bg-muted text-muted-foreground"}`}>
+    <Badge variant={map[key] ?? "secondary"} className="text-xs">
       {estado ?? "—"}
     </Badge>
   )
@@ -174,11 +174,11 @@ export default function PolizasDashboard({ polizas, loadingPolizas, onVerDocumen
                   <TableCell className="font-bold text-xs">{p.numero_poliza_oficial ?? p.numero_poliza ?? `#${p.id}`}</TableCell>
                   <TableCell className="hidden sm:table-cell text-sm">{p.prospecto_nombre} {p.prospecto_apellido}</TableCell>
                   <TableCell className="hidden md:table-cell text-xs text-muted-foreground">{p.plan_nombre}</TableCell>
-                  <TableCell className="font-bold text-emerald-600 text-sm">{formatCurrency(p.total_final ?? 0)}</TableCell>
+                  <TableCell className="font-bold text-sm">{formatCurrency(p.total_final ?? 0)}</TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1">
                       {getEstadoBadge(p.estado)}
-                      {p.requiere_auditoria_medica && <Badge className="text-xs bg-red-100 text-red-800">🏥 Auditoría</Badge>}
+                      {p.requiere_auditoria_medica && <Badge variant="warn" className="text-xs">🏥 Auditoría</Badge>}
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-xs text-muted-foreground">{formatFecha(p.created_at)}</TableCell>
@@ -228,14 +228,14 @@ export default function PolizasDashboard({ polizas, loadingPolizas, onVerDocumen
                   <p className="font-bold text-sm">Póliza #{p.numero_poliza_oficial ?? p.numero_poliza ?? p.id}</p>
                   <div className="flex flex-col gap-1 items-end">
                     {getEstadoBadge(p.estado)}
-                    {p.requiere_auditoria_medica && <Badge className="text-xs bg-red-100 text-red-800">🏥 Auditoría</Badge>}
+                    {p.requiere_auditoria_medica && <Badge variant="warn" className="text-xs">🏥 Auditoría</Badge>}
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="flex-1 space-y-2 text-sm">
                 <p className="font-medium">{p.prospecto_nombre} {p.prospecto_apellido}</p>
                 <p className="text-xs text-muted-foreground">{p.plan_nombre}</p>
-                <p className="text-lg font-bold text-emerald-600">{formatCurrency(p.total_final ?? 0)}</p>
+                <p className="text-lg font-bold">{formatCurrency(p.total_final ?? 0)}</p>
                 <p className="text-xs text-muted-foreground">{formatFecha(p.created_at)}</p>
                 <div className="flex gap-1 pt-2 flex-wrap">
                   {onEditarPoliza && (

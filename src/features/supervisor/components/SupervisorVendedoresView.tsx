@@ -366,11 +366,7 @@ export function SupervisorVendedoresView() {
 
   const categoriaBadge = (v: Vendedor) => {
     if (!v.categoria_nombre) return <Badge variant="outline" className="text-xs">Sin categoría</Badge>
-    const color =
-      v.categoria_prioridad === 1 ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      : v.categoria_prioridad === 2 ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-      : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-    return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${color}`}>{v.categoria_nombre}</span>
+    return <Badge variant="secondary" className="text-xs">{v.categoria_nombre}</Badge>
   }
 
   // ─── Render ──────────────────────────────────────────────────────────────────
@@ -385,19 +381,19 @@ export function SupervisorVendedoresView() {
             <p className="text-xs text-muted-foreground">Vendedores</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <UserCheck className="size-4 mx-auto mb-1 text-emerald-500" />
+            <UserCheck className="size-4 mx-auto mb-1 text-state-ok-text" />
             <p className="text-2xl font-bold">{metricasEquipo.vendedoresActivos}</p>
             <p className="text-xs text-muted-foreground">Con prospectos</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <BarChart2 className="size-4 mx-auto mb-1 text-sky-500" />
+            <BarChart2 className="size-4 mx-auto mb-1 text-muted-foreground" />
             <p className="text-2xl font-bold">
               {metricasEquipo.prospectosPorVendedor.reduce((s, v) => s + (v.total_prospectos ?? 0), 0)}
             </p>
             <p className="text-xs text-muted-foreground">Prospectos totales</p>
           </CardContent></Card>
           <Card><CardContent className="p-3 text-center">
-            <BarChart2 className="size-4 mx-auto mb-1 text-indigo-500" />
+            <BarChart2 className="size-4 mx-auto mb-1 text-muted-foreground" />
             <p className="text-2xl font-bold">
               {metricasEquipo.totalVendedores > 0
                 ? Math.round(
@@ -490,13 +486,9 @@ export function SupervisorVendedoresView() {
                       <Badge variant="secondary" className="text-xs">{v.total_prospectos ?? 0}</Badge>
                     </TableCell>
                     <TableCell>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        isEnabled(v)
-                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                          : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                      }`}>
+                      <Badge variant={isEnabled(v) ? "ok" : "secondary"} className="text-xs">
                         {isEnabled(v) ? "Habilitado" : "Deshabilitado"}
-                      </span>
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-center gap-1">
@@ -511,7 +503,7 @@ export function SupervisorVendedoresView() {
                         </Button>
                         <Button
                           size="icon"
-                          className={`size-8 ${isEnabled(v) ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`}
+                          className="size-8 bg-muted text-foreground border hover:bg-accent"
                           title={isEnabled(v) ? "Deshabilitar" : "Habilitar"}
                           disabled={togglingId === v.id}
                           onClick={() => handleToggle(v)}
@@ -520,7 +512,8 @@ export function SupervisorVendedoresView() {
                         </Button>
                         <Button
                           size="icon"
-                          className="size-8 bg-red-500 hover:bg-red-600 text-white border-0"
+                          variant="destructive"
+                          className="size-8"
                           title="Eliminar"
                           onClick={() => setConfirmEliminar(v)}
                         >
@@ -549,13 +542,9 @@ export function SupervisorVendedoresView() {
                       <CardTitle className="text-sm truncate">{nombreCompleto(v)}</CardTitle>
                       <p className="text-xs text-muted-foreground">ID: {v.id}</p>
                     </div>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium shrink-0 ${
-                      isEnabled(v)
-                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                        : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                    }`}>
+                    <Badge variant={isEnabled(v) ? "ok" : "secondary"} className="text-[10px] shrink-0">
                       {isEnabled(v) ? "Activo" : "Inactivo"}
-                    </span>
+                    </Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="pb-2 space-y-1.5 text-xs">
@@ -619,13 +608,9 @@ export function SupervisorVendedoresView() {
               <div className="space-y-3">
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Estado</p>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    isEnabled(detalleVendedor)
-                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                      : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                  }`}>
+                  <Badge variant={isEnabled(detalleVendedor) ? "ok" : "secondary"} className="text-xs">
                     {isEnabled(detalleVendedor) ? "Habilitado" : "Deshabilitado"}
-                  </span>
+                  </Badge>
                 </div>
                 <div><p className="text-xs text-muted-foreground">Prospectos</p><p className="font-bold">{detalleVendedor.total_prospectos ?? 0}</p></div>
                 <div>

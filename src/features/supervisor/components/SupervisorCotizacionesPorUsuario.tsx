@@ -60,7 +60,7 @@ function infoPromocion(valor: number | undefined) {
     esIncremento,
     monto: esIncremento ? `+ ${formatCurrency(Math.abs(num))}` : formatCurrency(num),
     label: esIncremento ? "Incremento" : "Promoción",
-    clase: esIncremento ? "text-red-500" : "text-amber-500",
+    clase: esIncremento ? "text-state-risk-text" : "text-state-ok-text",
   }
 }
 
@@ -232,7 +232,7 @@ export function SupervisorCotizacionesPorUsuario() {
                                 <TableCell className={cn("text-right text-xs", promo.clase)}>
                                   {c.descuento_promocion ? promo.monto : "—"}
                                 </TableCell>
-                                <TableCell className="text-right font-semibold text-green-600">
+                                <TableCell className="text-right font-semibold">
                                   {formatCurrency(c.total_final ?? c.precio_final)}
                                 </TableCell>
                               </TableRow>
@@ -290,7 +290,7 @@ export function SupervisorCotizacionesPorUsuario() {
                             <TableCell className={cn("text-xs text-right", promo.clase)}>
                               {c.descuento_promocion ? promo.monto : "—"}
                             </TableCell>
-                            <TableCell className="text-xs text-right font-semibold text-green-600">
+                            <TableCell className="text-xs text-right font-semibold">
                               {formatCurrency(c.total_final ?? c.precio_final)}
                             </TableCell>
                           </TableRow>

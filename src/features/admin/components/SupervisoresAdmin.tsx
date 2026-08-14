@@ -203,21 +203,21 @@ export default function SupervisoresAdmin() {
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <UserCheck className="size-4 mx-auto mb-1 text-emerald-500" />
+            <UserCheck className="size-4 mx-auto mb-1 text-state-ok-text" />
             <p className="text-2xl font-bold text-foreground">{supervisoresActivos}</p>
             <p className="text-xs text-muted-foreground mt-1">Supervisores Activos</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Users className="size-4 mx-auto mb-1 text-sky-500" />
+            <Users className="size-4 mx-auto mb-1 text-muted-foreground" />
             <p className="text-2xl font-bold text-foreground">{totalVendedores}</p>
             <p className="text-xs text-muted-foreground mt-1">Total Vendedores</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <UserX className="size-4 mx-auto mb-1 text-amber-500" />
+            <UserX className="size-4 mx-auto mb-1 text-state-warn-text" />
             <p className="text-2xl font-bold text-foreground">{vendedoresSinSupervisor.length}</p>
             <p className="text-xs text-muted-foreground mt-1">Sin Supervisor</p>
           </CardContent>
@@ -288,7 +288,7 @@ export default function SupervisoresAdmin() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center hidden md:table-cell">
-                        <span className="inline-flex size-7 items-center justify-center rounded-full bg-green-500 text-white text-xs font-bold">
+                        <span className="inline-flex size-7 items-center justify-center rounded-full bg-state-ok text-white text-xs font-bold">
                           {s.vendedores_activos ?? 0}
                         </span>
                       </TableCell>
@@ -317,7 +317,7 @@ export default function SupervisoresAdmin() {
                             size="icon"
                             onClick={() => setConfirmToggle({ open: true, sup: s })}
                             title={s.is_enabled !== false ? "Deshabilitar" : "Habilitar"}
-                            className={`size-8 ${s.is_enabled !== false ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`}
+                            className="size-8 bg-muted text-foreground border hover:bg-accent"
                           >
                             <Link2Off className="size-3.5" />
                           </Button>
@@ -374,7 +374,7 @@ export default function SupervisoresAdmin() {
                       <p className="text-xs text-muted-foreground">Vendedores</p>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-2xl font-bold text-state-ok-text">
                         {(detalleData.vendedores ?? []).filter(v => v.is_enabled !== false).length}
                       </p>
                       <p className="text-xs text-muted-foreground">Activos</p>
@@ -422,7 +422,7 @@ export default function SupervisoresAdmin() {
                               </Badge>
                             </TableCell>
                             <TableCell className="text-center">
-                              <Badge className="bg-green-600 hover:bg-green-600 text-white text-xs rounded-full px-2">
+                              <Badge variant="ok" className="text-xs rounded-full px-2">
                                 {v.ventas_realizadas ?? 0}
                               </Badge>
                             </TableCell>
@@ -449,7 +449,7 @@ export default function SupervisoresAdmin() {
           )}
 
           <DialogFooter>
-            <Button variant="destructive"
+            <Button variant="outline"
               onClick={() => setDetalleModal({ open: false, sup: null })}>
               Cerrar
             </Button>
@@ -462,7 +462,7 @@ export default function SupervisoresAdmin() {
         <DialogContent className="sm:max-w-lg" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <UserPlus className="size-5 text-green-600" />
+              <UserPlus className="size-5 text-muted-foreground" />
               Asignar Vendedor a {asignarModal.sup?.first_name} {asignarModal.sup?.last_name}
             </DialogTitle>
           </DialogHeader>
@@ -488,15 +488,13 @@ export default function SupervisoresAdmin() {
                       <TableCell className="font-medium text-sm">{v.first_name} {v.last_name}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">{v.email}</TableCell>
                       <TableCell className="text-center">
-                        <Badge className={v.is_enabled !== false
-                          ? "bg-green-500 hover:bg-green-500 text-white text-[10px] rounded-full"
-                          : "bg-muted text-foreground border hover:bg-accent text-[10px] rounded-full"}>
+                        <Badge variant={v.is_enabled !== false ? "ok" : "secondary"} className="text-[10px] rounded-full">
                           {v.is_enabled !== false ? "Activo" : "Inactivo"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
                         <Button size="sm" disabled={asignando} onClick={() => asignarVendedor(v.id)}
-                          className="bg-green-500 hover:bg-green-600 text-white size-8 p-0">
+                          className="size-8 p-0">
                           <UserPlus className="size-3.5" />
                         </Button>
                       </TableCell>
@@ -508,7 +506,7 @@ export default function SupervisoresAdmin() {
           )}
 
           <DialogFooter>
-            <Button variant="destructive"
+            <Button variant="outline"
               onClick={() => setAsignarModal({ open: false, sup: null })}>
               Cerrar
             </Button>
@@ -521,7 +519,7 @@ export default function SupervisoresAdmin() {
         <DialogContent className="sm:max-w-sm" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Link2Off className="size-5 text-red-500" />
+              <Link2Off className="size-5 text-muted-foreground" />
               {confirmToggle.sup?.is_enabled !== false ? "Deshabilitar supervisor" : "Habilitar supervisor"}
             </DialogTitle>
           </DialogHeader>
@@ -535,13 +533,10 @@ export default function SupervisoresAdmin() {
             </span>?
           </p>
           <DialogFooter className="gap-2">
-            <Button variant="destructive" onClick={() => setConfirmToggle({ open: false, sup: null })}>
+            <Button variant="outline" onClick={() => setConfirmToggle({ open: false, sup: null })}>
               Cancelar
             </Button>
-            <Button onClick={ejecutarToggle}
-              className={confirmToggle.sup?.is_enabled !== false
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : "bg-green-500 hover:bg-green-600 text-white"}>
+            <Button variant={confirmToggle.sup?.is_enabled !== false ? "destructive" : "default"} onClick={ejecutarToggle}>
               {confirmToggle.sup?.is_enabled !== false ? "Sí, deshabilitar" : "Sí, habilitar"}
             </Button>
           </DialogFooter>

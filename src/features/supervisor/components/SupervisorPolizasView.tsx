@@ -13,6 +13,7 @@ import DocumentPreviewModal from "@/components/modals/DocumentPreviewModal"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -367,24 +368,12 @@ export function SupervisorPolizasView() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: "Total pólizas",   value: fmtNum(resumen.total_polizas),        icon: <FileText className="size-5" />,     iconBg: "bg-blue-50 dark:bg-blue-950",   iconColor: "text-blue-600" },
-            { label: "En proceso",      value: fmtNum(resumen.polizas_en_proceso),   icon: <AlertCircle className="size-5" />,  iconBg: "bg-amber-50 dark:bg-amber-950", iconColor: "text-amber-600" },
-            { label: "Finalizadas",     value: fmtNum(resumen.polizas_finalizadas),  icon: <CheckCircle2 className="size-5" />, iconBg: "bg-green-50 dark:bg-green-950", iconColor: "text-green-600" },
-            { label: "Tasa cierre",     value: metricas.finalization_rate ?? "—",    icon: <Percent className="size-5" />,      iconBg: "bg-violet-50 dark:bg-violet-950", iconColor: "text-violet-600" },
+            { label: "Total pólizas",   value: fmtNum(resumen.total_polizas),        icon: FileText,     tone: "neutral" as const },
+            { label: "En proceso",      value: fmtNum(resumen.polizas_en_proceso),   icon: AlertCircle,  tone: "warn" as const },
+            { label: "Finalizadas",     value: fmtNum(resumen.polizas_finalizadas),  icon: CheckCircle2, tone: "ok" as const },
+            { label: "Tasa cierre",     value: metricas.finalization_rate ?? "—",    icon: Percent,      tone: "neutral" as const },
           ].map(s => (
-            <Card key={s.label} className="overflow-hidden">
-              <CardContent className="p-0">
-                <div className="flex items-center gap-3 p-4">
-                  <div className={`rounded-xl p-2.5 ${s.iconBg} shrink-0`}>
-                    <span className={s.iconColor}>{s.icon}</span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xl font-bold tabular-nums leading-none">{s.value}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5 truncate">{s.label}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard key={s.label} icon={s.icon} label={s.label} value={s.value} tone={s.tone} />
           ))}
         </div>
 

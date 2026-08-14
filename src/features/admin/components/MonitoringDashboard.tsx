@@ -11,6 +11,7 @@ import {
   Server, Database, Cpu, HardDrive, Network,
   CheckCircle, AlertTriangle, RefreshCw, Loader2, Clock, Users, Eye,
 } from "lucide-react"
+import { getUmbralEstado, ESTADO_BG_SOLID } from "@/utils/getUmbralEstado"
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface SystemMetrics {
@@ -47,9 +48,7 @@ function formatUptime(s: number): string {
 }
 
 function progressColor(pct: number) {
-  if (pct < 60) return "bg-green-500"
-  if (pct < 80) return "bg-yellow-500"
-  return "bg-red-500"
+  return ESTADO_BG_SOLID[getUmbralEstado(pct)]
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -136,7 +135,7 @@ export default function MonitoringDashboard() {
               <Card>
                 <CardHeader className="pb-2 pt-4 px-4">
                   <CardTitle className="text-sm flex items-center gap-2">
-                    <Cpu className="h-4 w-4 text-blue-500" />CPU
+                    <Cpu className="h-4 w-4 text-muted-foreground" />CPU
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 pb-4 space-y-2">
@@ -157,7 +156,7 @@ export default function MonitoringDashboard() {
               <Card>
                 <CardHeader className="pb-2 pt-4 px-4">
                   <CardTitle className="text-sm flex items-center gap-2">
-                    <HardDrive className="h-4 w-4 text-purple-500" />Memoria RAM
+                    <HardDrive className="h-4 w-4 text-muted-foreground" />Memoria RAM
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 pb-4 space-y-2">
@@ -178,7 +177,7 @@ export default function MonitoringDashboard() {
               <Card>
                 <CardHeader className="pb-2 pt-4 px-4">
                   <CardTitle className="text-sm flex items-center gap-2">
-                    <Database className="h-4 w-4 text-orange-500" />Disco
+                    <Database className="h-4 w-4 text-muted-foreground" />Disco
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 pb-4 space-y-2">
@@ -244,7 +243,7 @@ export default function MonitoringDashboard() {
           {/* Red */}
           {metrics.network && (
             <Card>
-              <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Network className="h-4 w-4 text-cyan-500" />Red</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Network className="h-4 w-4 text-muted-foreground" />Red</CardTitle></CardHeader>
               <CardContent className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-xs text-muted-foreground">Recibido</p>

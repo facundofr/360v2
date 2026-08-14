@@ -178,24 +178,24 @@ export default function GestionCategorias() {
           <p className="text-xs text-muted-foreground">Total categorías</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <BarChart2 className="size-4 mx-auto mb-1 text-emerald-500" />
+          <BarChart2 className="size-4 mx-auto mb-1 text-state-ok-text" />
           <p className="text-2xl font-bold text-foreground">{estadisticas?.categorias_activas ?? totalActivas}</p>
           <p className="text-xs text-muted-foreground">Activas</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <Users className="size-4 mx-auto mb-1 text-sky-500" />
+          <Users className="size-4 mx-auto mb-1 text-muted-foreground" />
           <p className="text-2xl font-bold text-foreground">{estadisticas?.vendedores_asignados ?? cargaVendedores.length}</p>
           <p className="text-xs text-muted-foreground">Vendedores asignados</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <Users className="size-4 mx-auto mb-1 text-amber-500" />
+          <Users className="size-4 mx-auto mb-1 text-state-warn-text" />
           <p className="text-2xl font-bold text-foreground">
             {estadisticas?.vendedores_sin_categoria ?? Math.max(0, vendedores.length - cargaVendedores.length)}
           </p>
           <p className="text-xs text-muted-foreground">Sin categoría</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <BarChart2 className="size-4 mx-auto mb-1 text-indigo-500" />
+          <BarChart2 className="size-4 mx-auto mb-1 text-muted-foreground" />
           <p className="text-2xl font-bold text-foreground">{estadisticas?.prospectos_distribuidos ?? "—"}</p>
           <p className="text-xs text-muted-foreground">Prospectos distribuidos</p>
         </CardContent></Card>
@@ -236,8 +236,7 @@ export default function GestionCategorias() {
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{c.capacidad_maxima ?? "—"}</TableCell>
                   <TableCell>
-                    <Badge variant={(c.activa === true || c.activa === 1) ? "default" : "secondary"}
-                      className={(c.activa === true || c.activa === 1) ? "bg-green-100 text-green-800 hover:bg-green-100 text-xs" : "text-xs"}>
+                    <Badge variant={(c.activa === true || c.activa === 1) ? "ok" : "secondary"} className="text-xs">
                       {(c.activa === true || c.activa === 1) ? "Activa" : "Inactiva"}
                     </Badge>
                   </TableCell>
@@ -247,7 +246,7 @@ export default function GestionCategorias() {
                       <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => resetRoundRobin(c)} title="Reset round-robin">
                         <RotateCcw className="size-3.5" />
                       </Button>
-                      <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminar(c)} title="Eliminar">
+                      <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(c)} title="Eliminar">
                         <Trash2 className="size-3.5" />
                       </Button>
                     </div>

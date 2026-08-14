@@ -82,9 +82,9 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950/20 p-4 text-sm space-y-1">
-        <p className="font-medium text-blue-800 dark:text-blue-400">Requisitos del archivo</p>
-        <ul className="list-disc list-inside text-blue-700 dark:text-blue-300 space-y-0.5 text-xs">
+      <div className="rounded-lg border bg-muted p-4 text-sm space-y-1">
+        <p className="font-medium">Requisitos del archivo</p>
+        <ul className="list-disc list-inside text-muted-foreground space-y-0.5 text-xs">
           <li>Formato: CSV, XLSX o XLS</li>
           <li>Columnas obligatorias: nombre, apellido, edad, numero_contacto, correo, localidad</li>
           <li>Columnas opcionales: tipo_afiliacion_id, sueldo_bruto, categoria_monotributo, comentario</li>
@@ -122,7 +122,7 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
 
       {resultado && (
         <div className="rounded-lg border p-4 space-y-2">
-          <div className="flex items-center gap-2 text-sm font-medium text-green-700">
+          <div className="flex items-center gap-2 text-sm font-medium text-state-ok-text">
             <CheckCircle className="size-4" />Archivo procesado
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
@@ -134,11 +134,11 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
             ))}
           </div>
           {Array.isArray((resultado as { errores?: unknown[] }).errores) && (resultado as { errores: unknown[] }).errores.length > 0 && (
-            <div className="rounded border border-red-200 bg-red-50 dark:bg-red-950/20 p-3">
-              <div className="flex items-center gap-1 text-sm font-medium text-red-700 mb-2"><AlertCircle className="size-3" />Errores</div>
+            <div className="rounded border border-state-risk/30 bg-state-risk-soft p-3">
+              <div className="flex items-center gap-1 text-sm font-medium text-state-risk-text mb-2"><AlertCircle className="size-3" />Errores</div>
               <div className="max-h-32 overflow-y-auto space-y-1">
                 {((resultado as { errores: Array<{ fila?: number; error?: string }> }).errores).map((e, i) => (
-                  <p key={i} className="text-xs text-red-600">Fila {e.fila}: {e.error}</p>
+                  <p key={i} className="text-xs text-state-risk-text">Fila {e.fila}: {e.error}</p>
                 ))}
               </div>
             </div>
@@ -170,12 +170,12 @@ function EstadisticasRefritos({ refreshTrigger }: { refreshTrigger: number }) {
   if (!stats) return <p className="text-sm text-muted-foreground text-center py-8">Sin estadísticas</p>
 
   const tarjetas = [
-    { label: "Total", value: stats.total_refritos ?? 0, color: "text-primary" },
-    { label: "Pendientes", value: stats.pendientes ?? 0, color: "text-amber-500" },
-    { label: "Contactados", value: stats.contactados ?? 0, color: "text-sky-500" },
-    { label: "Ventas", value: stats.ventas ?? 0, color: "text-emerald-500" },
-    { label: "Sin contacto", value: stats.sin_contacto ?? 0, color: "text-orange-500" },
-    { label: "Definitivos", value: stats.definitivos ?? 0, color: "text-red-500" },
+    { label: "Total", value: stats.total_refritos ?? 0 },
+    { label: "Pendientes", value: stats.pendientes ?? 0 },
+    { label: "Contactados", value: stats.contactados ?? 0 },
+    { label: "Ventas", value: stats.ventas ?? 0 },
+    { label: "Sin contacto", value: stats.sin_contacto ?? 0 },
+    { label: "Definitivos", value: stats.definitivos ?? 0 },
   ]
 
   return (
@@ -208,9 +208,9 @@ function EstadisticasRefritos({ refreshTrigger }: { refreshTrigger: number }) {
                   <TableRow key={i}>
                     <TableCell className="text-sm font-medium">{v.vendedor_nombre}</TableCell>
                     <TableCell className="text-sm">{v.total}</TableCell>
-                    <TableCell className="hidden sm:table-cell text-sm text-yellow-600">{v.pendientes}</TableCell>
-                    <TableCell className="hidden sm:table-cell text-sm text-blue-600">{v.contactados}</TableCell>
-                    <TableCell className="text-sm text-green-600 font-medium">{v.ventas}</TableCell>
+                    <TableCell className="hidden sm:table-cell text-sm">{v.pendientes}</TableCell>
+                    <TableCell className="hidden sm:table-cell text-sm">{v.contactados}</TableCell>
+                    <TableCell className="text-sm font-medium">{v.ventas}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -315,7 +315,7 @@ function HistoricoRefritos({ refreshTrigger }: { refreshTrigger: number }) {
                       disabled={eliminandoId === Number(r.id)}
                       onClick={() => eliminarDelFlujo(Number(r.id), `${r.nombre ?? ""} ${r.apellido ?? ""}`.trim())}
                     >
-                      <Ban className="size-3.5 text-red-500" />
+                      <Ban className="size-3.5 text-muted-foreground" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -393,7 +393,7 @@ function ReporteVendedoresRefritos({ refreshTrigger }: { refreshTrigger: number 
               </TableCell>
               <TableCell className="text-right">{f.total_refritos ?? 0}</TableCell>
               <TableCell className="text-right">{f.refritos_activos ?? 0}</TableCell>
-              <TableCell className="text-right text-emerald-600 font-medium">{f.convertidos ?? 0}</TableCell>
+              <TableCell className="text-right font-medium">{f.convertidos ?? 0}</TableCell>
               <TableCell className="text-right">
                 {f.tasa_conversion != null ? `${f.tasa_conversion}%` : "—"}
               </TableCell>

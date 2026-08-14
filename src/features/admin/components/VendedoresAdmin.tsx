@@ -306,17 +306,17 @@ export default function VendedoresAdmin() {
           <p className="text-xs text-muted-foreground">Total</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <UserCheck className="size-4 mx-auto mb-1 text-emerald-500" />
+          <UserCheck className="size-4 mx-auto mb-1 text-state-ok-text" />
           <p className="text-2xl font-bold text-foreground">{metricas.vendedoresActivos}</p>
           <p className="text-xs text-muted-foreground">Activos</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <UserX className="size-4 mx-auto mb-1 text-amber-500" />
+          <UserX className="size-4 mx-auto mb-1 text-state-warn-text" />
           <p className="text-2xl font-bold text-foreground">{metricas.vendedoresSinSupervisor}</p>
           <p className="text-xs text-muted-foreground">Sin supervisor</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <UserCog className="size-4 mx-auto mb-1 text-sky-500" />
+          <UserCog className="size-4 mx-auto mb-1 text-muted-foreground" />
           <p className="text-2xl font-bold text-foreground">{metricas.supervisioresActivos}</p>
           <p className="text-xs text-muted-foreground">Supervisores activos</p>
         </CardContent></Card>
@@ -360,10 +360,10 @@ export default function VendedoresAdmin() {
                   <TableCell className="font-medium text-sm">{v.first_name} {v.last_name}</TableCell>
                   <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">{v.email}</TableCell>
                   <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                    {v.supervisor_nombre ?? <span className="text-amber-600 text-xs">Sin asignar</span>}
+                    {v.supervisor_nombre ?? <span className="text-muted-foreground text-xs">Sin asignar</span>}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={v.activo !== false ? "default" : "secondary"} className={v.activo !== false ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}>
+                    <Badge variant={v.activo !== false ? "ok" : "secondary"}>
                       {v.activo !== false ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
@@ -384,12 +384,12 @@ export default function VendedoresAdmin() {
                         </TooltipTrigger><TooltipContent>Cambiar categoría</TooltipContent></Tooltip>
                       )}
                       <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className={`size-8 ${v.activo !== false ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`} onClick={() => toggleEstado(v)}>
+                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(v)}>
                           {v.activo !== false ? <UserX className="size-3.5" /> : <UserCheck className="size-3.5" />}
                         </Button>
                       </TooltipTrigger><TooltipContent>{v.activo !== false ? "Deshabilitar" : "Habilitar"}</TooltipContent></Tooltip>
                       <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminarVendedor(v)}><Trash2 className="size-3.5" /></Button>
+                        <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminarVendedor(v)}><Trash2 className="size-3.5" /></Button>
                       </TooltipTrigger><TooltipContent>Eliminar vendedor</TooltipContent></Tooltip>
                     </div>
                   </TableCell>
@@ -584,7 +584,7 @@ export default function VendedoresAdmin() {
               </Select>
             </div>
 
-            <div className="flex items-start gap-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-2 text-xs text-blue-700 dark:text-blue-300">
+            <div className="flex items-start gap-2 rounded-lg bg-muted border p-2 text-xs text-muted-foreground">
               <AlertCircle className="size-3.5 mt-0.5 shrink-0" />
               <span>Al reasignar, el nuevo vendedor será notificado y podrá ver todo el historial del prospecto.</span>
             </div>

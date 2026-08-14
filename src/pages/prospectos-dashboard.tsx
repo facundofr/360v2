@@ -28,6 +28,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
+import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
@@ -347,8 +348,8 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
           </div>
         </div>
         {gaming.streakActual > 0 && (
-          <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-2 text-center">
-            <p className="text-xs text-amber-700 dark:text-amber-400">Racha: {gaming.streakActual} dias</p>
+          <div className="rounded-lg bg-state-ok-soft border border-state-ok/30 p-2 text-center">
+            <p className="text-xs text-state-ok-text">Racha: {gaming.streakActual} dias</p>
           </div>
         )}
         {gaming.logros.length > 0 && (
@@ -356,7 +357,7 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
             <p className="text-[10px] font-semibold text-muted-foreground uppercase">Logros</p>
             <div className="flex flex-wrap gap-1">
               {gaming.logros.slice(-3).map((l, i) => (
-                <span key={i} className="text-[10px] bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded px-1.5 py-0.5">{l}</span>
+                <span key={i} className="text-[10px] bg-state-ok-soft text-state-ok-text rounded px-1.5 py-0.5">{l}</span>
               ))}
             </div>
           </div>
@@ -773,15 +774,12 @@ export default function ProspectosDashboardPage() {
               {/* Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
-                  { label: "Total", value: prospectos.length, icon: <UserIcon className="size-4" />, cls: "text-blue-600" },
-                  { label: "Ventas", value: prospectos.filter(p => p.estado === "Venta").length, icon: <DollarSign className="size-4" />, cls: "text-green-600" },
-                  { label: "En proceso", value: prospectos.filter(p => ["1 Contacto","Calificado Cotizacion","Calificado Poliza","Calificado Pago"].includes(p.estado)).length, icon: <TrendingUp className="size-4" />, cls: "text-orange-600" },
-                  { label: "Leads", value: prospectos.filter(p => p.estado === "Lead").length, icon: <MessageSquare className="size-4" />, cls: "text-purple-600" },
-                ].map(({ label, value, icon, cls }) => (
-                  <Card key={label}><CardContent className="p-3 flex items-center gap-3">
-                    <div className={cn("rounded-lg bg-muted p-2", cls)}>{icon}</div>
-                    <div><p className="text-xs text-muted-foreground">{label}</p><p className="text-xl font-bold">{value}</p></div>
-                  </CardContent></Card>
+                  { label: "Total", value: prospectos.length, icon: UserIcon, tone: "neutral" as const },
+                  { label: "Ventas", value: prospectos.filter(p => p.estado === "Venta").length, icon: DollarSign, tone: "ok" as const },
+                  { label: "En proceso", value: prospectos.filter(p => ["1 Contacto","Calificado Cotizacion","Calificado Poliza","Calificado Pago"].includes(p.estado)).length, icon: TrendingUp, tone: "warn" as const },
+                  { label: "Leads", value: prospectos.filter(p => p.estado === "Lead").length, icon: MessageSquare, tone: "neutral" as const },
+                ].map(({ label, value, icon, tone }) => (
+                  <StatCard key={label} icon={icon} label={label} value={value} tone={tone} />
                 ))}
               </div>
 
@@ -883,7 +881,7 @@ export default function ProspectosDashboardPage() {
                             <TableCell className="hidden md:table-cell">
                               <div className="h-2 w-24 bg-muted rounded-full overflow-hidden">
                                 <div
-                                  className={cn("h-full rounded-full", progreso === 100 ? "bg-green-500" : progreso >= 75 ? "bg-blue-500" : progreso >= 50 ? "bg-amber-500" : "bg-muted-foreground/40")}
+                                  className={cn("h-full rounded-full", progreso === 100 ? "bg-state-ok" : progreso >= 75 ? "bg-primary/70" : progreso >= 50 ? "bg-state-warn" : "bg-muted-foreground/40")}
                                   style={{ width: `${progreso}%` }}
                                 />
                               </div>
@@ -892,7 +890,7 @@ export default function ProspectosDashboardPage() {
                               <div className="flex gap-1">
                                 <Button size="icon" variant="ghost" className="size-7" title="Historial" onClick={() => abrirHistorial(p)}><History className="size-3" /></Button>
                                 <Button size="icon" variant="ghost" className="size-7 text-green-600" title="WhatsApp" onClick={() => enviarPrimerContactoWhatsApp(p)} disabled={!p.numero_contacto}><MessageCircle className="size-3" /></Button>
-                                <Button size="icon" variant="ghost" className="size-7 text-amber-600" title="Llamada" onClick={() => registrarLlamada(p)} disabled={!p.numero_contacto}><Phone className="size-3" /></Button>
+                                <Button size="icon" variant="ghost" className="size-7" title="Llamada" onClick={() => registrarLlamada(p)} disabled={!p.numero_contacto}><Phone className="size-3" /></Button>
                                 <Button size="icon" variant="ghost" className="size-7" title="Ver detalle" onClick={() => navigate(`/vendedor/prospecto/${p.id}`)}><Eye className="size-3" /></Button>
                               </div>
                             </TableCell>
@@ -1143,16 +1141,16 @@ export default function ProspectosDashboardPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               {resultadoAlta.tipo === "reasignado" ? (
-                <><CheckCircle2 className="size-5 text-emerald-600" />Dato repetido reasignado a vos</>
+                <><CheckCircle2 className="size-5 text-state-ok-text" />Dato repetido reasignado a vos</>
               ) : (
-                <><AlertTriangle className="size-5 text-amber-500" />Prospecto en gestión activa</>
+                <><AlertTriangle className="size-5 text-state-warn-text" />Prospecto en gestión activa</>
               )}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3 text-sm">
             {resultadoAlta.tipo === "reasignado" ? (
-              <div className="rounded-lg border border-emerald-300 bg-emerald-50 dark:bg-emerald-950/30 p-3 space-y-1">
+              <div className="rounded-lg border border-state-ok/30 bg-state-ok-soft p-3 space-y-1">
                 <p className="font-medium">
                   Este contacto ya estaba en el sistema, pero quedó estancado sin novedades.
                 </p>
@@ -1165,7 +1163,7 @@ export default function ProspectosDashboardPage() {
                 <p className="text-xs">Se te asignó para que lo retomes.</p>
               </div>
             ) : (
-              <div className="rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/30 p-3 space-y-1">
+              <div className="rounded-lg border border-state-warn/30 bg-state-warn-soft p-3 space-y-1">
                 <p className="font-medium">Este prospecto ya está registrado y asignado a:</p>
                 {resultadoAlta.vendedores.length > 0 ? (
                   <ul className="list-disc list-inside text-xs">
@@ -1235,7 +1233,7 @@ function ProspectoCard({
             <p className="font-semibold text-sm leading-tight">{p.nombre} {p.apellido}</p>
             <p className="text-xs text-muted-foreground">{p.edad} anos</p>
             {p.gecros_estado && (
-              <Badge className={cn("text-[10px] mt-0.5 pointer-events-none", p.gecros_estado === "Con Cobertura" ? "bg-green-100 text-green-800" : "bg-muted text-muted-foreground")}>
+              <Badge variant={p.gecros_estado === "Con Cobertura" ? "ok" : "secondary"} className="text-[10px] mt-0.5 pointer-events-none">
                 Gecros: {p.gecros_estado}
               </Badge>
             )}
@@ -1243,7 +1241,7 @@ function ProspectoCard({
           <div className="flex flex-col items-end gap-1 shrink-0">
             {getBadgeEstado(p.estado)}
             {p.es_reciclado === 1 && p.visible_refrito === 1 && (
-              <Badge className="text-[10px] bg-amber-100 text-amber-800 pointer-events-none">Reciclado</Badge>
+              <Badge variant="warn" className="text-[10px] pointer-events-none">Reciclado</Badge>
             )}
           </div>
         </div>
@@ -1313,7 +1311,7 @@ function ProspectoCard({
           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
             <div
               className={cn("h-full rounded-full transition-all",
-                progreso === 100 ? "bg-green-500" : progreso >= 75 ? "bg-blue-500" : progreso >= 50 ? "bg-amber-500" : progreso > 0 ? "bg-orange-400" : "bg-muted-foreground/20"
+                progreso === 100 ? "bg-state-ok" : progreso >= 75 ? "bg-primary/70" : progreso >= 50 ? "bg-state-warn" : progreso > 0 ? "bg-muted-foreground/40" : "bg-muted-foreground/20"
               )}
               style={{ width: `${progreso}%` }}
             />
@@ -1339,10 +1337,10 @@ function ProspectoCard({
         <Button size="icon" variant="ghost" className="size-7 text-green-600" title="WhatsApp primer contacto" onClick={onWhatsApp} disabled={!p.numero_contacto}>
           <MessageCircle className="size-3" />
         </Button>
-        <Button size="icon" variant="ghost" className="size-7 text-amber-600" title="Registrar llamada" onClick={onLlamada} disabled={!p.numero_contacto}>
+        <Button size="icon" variant="ghost" className="size-7" title="Registrar llamada" onClick={onLlamada} disabled={!p.numero_contacto}>
           <Phone className="size-3" />
         </Button>
-        <Button size="icon" variant="ghost" className="size-7 text-purple-600" title="Promociones" onClick={onPromociones}>
+        <Button size="icon" variant="ghost" className="size-7" title="Promociones" onClick={onPromociones}>
           <Tag className="size-3" />
         </Button>
         <Button variant="ghost" size="sm" className="flex-1 h-7 text-xs" onClick={onVerDetalle}>

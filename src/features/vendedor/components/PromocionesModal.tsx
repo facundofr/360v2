@@ -105,13 +105,13 @@ export function PromocionesModal({ prospectoId, open, onClose, onPromocionAplica
         </DialogHeader>
 
         {promocionActual && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950/30 p-3 text-sm">
-            <p className="font-semibold text-blue-800 dark:text-blue-300 mb-0.5">Promoción actualmente aplicada:</p>
-            <p className="text-blue-700 dark:text-blue-400">
+          <div className="rounded-lg border bg-muted p-3 text-sm">
+            <p className="font-semibold mb-0.5">Promoción actualmente aplicada:</p>
+            <p className="text-muted-foreground">
               <strong>{getNombre(promocionActual)}</strong> — {getDescuento(promocionActual)}%
             </p>
             {promocionActual.descripcion && (
-              <p className="text-blue-600 dark:text-blue-500 text-xs mt-0.5">{promocionActual.descripcion}</p>
+              <p className="text-muted-foreground text-xs mt-0.5">{promocionActual.descripcion}</p>
             )}
           </div>
         )}
@@ -146,7 +146,7 @@ export function PromocionesModal({ prospectoId, open, onClose, onPromocionAplica
                 </CardHeader>
                 <CardContent className="pt-0 space-y-1">
                   {p.descripcion && <p className="text-xs text-muted-foreground">{p.descripcion}</p>}
-                  <Badge variant="secondary" className="text-green-700 bg-green-100 dark:bg-green-900/30">
+                  <Badge variant="ok">
                     🎯 Descuento: {getDescuento(p)}%
                   </Badge>
                   {getVencimiento(p) && (
@@ -155,7 +155,7 @@ export function PromocionesModal({ prospectoId, open, onClose, onPromocionAplica
                     </p>
                   )}
                   {selected?.id === p.id && (
-                    <p className="text-xs font-semibold text-green-600">✅ Seleccionada</p>
+                    <p className="text-xs font-semibold text-state-ok-text">✅ Seleccionada</p>
                   )}
                 </CardContent>
               </Card>

@@ -62,7 +62,6 @@ export function BotonesEliminarFirma({ poliza, onActualizar }: BotonesEliminarFi
           <Button
             size="sm"
             variant="outline"
-            className="text-yellow-600 hover:text-yellow-700 border-yellow-200"
             onClick={() => setConfirmAction("solicitud")}
             disabled={loading}
           >
@@ -73,8 +72,7 @@ export function BotonesEliminarFirma({ poliza, onActualizar }: BotonesEliminarFi
         {esFirmada && (
           <Button
             size="sm"
-            variant="outline"
-            className="text-red-600 hover:text-red-700 border-red-200"
+            variant="destructive"
             onClick={() => setConfirmAction("documento")}
             disabled={loading}
           >
@@ -99,7 +97,7 @@ export function BotonesEliminarFirma({ poliza, onActualizar }: BotonesEliminarFi
           <DialogFooter>
             <Button variant="outline" onClick={() => setConfirmAction(null)}>Cancelar</Button>
             <Button
-              className={confirmAction === "documento" ? "bg-red-600 hover:bg-red-700" : "bg-yellow-600 hover:bg-yellow-700"}
+              variant={confirmAction === "documento" ? "destructive" : "default"}
               onClick={handleConfirm}
             >
               {loading ? "Eliminando..." : "Confirmar"}

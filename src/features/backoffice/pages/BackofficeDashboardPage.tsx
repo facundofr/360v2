@@ -4,22 +4,20 @@ import axios from "axios"
 import { toast } from "sonner"
 import {
   UserCheck, TrendingUp, DollarSign, FileText,
-  LogOut, RefreshCw, Filter,
-  ShieldCheck, Tag, Users, Activity, ArrowUpRight, ArrowDownRight,
-  Percent, ChevronRight, X as XIcon, LayoutDashboard
+  RefreshCw, Filter,
+  ShieldCheck, Tag, Users, Activity,
+  Percent, ChevronRight, LayoutDashboard
 } from "lucide-react"
 import { TendenciasChart } from "@/components/common/TendenciasChart"
 
 import {
-  SidebarProvider, Sidebar, SidebarContent, SidebarHeader,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger,
-  SidebarInset, SidebarFooter, SidebarGroup, SidebarGroupLabel, useSidebar
+  SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+  SidebarGroup, SidebarGroupLabel, useSidebar,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
 import { useAuth } from "@/contexts/AuthContext"
 import { API_URL } from "@/lib/config"
 import { BackofficeProspectosView } from "../components/BackofficeProspectosView"
@@ -28,9 +26,8 @@ import { BackofficeSupervisoresView } from "../components/BackofficeSupervisores
 import { BackofficeVendedoresView } from "../components/BackofficeVendedoresView"
 import { BackofficePromocionesView } from "../components/BackofficePromocionesView"
 import { BackofficeMetricasView } from "../components/BackofficeMetricasView"
-import ThemeToggle from "@/components/common/theme-toggle"
-import Logo from "@/components/ui/logo"
-import { AppVersion } from "@/components/common/AppVersion"
+import { DashboardShell } from "@/components/common/DashboardShell"
+import { StatCard } from "@/components/common/StatCard"
 import { getAuthToken } from "@/lib/auth"
 
 type Vista = "dashboard" | "prospectos" | "polizas" | "supervisores" | "vendedores" | "promociones" | "metricas"
@@ -68,15 +65,6 @@ interface Estadisticas {
 export default function BackofficeDashboardPage() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-
-  function MobileControls() {
-    const { setOpenMobile } = useSidebar()
-    return (
-      <div className="flex flex-col items-end">
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpenMobile(false)} aria-label="Cerrar menú"><XIcon className="size-4"/></Button>
-      </div>
-    )
-  }
 
   function SidebarNavContent() {
     const { setOpenMobile } = useSidebar()
@@ -224,75 +212,23 @@ export default function BackofficeDashboardPage() {
   const chartData = buildChartData()
 
   return (
-    <SidebarProvider>
-      <Sidebar variant="inset" className="border-r-0">
-        {/* Header: gradiente identidad backoffice */}
-        <SidebarHeader className="pb-0">
-          <div className="relative overflow-hidden rounded-t-lg bg-gradient-to-br from-primary via-primary to-[#3d1a4d] px-4 pt-5 pb-4">
-            {/* Círculos decorativos */}
-            <div className="pointer-events-none absolute -top-6 -right-6 size-24 rounded-full bg-white/10" />
-            <div className="pointer-events-none absolute -bottom-4 -left-4 size-16 rounded-full bg-white/8" />
-            <div className="relative flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 ring-2 ring-white/30 backdrop-blur-sm overflow-hidden">
-                  <Logo className="h-7" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-tight text-white">Backoffice</p>
-                  <p className="text-[11px] leading-tight text-[#d4a8e0]">{user?.name ?? "Panel"}</p>
-                </div>
-              </div>
-              <MobileControls />
-            </div>
-            <div className="mt-3 flex items-center gap-2">
-              <Badge className="bg-white/20 text-white border-0 text-[10px] font-semibold hover:bg-white/30">
-                Administración
-              </Badge>
-            </div>
-          </div>
-        </SidebarHeader>
-
-        <SidebarNavContent />
-
-        <SidebarFooter className="border-t p-3">
-          <div className="flex items-center gap-2 px-1 py-1.5">
-            <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15 dark:bg-primary/25">
-              <span className="text-xs font-bold text-primary dark:text-purple-300">
-                {(user?.name ?? "B").charAt(0).toUpperCase()}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate">{user?.name ?? "Backoffice"}</p>
-              <p className="text-[10px] text-muted-foreground truncate">{user?.email ?? ""}</p>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-destructive"
-              onClick={() => logout().then(() => navigate("/login"))}
-              title="Cerrar sesión"
-            >
-              <LogOut className="size-3.5" />
-            </Button>
-          </div>
-          <AppVersion className="px-1 pt-1 group-data-[collapsible=icon]:hidden" />
-        </SidebarFooter>
-      </Sidebar>
-
-      <SidebarInset className="min-w-0 overflow-x-hidden">
-        <header className="flex items-center gap-3 border-b px-4 py-3 sticky top-0 bg-background/95 backdrop-blur z-10">
-          <SidebarTrigger aria-label="Alternar menú lateral" />
-          <div className="flex-1 min-w-0">
-            <h1 className="font-semibold truncate">{menuItems.find(m => m.id === vista)?.label ?? "Backoffice"}</h1>
-          </div>
-          {vista === "dashboard" && (
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Actualizar dashboard" onClick={fetchDashboard}>
-              <RefreshCw className="size-4" aria-hidden="true" />
-            </Button>
-          )}
-          <ThemeToggle size="icon" variant="ghost" className="shrink-0 size-8" />
-        </header>
-
+    <DashboardShell
+      roleLabel="Backoffice"
+      roleBadgeLabel="Administración"
+      logoClassName="h-7"
+      userName={user?.name}
+      userEmail={user?.email}
+      onLogout={() => logout().then(() => navigate("/login"))}
+      navContent={<SidebarNavContent />}
+      headerTitle={menuItems.find(m => m.id === vista)?.label ?? "Backoffice"}
+      headerActions={
+        vista === "dashboard" ? (
+          <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Actualizar dashboard" onClick={fetchDashboard}>
+            <RefreshCw className="size-4" aria-hidden="true" />
+          </Button>
+        ) : undefined
+      }
+    >
         <div className="p-4 sm:p-6 flex flex-col gap-5">
           {/* -- DASHBOARD PRINCIPAL -- */}
           {vista === "dashboard" && (
@@ -345,52 +281,34 @@ export default function BackofficeDashboardPage() {
                   {[
                     {
                       label: "Total Prospectos", value: totalProspectos,
-                      icon: <Users className="size-5" />, iconBg: "bg-blue-500/15", iconColor: "text-blue-500",
-                      trend: +5.2, desc: "vs. periodo anterior", action: () => setVista("prospectos")
+                      icon: Users,
+                      trend: 5.2, desc: "vs. periodo anterior", action: () => setVista("prospectos")
                     },
                     {
                       label: "Vendedores Activos", value: totalVendedores,
-                      icon: <UserCheck className="size-5" />, iconBg: "bg-violet-500/15", iconColor: "text-violet-500",
+                      icon: UserCheck,
                       trend: undefined, desc: "en el equipo", action: () => setVista("vendedores")
                     },
                     {
                       label: "Pólizas Generadas", value: totalPolizas,
-                      icon: <FileText className="size-5" />, iconBg: "bg-orange-500/15", iconColor: "text-orange-500",
-                      trend: +8.1, desc: "vs. periodo anterior", action: () => setVista("polizas")
+                      icon: FileText,
+                      trend: 8.1, desc: "vs. periodo anterior", action: () => setVista("polizas")
                     },
                     {
                       label: "Ventas del periodo", value: ventasMes,
-                      icon: <DollarSign className="size-5" />, iconBg: "bg-green-500/15", iconColor: "text-green-500",
-                      trend: conversionRate, desc: `${conversionRate !== undefined ? Number(conversionRate).toFixed(1) + "% conversión" : ""}`, action: undefined
+                      icon: DollarSign,
+                      trend: conversionRate, desc: conversionRate !== undefined ? `${Number(conversionRate).toFixed(1)}% conversión` : undefined, action: undefined
                     },
-                  ].map(({ label, value, icon, iconBg, iconColor, trend, desc, action }) => (
-                    <Card key={label} className={action ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={action}>
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className={`rounded-lg p-2 ${iconBg}`}>
-                            <span className={iconColor}>{icon}</span>
-                          </div>
-                          {trend !== undefined && (
-                            <Badge variant="outline" className={`text-xs gap-1 ${
-                              trend >= 0
-                                ? "text-green-500 border-green-500/30 bg-green-500/10"
-                                : "text-red-500 border-red-500/30 bg-red-500/10"
-                            }`}>
-                              {trend >= 0
-                                ? <ArrowUpRight className="size-3" />
-                                : <ArrowDownRight className="size-3" />}
-                              {Math.abs(trend).toFixed(1)}%
-                            </Badge>
-                          )}
-                          {action && <ChevronRight className="size-4 text-muted-foreground" />}
-                        </div>
-                        <p className="text-2xl font-bold tracking-tight">
-                          {value !== undefined ? Number(value).toLocaleString("es-AR") : "-"}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
-                        {desc && <p className="text-xs text-muted-foreground">{desc}</p>}
-                      </CardContent>
-                    </Card>
+                  ].map(({ label, value, icon, trend, desc, action }) => (
+                    <StatCard
+                      key={label}
+                      icon={icon}
+                      label={label}
+                      value={value !== undefined ? Number(value).toLocaleString("es-AR") : "-"}
+                      subtitle={desc}
+                      trend={trend !== undefined ? { value: Number(trend.toFixed(1)), positive: trend >= 0 } : null}
+                      onClick={action}
+                    />
                   ))}
                 </div>
               )}
@@ -399,14 +317,14 @@ export default function BackofficeDashboardPage() {
               {!loading && (ingresosMes !== undefined || conversionRate !== undefined) && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {ingresosMes !== undefined && (
-                    <Card className="border-green-500/30 bg-green-500/8">
+                    <Card>
                       <CardContent className="p-4 flex items-center gap-3">
-                        <div className="rounded-xl bg-green-500/15 p-3">
-                          <DollarSign className="size-5 text-green-500" />
+                        <div className="rounded-xl bg-muted p-3">
+                          <DollarSign className="size-5 text-muted-foreground" />
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Ingresos del periodo</p>
-                          <p className="text-xl font-bold text-green-500">
+                          <p className="text-xl font-bold">
                             {new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", minimumFractionDigits: 0 }).format(ingresosMes)}
                           </p>
                         </div>
@@ -414,14 +332,14 @@ export default function BackofficeDashboardPage() {
                     </Card>
                   )}
                   {conversionRate !== undefined && (
-                    <Card className="border-blue-500/30 bg-blue-500/8">
+                    <Card>
                       <CardContent className="p-4 flex items-center gap-3">
-                        <div className="rounded-xl bg-blue-500/15 p-3">
-                          <Percent className="size-5 text-blue-500" />
+                        <div className="rounded-xl bg-muted p-3">
+                          <Percent className="size-5 text-muted-foreground" />
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Tasa de conversión</p>
-                          <p className="text-xl font-bold text-blue-500">{Number(conversionRate).toFixed(1)}%</p>
+                          <p className="text-xl font-bold">{Number(conversionRate).toFixed(1)}%</p>
                           <p className="text-xs text-muted-foreground">prospectos → pólizas</p>
                         </div>
                       </CardContent>
@@ -455,7 +373,6 @@ export default function BackofficeDashboardPage() {
           {vista === "promociones" && <BackofficePromocionesView />}
           {vista === "metricas" && <BackofficeMetricasView />}
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </DashboardShell>
   )
 }

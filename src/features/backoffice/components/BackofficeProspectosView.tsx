@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -248,12 +249,12 @@ export function BackofficeProspectosView() {
   const fmtNum = (n?: number) => Number(n ?? 0).toLocaleString("es-AR")
 
   const STAT_DEFS = [
-    { label: "Total prospectos", value: estadisticas.total_prospectos, iconBg: "bg-blue-50", iconColor: "text-blue-600", icon: <Users className="size-5" /> },
-    { label: "Ingresados hoy", value: estadisticas.prospectos_hoy, iconBg: "bg-green-50", iconColor: "text-green-600", icon: <Calendar className="size-5" /> },
-    { label: "Con cotización", value: estadisticas.con_cotizaciones, iconBg: "bg-amber-50", iconColor: "text-amber-600", icon: <FileText className="size-5" /> },
-    { label: "Con póliza", value: estadisticas.con_polizas, iconBg: "bg-indigo-50", iconColor: "text-indigo-600", icon: <ShieldCheck className="size-5" /> },
-    { label: "Ventas", value: estadisticas.ventas, iconBg: "bg-emerald-50", iconColor: "text-emerald-600", icon: <TrendingUp className="size-5" /> },
-    { label: "WhatsApp activo", value: estadisticas.whatsapp_activo, iconBg: "bg-lime-50", iconColor: "text-lime-600", icon: <MessageCircle className="size-5" /> },
+    { label: "Total prospectos", value: estadisticas.total_prospectos, icon: Users },
+    { label: "Ingresados hoy", value: estadisticas.prospectos_hoy, icon: Calendar },
+    { label: "Con cotización", value: estadisticas.con_cotizaciones, icon: FileText },
+    { label: "Con póliza", value: estadisticas.con_polizas, icon: ShieldCheck },
+    { label: "Ventas", value: estadisticas.ventas, icon: TrendingUp },
+    { label: "WhatsApp activo", value: estadisticas.whatsapp_activo, icon: MessageCircle },
   ]
 
   const activeFiltersCount = [filtros.estado, filtros.vendedor_id, filtros.supervisor_id, filtros.fecha_desde, filtros.fecha_hasta].filter(Boolean).length
@@ -299,19 +300,12 @@ export function BackofficeProspectosView() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {STAT_DEFS.map(s => (
-          <Card key={s.label} className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="flex items-center gap-3 p-3">
-                <div className={`rounded-lg p-2 ${s.iconBg} shrink-0`}>
-                  <span className={s.iconColor} aria-hidden="true">{s.icon}</span>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xl font-bold tabular-nums leading-none">{s.value !== undefined ? fmtNum(s.value) : "—"}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5 leading-tight truncate">{s.label}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard
+            key={s.label}
+            icon={s.icon}
+            label={s.label}
+            value={s.value !== undefined ? fmtNum(s.value) : "—"}
+          />
         ))}
       </div>
 
@@ -465,14 +459,14 @@ export function BackofficeProspectosView() {
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <div className="flex gap-2">
-                          {p.correo && <span title={p.correo}><Mail className="size-4 text-blue-500" /></span>}
-                          {p.numero_contacto && <span title={p.numero_contacto}><Phone className="size-4 text-green-500" /></span>}
-                          {p.whatsapp_opt_in && <MessageCircle className="size-4 text-lime-500" />}
+                          {p.correo && <span title={p.correo}><Mail className="size-4 text-muted-foreground" /></span>}
+                          {p.numero_contacto && <span title={p.numero_contacto}><Phone className="size-4 text-muted-foreground" /></span>}
+                          {p.whatsapp_opt_in && <MessageCircle className="size-4 text-muted-foreground" />}
                         </div>
                       </TableCell>
                       <TableCell>{getBadgeEstado(p.estado)}</TableCell>
                       <TableCell className="hidden md:table-cell text-sm">
-                        {p.vendedor_nombre ? <>{p.vendedor_nombre} {p.vendedor_apellido}<br /><span className="text-xs text-muted-foreground">{p.vendedor_email}</span></> : <Badge variant="outline" className="text-yellow-600 border-yellow-400">Sin asignar</Badge>}
+                        {p.vendedor_nombre ? <>{p.vendedor_nombre} {p.vendedor_apellido}<br /><span className="text-xs text-muted-foreground">{p.vendedor_email}</span></> : <Badge variant="warn">Sin asignar</Badge>}
                       </TableCell>
                       <TableCell className="hidden lg:table-cell text-sm">
                         {p.supervisor_nombre ? `${p.supervisor_nombre} ${p.supervisor_apellido ?? ""}` : <Badge variant="secondary">N/A</Badge>}
@@ -480,9 +474,9 @@ export function BackofficeProspectosView() {
                       <TableCell className="hidden md:table-cell text-xs text-muted-foreground">{fmtFecha(p.fecha_registro)}</TableCell>
                       <TableCell className="hidden lg:table-cell">
                         <div className="flex gap-1 flex-wrap">
-                          {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs border-yellow-400 text-yellow-600"><FileText className="size-3 mr-0.5" />{p.cotizaciones_count}</Badge>}
-                          {(p.polizas_count ?? 0) > 0 && <Badge variant="outline" className="text-xs border-green-500 text-green-600"><ShieldCheck className="size-3 mr-0.5" />{p.polizas_count}</Badge>}
-                          {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs border-sky-400 text-sky-600"><History className="size-3 mr-0.5" />{p.acciones_count}</Badge>}
+                          {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs"><FileText className="size-3 mr-0.5" />{p.cotizaciones_count}</Badge>}
+                          {(p.polizas_count ?? 0) > 0 && <Badge variant="ok" className="text-xs"><ShieldCheck className="size-3 mr-0.5" />{p.polizas_count}</Badge>}
+                          {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs"><History className="size-3 mr-0.5" />{p.acciones_count}</Badge>}
                         </div>
                         {p.ultima_accion && <p className="text-xs text-muted-foreground mt-0.5 truncate max-w-[120px]">{p.ultima_accion}</p>}
                       </TableCell>
@@ -533,13 +527,13 @@ export function BackofficeProspectosView() {
                   <div className="px-4 pb-3 space-y-2 flex-1">
                     {p.correo && (
                       <div className="flex items-center gap-2 text-xs text-muted-foreground truncate">
-                        <Mail className="size-3.5 shrink-0 text-blue-500" /><span className="truncate">{p.correo}</span>
+                        <Mail className="size-3.5 shrink-0 text-muted-foreground" /><span className="truncate">{p.correo}</span>
                       </div>
                     )}
                     {p.numero_contacto && (
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Phone className="size-3.5 shrink-0 text-green-500" /><span>{p.numero_contacto}</span>
-                        {p.whatsapp_opt_in && <MessageCircle className="size-3.5 text-lime-500" />}
+                        <Phone className="size-3.5 shrink-0 text-muted-foreground" /><span>{p.numero_contacto}</span>
+                        {p.whatsapp_opt_in && <MessageCircle className="size-3.5 text-muted-foreground" />}
                       </div>
                     )}
                     {p.vendedor_nombre && (
@@ -552,9 +546,9 @@ export function BackofficeProspectosView() {
                     )}
                     <div className="flex items-center justify-between pt-1">
                       <div className="flex gap-1">
-                        {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs border-yellow-400 text-yellow-600"><FileText className="size-3 mr-0.5" />{p.cotizaciones_count}</Badge>}
-                        {(p.polizas_count ?? 0) > 0 && <Badge variant="outline" className="text-xs border-green-500 text-green-600"><ShieldCheck className="size-3 mr-0.5" />{p.polizas_count}</Badge>}
-                        {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs border-sky-400 text-sky-600"><History className="size-3 mr-0.5" />{p.acciones_count}</Badge>}
+                        {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs"><FileText className="size-3 mr-0.5" />{p.cotizaciones_count}</Badge>}
+                        {(p.polizas_count ?? 0) > 0 && <Badge variant="ok" className="text-xs"><ShieldCheck className="size-3 mr-0.5" />{p.polizas_count}</Badge>}
+                        {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs"><History className="size-3 mr-0.5" />{p.acciones_count}</Badge>}
                       </div>
                       <span className="text-xs text-muted-foreground">{fmtFecha(p.fecha_registro)}</span>
                     </div>
@@ -662,7 +656,7 @@ export function BackofficeProspectosView() {
                         <p className="text-xs text-muted-foreground mt-1">Año: {String(c.anio ?? new Date().getFullYear())}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold text-green-600">${fmtPeso(c.total_final)}</p>
+                        <p className="text-lg font-bold">${fmtPeso(c.total_final)}</p>
                         <p className="text-xs text-muted-foreground">Total Final</p>
                       </div>
                     </div>
@@ -671,11 +665,11 @@ export function BackofficeProspectosView() {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-3">
                         <div>
                           <p className="text-xs text-muted-foreground">Bruto</p>
-                          <p className="font-semibold text-blue-600">${fmtPeso(c.total_bruto)}</p>
+                          <p className="font-semibold">${fmtPeso(c.total_bruto)}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Descuento</p>
-                          <p className="font-semibold text-orange-500">${fmtPeso(descTotal)}</p>
+                          <p className="font-semibold">${fmtPeso(descTotal)}</p>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Personas</p>
@@ -732,16 +726,16 @@ export function BackofficeProspectosView() {
                                       <TableCell className="text-xs">
                                         ${fmtPeso(d.descuento_promocion)}
                                         {parseFloat(String(d.descuento_promocion ?? 0)) > 0 && (
-                                          <Badge variant="outline" className="ml-1 text-xs text-amber-600 border-amber-400">Prom.</Badge>
+                                          <Badge variant="outline" className="ml-1 text-xs">Prom.</Badge>
                                         )}
                                       </TableCell>
                                       <TableCell className="text-xs">
                                         {d.promocion_aplicada
-                                          ? <Badge variant="outline" className="text-xs text-amber-600 border-amber-400">{String(d.promocion_aplicada)}</Badge>
+                                          ? <Badge variant="outline" className="text-xs">{String(d.promocion_aplicada)}</Badge>
                                           : <span className="text-muted-foreground">—</span>
                                         }
                                       </TableCell>
-                                      <TableCell className="text-xs font-bold text-green-600">${fmtPeso(d.precio_final)}</TableCell>
+                                      <TableCell className="text-xs font-bold">${fmtPeso(d.precio_final)}</TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -764,7 +758,7 @@ export function BackofficeProspectosView() {
       {/* Modal: WhatsApp */}
       <Dialog open={whatsappModal} onOpenChange={setWhatsappModal}>
         <DialogContent className="sm:max-w-2xl lg:max-w-3xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader><DialogTitle><MessageCircle className="inline size-4 mr-2 text-lime-500" />WhatsApp — {prospectoSeleccionado?.nombre} {prospectoSeleccionado?.apellido}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle><MessageCircle className="inline size-4 mr-2 text-muted-foreground" />WhatsApp — {prospectoSeleccionado?.nombre} {prospectoSeleccionado?.apellido}</DialogTitle></DialogHeader>
           {loadingWA ? <Skeleton className="h-40 w-full" /> : mensajesWA.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">Sin mensajes registrados</p>
           ) : (
@@ -773,7 +767,7 @@ export function BackofficeProspectosView() {
                 const esEnviado = m.tipo === "enviado"
                 return (
                   <div key={i} className={`flex ${esEnviado ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${esEnviado ? "bg-lime-100 text-lime-900" : "bg-muted"}`}>
+                    <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${esEnviado ? "bg-primary/10" : "bg-muted"}`}>
                       <p>{String(m.contenido ?? m.mensaje ?? "")}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">{fmtFecha(String(m.fecha_envio ?? ""))}</p>
                     </div>

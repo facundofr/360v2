@@ -7,11 +7,12 @@ import {
 } from "recharts"
 import {
   Users, TrendingUp, Clock, Phone, FileText, BarChart3,
-  ArrowUp, ArrowDown, Globe, RefreshCw,
+  Globe, RefreshCw,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { StatCard } from "@/components/common/StatCard"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { API_URL } from "@/lib/config"
@@ -92,36 +93,6 @@ const PERIODOS = [
 const getMesActual = () =>
   new Date().toLocaleString("es-AR", { month: "long", year: "numeric" }).toUpperCase()
 
-// ── KPI Card ───────────────────────────────────────────────────────────────
-function KPICard({
-  title, value, subtitle, trend, icon: Icon, iconBg = "bg-primary/10", iconColor = "text-primary",
-}: {
-  title: string; value: string | number; subtitle: string
-  trend?: number | null; icon: React.ElementType
-  iconBg?: string; iconColor?: string
-}) {
-  return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between mb-3">
-          <div className={`flex size-10 items-center justify-center rounded-xl ${iconBg}`}>
-            <Icon className={`size-5 ${iconColor}`} />
-          </div>
-          {trend != null && (
-            <Badge className={`gap-1 text-xs ${trend > 0 ? "bg-red-500 hover:bg-red-500" : "bg-green-600 hover:bg-green-600"} text-white`}>
-              {trend > 0 ? <ArrowUp className="size-3" /> : <ArrowDown className="size-3" />}
-              {Math.abs(trend)}%
-            </Badge>
-          )}
-        </div>
-        <p className="text-[11px] text-muted-foreground uppercase tracking-wide font-medium mb-1">{title}</p>
-        <p className="text-2xl font-bold leading-none mb-1">{value}</p>
-        <p className="text-xs text-muted-foreground">{subtitle}</p>
-      </CardContent>
-    </Card>
-  )
-}
-
 // ── Componente principal ───────────────────────────────────────────────────
 export default function DashboardMetricasAdmin() {
   const [loading, setLoading] = useState(true)
@@ -201,42 +172,37 @@ export default function DashboardMetricasAdmin() {
         <>
           {/* ── KPIs fila 1 ── */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            <KPICard
-              title="Total Prospectos"
+            <StatCard
+              label="Total Prospectos"
               value={kpis.totalProspectos.total.toLocaleString("es-AR")}
               subtitle={`${kpis.totalProspectos.hoy} hoy / ${kpis.totalProspectos.semana} esta semana`}
-              trend={kpis.totalProspectos.cambio}
+              trend={{ value: kpis.totalProspectos.cambio, positive: kpis.totalProspectos.cambio <= 0 }}
               icon={Users}
-              iconBg="bg-primary/10" iconColor="text-primary"
             />
-            <KPICard
-              title="Tasa de Conversión"
+            <StatCard
+              label="Tasa de Conversión"
               value={`${kpis.tasaConversion.valor}%`}
               subtitle={`${kpis.tasaConversion.totalVentas} ventas / ${kpis.tasaConversion.meta}% meta`}
-              trend={kpis.tasaConversion.cambio}
+              trend={{ value: kpis.tasaConversion.cambio, positive: kpis.tasaConversion.cambio <= 0 }}
               icon={TrendingUp}
-              iconBg="bg-emerald-100" iconColor="text-emerald-500"
             />
-            <KPICard
-              title="Tiempo de Respuesta"
+            <StatCard
+              label="Tiempo de Respuesta"
               value={`${kpis.tiempoRespuesta.valor} ${kpis.tiempoRespuesta.unidad}`}
               subtitle="Desde asignación"
               icon={Clock}
-              iconBg="bg-sky-100" iconColor="text-sky-500"
             />
-            <KPICard
-              title="Primer Contacto"
+            <StatCard
+              label="Primer Contacto"
               value={`${kpis.tiempoContacto.valor} hs`}
               subtitle="Tiempo promedio"
               icon={Phone}
-              iconBg="bg-sky-100" iconColor="text-sky-500"
             />
-            <KPICard
-              title="Pólizas Generadas"
+            <StatCard
+              label="Pólizas Generadas"
               value={kpis.polizasGeneradas.total}
               subtitle={`${kpis.polizasGeneradas.prospectosConPoliza} prospectos`}
               icon={FileText}
-              iconBg="bg-amber-100" iconColor="text-amber-500"
             />
           </div>
 

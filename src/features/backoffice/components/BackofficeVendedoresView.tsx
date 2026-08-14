@@ -6,6 +6,7 @@ import { Search, Users, Eye, ToggleLeft, ToggleRight, RefreshCw, LayoutGrid, Lay
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -313,24 +314,12 @@ export function BackofficeVendedoresView() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "Total vendedores", value: metricas.totalVendedores, icon: <Users className="size-5" />, iconBg: "bg-blue-50", iconColor: "text-blue-600" },
-          { label: "Activos", value: metricas.vendedoresActivos, icon: <ShieldCheck className="size-5" />, iconBg: "bg-green-50", iconColor: "text-green-600" },
-          { label: "Sin supervisor", value: metricas.vendedoresSinSupervisor, icon: <UserCog className="size-5" />, iconBg: "bg-amber-50", iconColor: "text-amber-600" },
-          { label: "Inactivos", value: metricas.totalVendedores - metricas.vendedoresActivos, icon: <UserX className="size-5" />, iconBg: "bg-red-50", iconColor: "text-red-600" },
+          { label: "Total vendedores", value: metricas.totalVendedores, icon: Users, tone: "neutral" as const },
+          { label: "Activos", value: metricas.vendedoresActivos, icon: ShieldCheck, tone: "ok" as const },
+          { label: "Sin supervisor", value: metricas.vendedoresSinSupervisor, icon: UserCog, tone: "warn" as const },
+          { label: "Inactivos", value: metricas.totalVendedores - metricas.vendedoresActivos, icon: UserX, tone: "risk" as const },
         ].map(s => (
-          <Card key={s.label} className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="flex items-center gap-3 p-4">
-                <div className={`rounded-xl p-2.5 ${s.iconBg} shrink-0`}>
-                  <span className={s.iconColor} aria-hidden="true">{s.icon}</span>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-2xl font-bold tabular-nums leading-none">{s.value}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5 truncate">{s.label}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <StatCard key={s.label} icon={s.icon} label={s.label} value={s.value} tone={s.tone} />
         ))}
       </div>
 
@@ -397,11 +386,11 @@ export function BackofficeVendedoresView() {
                     <TableRow key={v.id}>
                       <TableCell className="font-medium text-sm">{getNombre(v)}</TableCell>
                       <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">{v.email ?? "—"}</TableCell>
-                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{v.supervisor_nombre ?? <Badge variant="outline" className="text-orange-500 border-orange-400">Sin asignar</Badge>}</TableCell>
+                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{v.supervisor_nombre ?? <Badge variant="warn">Sin asignar</Badge>}</TableCell>
                       <TableCell className="text-right text-sm">{v.total_prospectos ?? "—"}</TableCell>
-                      <TableCell className="text-right text-sm font-semibold text-green-600">{v.ventas ?? "—"}</TableCell>
+                      <TableCell className="text-right text-sm font-semibold">{v.ventas ?? "—"}</TableCell>
                       <TableCell>
-                        <Badge variant={v.is_enabled !== false ? "outline" : "secondary"} className={v.is_enabled !== false ? "border-green-500 text-green-600" : ""}>
+                        <Badge variant={v.is_enabled !== false ? "ok" : "secondary"}>
                           {v.is_enabled !== false ? "Activo" : "Inactivo"}
                         </Badge>
                       </TableCell>
@@ -423,7 +412,7 @@ export function BackofficeVendedoresView() {
                           )}
                           <Tooltip><TooltipTrigger asChild>
                             <Button size="icon"
-                              className={`size-8 ${v.is_enabled !== false ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`}
+                              className="size-8 bg-muted text-foreground border hover:bg-accent"
                               aria-label={v.is_enabled !== false ? "Deshabilitar vendedor" : "Habilitar vendedor"}
                               disabled={savingToggle === v.id}
                               onClick={() => toggleEstado(v)}>
@@ -431,7 +420,7 @@ export function BackofficeVendedoresView() {
                             </Button>
                           </TooltipTrigger><TooltipContent>{v.is_enabled !== false ? "Deshabilitar" : "Habilitar"}</TooltipContent></Tooltip>
                           <Tooltip><TooltipTrigger asChild>
-                            <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" aria-label="Eliminar vendedor"
+                            <Button size="icon" variant="destructive" className="size-8" aria-label="Eliminar vendedor"
                               disabled={deletingId === v.id}
                               onClick={() => eliminarVendedor(v)}>
                               <Trash2 className="size-3.5" aria-hidden="true" />
@@ -454,7 +443,7 @@ export function BackofficeVendedoresView() {
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-start">
                   <CardTitle className="text-sm">{getNombre(v)}</CardTitle>
-                  <Badge variant={v.is_enabled !== false ? "outline" : "secondary"} className={`text-xs ${v.is_enabled !== false ? "border-green-500 text-green-600" : ""}`}>
+                  <Badge variant={v.is_enabled !== false ? "ok" : "secondary"} className="text-xs">
                     {v.is_enabled !== false ? "Activo" : "Inactivo"}
                   </Badge>
                 </div>
@@ -464,21 +453,21 @@ export function BackofficeVendedoresView() {
               <CardContent className="pt-0">
                 <div className="flex gap-4 mb-3">
                   <div><p className="text-xs text-muted-foreground">Prospectos</p><p className="font-bold text-sm">{v.total_prospectos ?? "—"}</p></div>
-                  <div><p className="text-xs text-muted-foreground">Ventas</p><p className="font-bold text-sm text-green-600">{v.ventas ?? "—"}</p></div>
+                  <div><p className="text-xs text-muted-foreground">Ventas</p><p className="font-bold text-sm">{v.ventas ?? "—"}</p></div>
                 </div>
                 <div className="flex gap-1 flex-wrap">
                   <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => verDetalle(v)}><Eye className="size-3 mr-1" />Detalle</Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs border-blue-500 text-blue-600" onClick={() => abrirAsignarSupervisor(v)}><UserCog className="size-3 mr-1" />Supervisor</Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs border-indigo-500 text-indigo-600" onClick={() => abrirProspectos(v)}><FileText className="size-3 mr-1" />Prospectos</Button>
+                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => abrirAsignarSupervisor(v)}><UserCog className="size-3 mr-1" />Supervisor</Button>
+                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => abrirProspectos(v)}><FileText className="size-3 mr-1" />Prospectos</Button>
                   {categorias.length > 0 && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs border-amber-500 text-amber-600" onClick={() => abrirCategoria(v)}><Tag className="size-3 mr-1" />Categoría</Button>
+                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => abrirCategoria(v)}><Tag className="size-3 mr-1" />Categoría</Button>
                   )}
-                  <Button size="sm" variant="outline" className={`h-7 text-xs ${v.is_enabled !== false ? "border-red-400 text-red-500" : "border-green-500 text-green-600"}`}
+                  <Button size="sm" variant="outline" className="h-7 text-xs"
                     disabled={savingToggle === v.id}
                     onClick={() => toggleEstado(v)}>
                     {v.is_enabled !== false ? <ToggleRight className="size-3" /> : <ToggleLeft className="size-3" />}
                   </Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs border-red-500 text-red-600"
+                  <Button size="sm" variant="destructive" className="h-7 text-xs"
                     disabled={deletingId === v.id}
                     onClick={() => eliminarVendedor(v)}>
                     <Trash2 className="size-3 mr-1" />Eliminar
@@ -524,7 +513,7 @@ export function BackofficeVendedoresView() {
               <div className="space-y-4">
                 <div>
                   <p className="font-bold">Estado:</p>
-                  <Badge className={`mt-1 text-xs uppercase ${vendedorSeleccionado.is_enabled !== false ? "bg-teal-600 hover:bg-teal-600" : "bg-red-500 hover:bg-red-500"} text-white`}>
+                  <Badge variant={vendedorSeleccionado.is_enabled !== false ? "ok" : "risk"} className="mt-1 text-xs uppercase">
                     {vendedorSeleccionado.is_enabled !== false ? "Habilitado" : "Deshabilitado"}
                   </Badge>
                 </div>
@@ -663,7 +652,7 @@ export function BackofficeVendedoresView() {
                       <Label htmlFor="todos" className="text-sm cursor-pointer">Seleccionar todos ({prospectos.length})</Label>
                     </div>
                     {selectedProspectos.length > 0 && (
-                      <Button size="sm" variant="outline" className="border-orange-400 text-orange-600"
+                      <Button size="sm" variant="outline"
                         onClick={() => { setNuevoVendedorId(""); setReasignarModal(true) }}>
                         <ArrowLeftRight className="size-3.5 mr-1" />Reasignar ({selectedProspectos.length})
                       </Button>
@@ -787,8 +776,8 @@ export function BackofficeVendedoresView() {
       <Dialog open={confirmToggleModal} onOpenChange={setConfirmToggleModal}>
         <DialogContent className="sm:max-w-sm" showCloseButton={false}>
           <div className="flex flex-col items-center gap-4 pt-4 pb-2">
-            <div className={`rounded-full border-4 p-3 ${vendedorParaToggle?.is_enabled !== false ? "border-gray-300" : "border-teal-300"}`}>
-              <AlertCircle className={`size-10 ${vendedorParaToggle?.is_enabled !== false ? "text-gray-400" : "text-teal-500"}`} />
+            <div className="rounded-full border-4 border-muted p-3">
+              <AlertCircle className="size-10 text-muted-foreground" />
             </div>
             <div className="text-center space-y-1">
               <h3 className="font-semibold text-base">
@@ -801,13 +790,13 @@ export function BackofficeVendedoresView() {
           </div>
           <div className="flex gap-3 justify-center pb-4">
             <Button
-              className={vendedorParaToggle?.is_enabled !== false ? "bg-gray-600 hover:bg-gray-700 text-white" : "bg-muted text-foreground border hover:bg-accent"}
+              variant={vendedorParaToggle?.is_enabled !== false ? "destructive" : "default"}
               disabled={savingToggle !== null}
               onClick={confirmarToggle}
             >
               {savingToggle !== null ? "..." : vendedorParaToggle?.is_enabled !== false ? "Sí, deshabilitar" : "Sí, habilitar"}
             </Button>
-            <Button variant="destructive" onClick={() => setConfirmToggleModal(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setConfirmToggleModal(false)}>Cancelar</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -816,8 +805,8 @@ export function BackofficeVendedoresView() {
       <Dialog open={confirmEliminarModal} onOpenChange={setConfirmEliminarModal}>
         <DialogContent className="sm:max-w-sm" showCloseButton={false}>
           <div className="flex flex-col items-center gap-4 pt-4 pb-2">
-            <div className="rounded-full border-4 border-orange-300 p-3">
-              <AlertCircle className="size-10 text-orange-400" />
+            <div className="rounded-full border-4 border-state-risk/30 p-3">
+              <AlertCircle className="size-10 text-state-risk-text" />
             </div>
             <div className="text-center space-y-1">
               <h3 className="font-semibold text-base">¿Eliminar vendedor?</h3>
@@ -828,13 +817,13 @@ export function BackofficeVendedoresView() {
           </div>
           <div className="flex gap-3 justify-center pb-4">
             <Button
-              className="bg-primary hover:bg-primary/90 text-white"
+              variant="destructive"
               disabled={deletingId !== null}
               onClick={confirmarEliminar}
             >
               {deletingId !== null ? "Eliminando..." : "Sí, eliminar"}
             </Button>
-            <Button variant="destructive" onClick={() => setConfirmEliminarModal(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setConfirmEliminarModal(false)}>Cancelar</Button>
           </div>
         </DialogContent>
       </Dialog>

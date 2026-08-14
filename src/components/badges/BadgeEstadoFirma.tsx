@@ -12,29 +12,25 @@ interface BadgeEstadoFirmaProps {
 const CONFIG = {
   pending: {
     label: "Pendiente de firma",
-    variant: "secondary" as const,
-    className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 border-yellow-200",
+    variant: "warn" as const,
     Icon: Clock,
     title: "La póliza fue enviada y está esperando la firma del prospecto",
   },
   signed: {
     label: "Póliza firmada",
-    variant: "secondary" as const,
-    className: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 border-green-200",
+    variant: "ok" as const,
     Icon: CheckCircle,
     title: "La póliza ha sido firmada exitosamente por el prospecto",
   },
   rejected: {
     label: "Firma rechazada",
-    variant: "destructive" as const,
-    className: "",
+    variant: "risk" as const,
     Icon: XCircle,
     title: "El prospecto rechazó la firma de la póliza",
   },
   expired: {
     label: "Firma expirada",
     variant: "secondary" as const,
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
     Icon: AlertTriangle,
     title: "El plazo para firmar la póliza ha expirado",
   },
@@ -47,15 +43,14 @@ export function BadgeEstadoFirma({ poliza, estado, className = "" }: BadgeEstado
   const config = CONFIG[estadoFirma] ?? {
     label: "Estado desconocido",
     variant: "secondary" as const,
-    className: "",
     Icon: AlertTriangle,
     title: "",
   }
 
-  const { label, variant, className: cfgClass, Icon, title } = config
+  const { label, variant, Icon, title } = config
 
   return (
-    <Badge variant={variant} className={`inline-flex items-center gap-1 ${cfgClass} ${className}`} title={title}>
+    <Badge variant={variant} className={`inline-flex items-center gap-1 ${className}`} title={title}>
       <Icon className="size-3" />
       {label}
     </Badge>

@@ -75,7 +75,7 @@ export function ValidacionConversacionModal({ open, onOpenChange, prospectoId, n
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <MessageCircle className="size-4 text-green-600" />
+            <MessageCircle className="size-4 text-muted-foreground" />
             Conversación de validación
           </DialogTitle>
           <DialogDescription>{nombre ?? `Prospecto #${prospectoId}`}</DialogDescription>
@@ -102,7 +102,7 @@ export function ValidacionConversacionModal({ open, onOpenChange, prospectoId, n
                     <div
                       className={cn(
                         "max-w-[80%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap break-words",
-                        saliente ? "bg-green-600 text-white" : "bg-muted"
+                        saliente ? "bg-primary text-primary-foreground" : "bg-muted"
                       )}
                     >
                       <div className="flex items-center gap-1 mb-0.5 opacity-70">

@@ -43,12 +43,6 @@ interface Usuario {
 }
 
 const ROLE_LABELS: Record<number, string> = { 1: "Vendedor", 2: "Supervisor", 3: "Administrador", 4: "Backoffice" }
-const ROLE_COLORS: Record<number, string> = {
-  1: "border-green-500 text-green-600",
-  2: "border-blue-500 text-blue-600",
-  3: "border-red-500 text-red-600",
-  4: "border-orange-400 text-orange-600",
-}
 
 const defaultForm = {
   first_name: "", last_name: "", email: "", phone_number: "", role: "1", password: "",
@@ -198,7 +192,7 @@ export default function UsuariosAdmin() {
         </TabsTrigger>
         <TabsTrigger value="activos" className="flex items-center gap-1.5">
           <Wifi className="size-3.5" />Usuarios Activos
-          <Badge className="ml-1 bg-green-500 text-white text-[9px] px-1 py-0 h-4 leading-none">TIEMPO REAL</Badge>
+          <Badge variant="ok" className="ml-1 text-[9px] px-1 py-0 h-4 leading-none">TIEMPO REAL</Badge>
         </TabsTrigger>
       </TabsList>
 
@@ -216,17 +210,17 @@ export default function UsuariosAdmin() {
           <p className="text-xs text-muted-foreground">Total</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <UserCheck className="size-4 mx-auto mb-1 text-emerald-500" />
+          <UserCheck className="size-4 mx-auto mb-1 text-state-ok-text" />
           <p className="text-2xl font-bold text-foreground">{users.filter(u => u.activo !== false).length}</p>
           <p className="text-xs text-muted-foreground">Activos</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <UserX className="size-4 mx-auto mb-1 text-red-500" />
+          <UserX className="size-4 mx-auto mb-1 text-state-risk-text" />
           <p className="text-2xl font-bold text-foreground">{users.filter(u => u.activo === false).length}</p>
           <p className="text-xs text-muted-foreground">Inactivos</p>
         </CardContent></Card>
         <Card><CardContent className="p-3 text-center">
-          <UserPlus className="size-4 mx-auto mb-1 text-sky-500" />
+          <UserPlus className="size-4 mx-auto mb-1 text-muted-foreground" />
           <p className="text-2xl font-bold text-foreground">{users.filter(u => u.role === 1).length}</p>
           <p className="text-xs text-muted-foreground">Vendedores</p>
         </CardContent></Card>
@@ -304,7 +298,7 @@ export default function UsuariosAdmin() {
                   <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">{u.phone_number ?? "—"}</TableCell>
                   <TableCell><Badge variant="outline">{ROLE_LABELS[u.role] ?? "?"}</Badge></TableCell>
                   <TableCell>
-                    <Badge variant={u.activo !== false ? "default" : "secondary"} className={u.activo !== false ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}>
+                    <Badge variant={u.activo !== false ? "ok" : "secondary"}>
                       {u.activo !== false ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
@@ -316,7 +310,7 @@ export default function UsuariosAdmin() {
                       <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(u)} title="Editar">
                         <Edit2 className="size-3.5" />
                       </Button>
-                      <Button size="icon" className={`size-8 ${u.activo !== false ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`} onClick={() => toggleEstado(u)} title={u.activo !== false ? "Deshabilitar" : "Habilitar"}>
+                      <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(u)} title={u.activo !== false ? "Deshabilitar" : "Habilitar"}>
                         {u.activo !== false ? <ShieldOff className="size-3.5" /> : <ShieldCheck className="size-3.5" />}
                       </Button>
                       {/* Reenviar verificación: sólo si el email sigue sin verificar. */}
@@ -331,7 +325,7 @@ export default function UsuariosAdmin() {
                           <Mail className="size-3.5" />
                         </Button>
                       )}
-                      <Button size="icon" className="size-8 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminar(u)} title="Eliminar">
+                      <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(u)} title="Eliminar">
                         <Trash2 className="size-3.5" />
                       </Button>
                     </div>
@@ -366,8 +360,8 @@ export default function UsuariosAdmin() {
                     </div>
                   </div>
                   <Badge
-                    variant={u.activo !== false ? "default" : "secondary"}
-                    className={`shrink-0 text-[10px] ${u.activo !== false ? "bg-green-100 text-green-800 hover:bg-green-100" : ""}`}
+                    variant={u.activo !== false ? "ok" : "secondary"}
+                    className="shrink-0 text-[10px]"
                   >
                     {u.activo !== false ? "Activo" : "Inactivo"}
                   </Badge>
@@ -396,10 +390,10 @@ export default function UsuariosAdmin() {
                   <Button size="icon" className="size-8 flex-1 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(u)} title="Editar">
                     <Edit2 className="size-3.5" />
                   </Button>
-                  <Button size="icon" className={`size-8 flex-1 ${u.activo !== false ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"} text-white border-0`} onClick={() => toggleEstado(u)} title={u.activo !== false ? "Deshabilitar" : "Habilitar"}>
+                  <Button size="icon" className="size-8 flex-1 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(u)} title={u.activo !== false ? "Deshabilitar" : "Habilitar"}>
                     {u.activo !== false ? <ShieldOff className="size-3.5" /> : <ShieldCheck className="size-3.5" />}
                   </Button>
-                  <Button size="icon" className="size-8 flex-1 bg-red-500 hover:bg-red-600 text-white border-0" onClick={() => eliminar(u)} title="Eliminar">
+                  <Button size="icon" variant="destructive" className="size-8 flex-1" onClick={() => eliminar(u)} title="Eliminar">
                     <Trash2 className="size-3.5" />
                   </Button>
                 </div>
@@ -567,7 +561,7 @@ export default function UsuariosAdmin() {
                     </div>
                     <div>
                       <p className="text-muted-foreground text-xs">Rol</p>
-                      <Badge variant="outline" className={`mt-0.5 text-xs font-bold uppercase ${ROLE_COLORS[u.role] ?? ""}`}>
+                      <Badge variant="outline" className="mt-0.5 text-xs font-bold uppercase">
                         {ROLE_LABELS[u.role]}
                       </Badge>
                     </div>
@@ -577,7 +571,7 @@ export default function UsuariosAdmin() {
                     </div>
                     <div>
                       <p className="text-muted-foreground text-xs">Estado</p>
-                      <Badge variant="outline" className={`mt-0.5 text-xs font-bold uppercase ${u.activo !== false ? "border-green-500 text-green-600" : "border-red-500 text-red-600"}`}>
+                      <Badge variant={u.activo !== false ? "ok" : "risk"} className="mt-0.5 text-xs font-bold uppercase">
                         {u.activo !== false ? "Habilitado" : "Deshabilitado"}
                       </Badge>
                     </div>
@@ -588,7 +582,7 @@ export default function UsuariosAdmin() {
                     <div>
                       <p className="text-muted-foreground text-xs">Email verificado</p>
                       {u.email_verified !== undefined ? (
-                        <Badge className={`mt-0.5 text-xs ${u.email_verified ? "bg-green-600 hover:bg-green-600" : "bg-red-500 hover:bg-red-500"} text-white`}>
+                        <Badge variant={u.email_verified ? "ok" : "risk"} className="mt-0.5">
                           {u.email_verified ? "✓ Verificado" : "✗ No verificado"}
                         </Badge>
                       ) : <p className="text-muted-foreground">—</p>}
@@ -642,11 +636,11 @@ export default function UsuariosAdmin() {
                       <p className="text-xs text-muted-foreground mt-0.5">Días en el sistema</p>
                     </div>
                     <div className="rounded-xl bg-muted/40 border p-3 flex flex-col items-center justify-center gap-1">
-                      <CheckCircle className={`size-6 ${u.email_verified !== false ? "text-green-500" : "text-muted-foreground"}`} />
+                      <CheckCircle className={`size-6 ${u.email_verified !== false ? "text-state-ok-text" : "text-muted-foreground"}`} />
                       <p className="text-xs text-muted-foreground text-center">Email verificado</p>
                     </div>
                     <div className="rounded-xl bg-muted/40 border p-3 flex flex-col items-center justify-center gap-1">
-                      <span className={`inline-block size-3 rounded-full ${u.activo !== false ? "bg-green-500" : "bg-red-500"}`} />
+                      <span className={`inline-block size-3 rounded-full ${u.activo !== false ? "bg-state-ok" : "bg-state-risk"}`} />
                       <p className="text-xs text-muted-foreground text-center">Estado actual</p>
                     </div>
                   </div>
@@ -687,7 +681,7 @@ export default function UsuariosAdmin() {
             return (
               <>
                 <DialogHeader className="pb-2">
-                  <DialogTitle className={`flex items-center gap-2 text-lg ${deshabilitar ? "text-red-500" : "text-green-600"}`}>
+                  <DialogTitle className={`flex items-center gap-2 text-lg ${deshabilitar ? "text-state-risk-text" : "text-state-ok-text"}`}>
                     {deshabilitar
                       ? <Ban className="size-5" />
                       : <CheckCircle className="size-5" />
@@ -702,7 +696,7 @@ export default function UsuariosAdmin() {
                     <strong>{confirmToggleModal.user.first_name} {confirmToggleModal.user.last_name}</strong>?
                   </p>
 
-                  <div className={`rounded-lg p-3 text-sm flex gap-2 ${deshabilitar ? "bg-blue-50 border border-blue-100 text-blue-800" : "bg-green-50 border border-green-100 text-green-800"}`}>
+                  <div className="rounded-lg p-3 text-sm flex gap-2 bg-muted text-muted-foreground border">
                     <span className="mt-0.5 shrink-0 text-base">ℹ️</span>
                     <div>
                       <p className="font-semibold mb-0.5">Información:</p>
@@ -715,17 +709,11 @@ export default function UsuariosAdmin() {
                 </div>
 
                 <DialogFooter className="gap-2 pt-2">
-                  <Button
-                    onClick={confirmarToggle}
-                    className={deshabilitar
-                      ? "bg-primary hover:bg-primary/90 gap-1.5"
-                      : "bg-green-600 hover:bg-green-700 gap-1.5"
-                    }
-                  >
+                  <Button onClick={confirmarToggle} className="gap-1.5">
                     {deshabilitar ? <Ban className="size-4" /> : <CheckCircle className="size-4" />}
                     {deshabilitar ? "Deshabilitar" : "Habilitar"}
                   </Button>
-                  <Button variant="destructive" onClick={() => setConfirmToggleModal({ open: false, user: null })}>
+                  <Button variant="outline" onClick={() => setConfirmToggleModal({ open: false, user: null })}>
                     Cancelar
                   </Button>
                 </DialogFooter>
@@ -759,7 +747,7 @@ export default function UsuariosAdmin() {
                 </div>
 
                 {/* Advertencia */}
-                <div className="rounded-lg p-3 text-sm bg-yellow-50 border border-yellow-200 text-yellow-800 flex gap-2">
+                <div className="rounded-lg p-3 text-sm bg-state-warn-soft border border-state-warn/30 text-state-warn-text flex gap-2">
                   <span className="mt-0.5 shrink-0">⚠️</span>
                   <div>
                     <p className="font-semibold mb-0.5">Advertencia:</p>
@@ -783,15 +771,16 @@ export default function UsuariosAdmin() {
 
               <DialogFooter className="flex-col gap-2 pt-2 sm:flex-col">
                 <Button
+                  variant="destructive"
                   onClick={confirmarEliminar}
                   disabled={textoEliminar !== "ELIMINAR"}
-                  className="w-full bg-primary hover:bg-primary/90 gap-1.5 disabled:opacity-50"
+                  className="w-full gap-1.5 disabled:opacity-50"
                 >
                   <Trash2 className="size-4" />
                   Eliminar Usuario
                 </Button>
                 <Button
-                  variant="destructive"
+                  variant="outline"
                   className="w-full gap-1.5"
                   onClick={() => {
                     setConfirmEliminarModal({ open: false, user: null })

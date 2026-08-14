@@ -117,9 +117,9 @@ export function CargarPolizaFirmadaModal({
               <p className="text-xs text-muted-foreground mt-1">Solo archivos PDF (máximo 10MB)</p>
             </div>
           ) : (
-            <div className="rounded-lg border border-green-300 bg-green-50 dark:bg-green-950/20 dark:border-green-800 p-3 space-y-2">
+            <div className="rounded-lg border border-state-ok/30 bg-state-ok-soft p-3 space-y-2">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-green-700 dark:text-green-400">
+                <div className="flex items-center gap-2 text-sm text-state-ok-text">
                   <Check className="size-4 shrink-0" />
                   <span className="font-medium truncate max-w-[240px]">{archivo.name}</span>
                 </div>

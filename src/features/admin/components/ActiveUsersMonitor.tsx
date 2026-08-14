@@ -192,26 +192,26 @@ export default function ActiveUsersMonitor() {
 
   const tiempoClass = (minutes?: number) => {
     if (minutes == null || isNaN(minutes)) return "border-muted-foreground text-muted-foreground"
-    if (minutes <= 2) return "border-green-400 text-green-600"
-    if (minutes <= 5) return "border-yellow-400 text-yellow-600"
+    if (minutes <= 2) return "border-state-ok/40 text-state-ok-text"
+    if (minutes <= 5) return "border-state-warn/40 text-state-warn-text"
     return "border-muted-foreground text-muted-foreground"
   }
 
   const roleBadgeClass = (roleColor?: string) => {
     switch (roleColor?.toLowerCase()) {
-      case "danger": case "red": return "border-red-500 text-red-600"
-      case "primary": case "blue": return "border-blue-500 text-blue-600"
-      case "success": case "green": return "border-green-500 text-green-600"
-      case "warning": case "orange": return "border-orange-400 text-orange-600"
+      case "danger": case "red": return "border-state-risk/40 text-state-risk-text"
+      case "primary": case "blue": return "border-primary text-primary"
+      case "success": case "green": return "border-state-ok/40 text-state-ok-text"
+      case "warning": case "orange": return "border-state-warn/40 text-state-warn-text"
       default: return "border-primary text-primary"
     }
   }
 
   const dotColor = (minutes?: number) => {
-    if (minutes == null || isNaN(minutes)) return "bg-gray-400"
-    if (minutes <= 2) return "bg-green-500"
-    if (minutes <= 5) return "bg-yellow-400"
-    return "bg-gray-400"
+    if (minutes == null || isNaN(minutes)) return "bg-muted-foreground/40"
+    if (minutes <= 2) return "bg-state-ok"
+    if (minutes <= 5) return "bg-state-warn"
+    return "bg-muted-foreground/40"
   }
 
   return (
@@ -224,8 +224,8 @@ export default function ActiveUsersMonitor() {
               <Users className="size-4" />
               Monitor de Usuarios Activos
               {wsConnected
-                ? <Wifi className="size-4 text-green-500" />
-                : <WifiOff className="size-4 text-yellow-500" />
+                ? <Wifi className="size-4 text-state-ok-text" />
+                : <WifiOff className="size-4 text-state-warn-text" />
               }
             </CardTitle>
             <div className="flex items-center gap-2">
@@ -250,17 +250,17 @@ export default function ActiveUsersMonitor() {
           {/* 4 métricas */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <Card><CardContent className="p-3 text-center">
-              <UserCheck className="size-4 mx-auto mb-1 text-green-600" />
+              <UserCheck className="size-4 mx-auto mb-1 text-state-ok-text" />
               <p className="text-2xl font-bold">{activeUsers.length}</p>
               <p className="text-xs text-muted-foreground">Activos ahora</p>
             </CardContent></Card>
             <Card><CardContent className="p-3 text-center">
-              <Users className="size-4 mx-auto mb-1 text-blue-500" />
+              <Users className="size-4 mx-auto mb-1 text-muted-foreground" />
               <p className="text-2xl font-bold">{statistics?.summary?.active_today ?? "—"}</p>
               <p className="text-xs text-muted-foreground">Activos hoy</p>
             </CardContent></Card>
             <Card><CardContent className="p-3 text-center">
-              <Wifi className="size-4 mx-auto mb-1 text-orange-500" />
+              <Wifi className="size-4 mx-auto mb-1 text-muted-foreground" />
               <p className="text-2xl font-bold">{statistics?.summary?.enabled_users ?? "—"}</p>
               <p className="text-xs text-muted-foreground">Habilitados</p>
             </CardContent></Card>
@@ -276,12 +276,12 @@ export default function ActiveUsersMonitor() {
             <div className="flex items-center gap-2">
               <span>Estado:</span>
               {wsConnected ? (
-                <Badge className="bg-green-100 text-green-700 border border-green-300 hover:bg-green-100 text-[10px] gap-1">
-                  <span className="inline-block size-1.5 rounded-full bg-green-500 animate-pulse" />
+                <Badge variant="ok" className="text-[10px] gap-1">
+                  <span className="inline-block size-1.5 rounded-full bg-state-ok animate-pulse" />
                   TIEMPO REAL
                 </Badge>
               ) : reconnecting ? (
-                <Badge variant="outline" className="text-yellow-600 border-yellow-400 text-[10px]">
+                <Badge variant="warn" className="text-[10px]">
                   Reconectando... ({connectionAttempts}/{MAX_RECONNECT})
                 </Badge>
               ) : (

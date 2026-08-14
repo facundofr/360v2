@@ -22,10 +22,10 @@ function getPasswordRequirements(password: string) {
 function getStrength(password: string): { level: number; text: string; color: string } {
   const met = Object.values(getPasswordRequirements(password)).filter(Boolean).length
   if (met === 0) return { level: 0, text: "", color: "" }
-  if (met <= 2) return { level: 1, text: "Débil", color: "bg-red-500" }
-  if (met <= 3) return { level: 2, text: "Regular", color: "bg-yellow-500" }
-  if (met <= 4) return { level: 3, text: "Buena", color: "bg-orange-500" }
-  return { level: 4, text: "Muy fuerte", color: "bg-green-500" }
+  if (met <= 2) return { level: 1, text: "Débil", color: "bg-state-risk" }
+  if (met <= 3) return { level: 2, text: "Regular", color: "bg-state-warn" }
+  if (met <= 4) return { level: 3, text: "Buena", color: "bg-state-ok" }
+  return { level: 4, text: "Muy fuerte", color: "bg-state-ok" }
 }
 
 export default function ResetPasswordPage() {
@@ -124,11 +124,11 @@ export default function ResetPasswordPage() {
                   ].map(({ met, text }) => (
                     <div key={text} className="flex items-center gap-1">
                       {met ? (
-                        <Check className="size-3 text-green-500" />
+                        <Check className="size-3 text-state-ok-text" />
                       ) : (
                         <X className="size-3 text-muted-foreground" />
                       )}
-                      <span className={met ? "text-green-600" : "text-muted-foreground"}>{text}</span>
+                      <span className={met ? "text-state-ok-text" : "text-muted-foreground"}>{text}</span>
                     </div>
                   ))}
                 </div>

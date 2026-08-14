@@ -51,13 +51,13 @@ const ESTADOS = [
 
 /** Color del badge según el estado textual que devuelve el backend. */
 const ESTADO_BADGE: Record<string, string> = {
-  "Pendiente validación WhatsApp":        "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
-  "Validación: esperando confirmación":   "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
-  "Lead":                                 "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-  "Lead (validado - interesado)":         "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-  "Lead (validado - averiguando)":        "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
-  "Lead (sin respuesta a validación)":    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
-  "Corregir datos":                       "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+  "Pendiente validación WhatsApp":        "bg-state-warn-soft text-state-warn-text",
+  "Validación: esperando confirmación":   "bg-state-warn-soft text-state-warn-text",
+  "Lead":                                 "bg-state-ok-soft text-state-ok-text",
+  "Lead (validado - interesado)":         "bg-state-ok-soft text-state-ok-text",
+  "Lead (validado - averiguando)":        "bg-state-warn-soft text-state-warn-text",
+  "Lead (sin respuesta a validación)":    "bg-state-warn-soft text-state-warn-text",
+  "Corregir datos":                       "bg-state-risk-soft text-state-risk-text",
   "No interesado":                        "bg-muted text-muted-foreground",
 }
 
@@ -242,10 +242,10 @@ export default function ValidacionWhatsappAdmin() {
 
   const kpis = [
     { label: "Enviados",        valor: totales.total_enviados ?? 0, icon: Send,       color: "text-primary" },
-    { label: "Pendientes",      valor: totales.pendientes ?? 0,     icon: Clock,      color: "text-sky-500" },
-    { label: "Urgentes",        valor: totales.urgentes ?? 0,       icon: ThumbsUp,   color: "text-emerald-500" },
-    { label: "Averiguando",     valor: totales.averiguando ?? 0,    icon: MessageCircle, color: "text-teal-500" },
-    { label: "A corregir",      valor: totales.corregir ?? 0,       icon: AlertTriangle, color: "text-red-500" },
+    { label: "Pendientes",      valor: totales.pendientes ?? 0,     icon: Clock,      color: "text-state-warn-text" },
+    { label: "Urgentes",        valor: totales.urgentes ?? 0,       icon: ThumbsUp,   color: "text-state-ok-text" },
+    { label: "Averiguando",     valor: totales.averiguando ?? 0,    icon: MessageCircle, color: "text-state-warn-text" },
+    { label: "A corregir",      valor: totales.corregir ?? 0,       icon: AlertTriangle, color: "text-state-risk-text" },
     { label: "No interesado",   valor: totales.no_interesado ?? 0,  icon: XCircle,    color: "text-muted-foreground" },
   ]
 
@@ -279,7 +279,7 @@ export default function ValidacionWhatsappAdmin() {
             <Label htmlFor="validador-activo" className="cursor-pointer">
               {activo ? "Activo" : "Inactivo"}
             </Label>
-            <Badge variant={activo ? "default" : "secondary"} className={activo ? "bg-emerald-600" : undefined}>
+            <Badge variant={activo ? "ok" : "secondary"}>
               {activo ? "Derivando prospectos" : "Sin derivar"}
             </Badge>
           </div>

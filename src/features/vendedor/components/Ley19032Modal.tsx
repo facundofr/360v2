@@ -176,13 +176,13 @@ export function Ley19032Modal({
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-950/30 p-3 text-sm">
-            <p className="font-semibold text-blue-800 dark:text-blue-300">Ley 19032 — Cálculo de Aporte Presuntivo</p>
-            <p className="text-blue-700 dark:text-blue-400 mt-1">
+          <div className="rounded-lg border bg-muted p-3 text-sm">
+            <p className="font-semibold">Ley 19032 — Cálculo de Aporte Presuntivo</p>
+            <p className="text-muted-foreground mt-1">
               Ingresá el importe de descuento de Ley 19032 del recibo de sueldo.
               Se aplica automáticamente a todas las cotizaciones con personas de recibo de sueldo.
             </p>
-            <div className="mt-2 rounded bg-blue-100 dark:bg-blue-900/40 px-3 py-1.5 font-mono text-xs text-blue-800 dark:text-blue-300">
+            <div className="mt-2 rounded bg-background px-3 py-1.5 font-mono text-xs text-muted-foreground">
               Fórmula: (Ley 19032 ÷ 0.03) × 0.06732 = Aporte Presuntivo
             </div>
           </div>
@@ -190,13 +190,13 @@ export function Ley19032Modal({
           {loading ? (
             <Skeleton className="h-20 w-full rounded-lg" />
           ) : cotizaciones.length === 0 ? (
-            <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:bg-yellow-950/30 p-3 text-sm text-yellow-800 dark:text-yellow-300">
+            <div className="rounded-lg border border-state-warn/30 bg-state-warn-soft p-3 text-sm text-state-warn-text">
               No hay cotizaciones con tipo de afiliación "Con recibo de sueldo"
             </div>
           ) : (
             <>
-              <div className="rounded-lg border border-green-200 bg-green-50 dark:bg-green-950/30 p-3 text-sm">
-                <p className="text-green-800 dark:text-green-300">
+              <div className="rounded-lg border border-state-ok/30 bg-state-ok-soft p-3 text-sm">
+                <p className="text-state-ok-text">
                   <strong>Cotizaciones encontradas:</strong> {cotizaciones.length} &nbsp;·&nbsp;
                   <strong>Personas con recibo de sueldo:</strong> {totalConRecibo}
                 </p>
@@ -223,7 +223,7 @@ export function Ley19032Modal({
                         {previewCalc[idx] && (
                           <div className="rounded bg-muted p-2 text-xs space-y-0.5">
                             <p>Sueldo bruto calculado: <strong>{formatCurrency(previewCalc[idx].sueldoBruto)}</strong></p>
-                            <p className="text-green-700 dark:text-green-400">
+                            <p className="text-muted-foreground">
                               Aporte presuntivo: <strong>{formatCurrency(previewCalc[idx].aportePresuntivo)}</strong>
                             </p>
                           </div>
@@ -250,12 +250,12 @@ export function Ley19032Modal({
                         <TableRow key={i}>
                           <TableCell>{row.nombre} <span className="text-xs text-muted-foreground">({row.vinculo})</span></TableCell>
                           <TableCell>{formatCurrency(row.importeLey19032)}</TableCell>
-                          <TableCell className="font-semibold text-green-600">{formatCurrency(row.aportePresuntivo)}</TableCell>
+                          <TableCell className="font-semibold">{formatCurrency(row.aportePresuntivo)}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow>
                         <TableCell colSpan={2} className="font-bold text-right">Total:</TableCell>
-                        <TableCell className="font-bold text-green-600">{formatCurrency(totalAportePreview)}</TableCell>
+                        <TableCell className="font-bold">{formatCurrency(totalAportePreview)}</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
