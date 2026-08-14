@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://360.cober.online/api/:path*"
+      "destination": "https://wspflows.cober.online/api/:path*"
     },
     {
       "source": "/((?!api/|assets/|icons/|data/|manifest\\.json|sw\\.js|firebase-messaging-sw\\.js|offline\\.html|favicon\\.ico).*)",
