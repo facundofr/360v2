@@ -1,0 +1,262 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.417 0.138 317);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    /* Colores custom para métricas (RGB proporcionados por el usuario) */
+    --color-Prospectos: rgba(227, 6, 32, 1);   /* rojo */
+    --color-Vendedores: rgba(251, 162, 0, 1);  /* amarillo */
+    --color-Ventas: rgba(8, 198, 176, 1);      /* celeste */
+    --color-Polizas: rgba(0, 57, 109, 1);      /* azul */
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.417 0.138 317);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+    /* Chart-specific token — contraste suficiente sobre fondo claro */
+    --chart-grid: oklch(0.5 0 0 / 18%);
+}
+
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.417 0.138 317);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+      /* Colores custom para métricas en modo oscuro (usar mismos RGBA) */
+      --color-Prospectos: rgba(227, 6, 32, 1);   /* rojo */
+      --color-Vendedores: rgba(251, 162, 0, 1);  /* amarillo */
+      --color-Ventas: rgba(8, 198, 176, 1);      /* celeste */
+      --color-Polizas: rgba(0, 57, 109, 1);      /* azul */
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.417 0.138 317);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+    /* Chart-specific token — contraste suficiente sobre fondo oscuro */
+    --chart-grid: oklch(1 0 0 / 18%);
+}
+
+
+@layer base {
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+@theme inline {
+    --font-sans: 'Montserrat', sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+       font-family: 'Montserrat', sans-serif !important;
+    }
+  html {
+    @apply font-sans;
+    font-family: 'Montserrat', sans-serif !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SISTEMA DE COLOR SEMÁNTICO
+   ───────────────────────────────────────────────────────────────────────────
+   La app se usa con el pulgar, en la calle, contra reloj. Con 14 familias de
+   color repartidas entre los botones, el color no significaba nada y había que
+   leer cada ícono. Acá el color vuelve a comunicar:
+
+     · primary (violeta Cober) → LA acción principal del contexto. Nada más.
+     · ok / warn / risk        → ESTADO. Nunca un botón, salvo el destructivo.
+     · neutro                  → todo el resto de las acciones.
+
+   Regla práctica: si tenés que preguntarte de qué color va un botón,
+   va neutro.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Estado: verde / ámbar / rojo, calibrados sobre fondo claro */
+  --state-ok:        oklch(0.58 0.13 155);
+  --state-ok-soft:   oklch(0.95 0.03 155);
+  --state-ok-text:   oklch(0.42 0.11 155);
+
+  --state-warn:      oklch(0.72 0.14 70);
+  --state-warn-soft: oklch(0.96 0.04 80);
+  --state-warn-text: oklch(0.50 0.11 60);
+
+  --state-risk:      oklch(0.58 0.20 25);
+  --state-risk-soft: oklch(0.95 0.03 25);
+  --state-risk-text: oklch(0.47 0.18 25);
+
+  /* Superficie teñida de marca, para lo seleccionado/activo */
+  --brand-soft:      oklch(0.96 0.02 317);
+
+  /* Altura mínima de un objetivo táctil. 44px es el piso de Apple/WCAG. */
+  --tap: 2.75rem;
+}
+
+.dark {
+  --state-ok:        oklch(0.70 0.14 158);
+  --state-ok-soft:   oklch(0.26 0.05 158);
+  --state-ok-text:   oklch(0.80 0.13 158);
+
+  --state-warn:      oklch(0.78 0.14 75);
+  --state-warn-soft: oklch(0.28 0.05 70);
+  --state-warn-text: oklch(0.85 0.12 80);
+
+  --state-risk:      oklch(0.68 0.18 22);
+  --state-risk-soft: oklch(0.27 0.07 22);
+  --state-risk-text: oklch(0.80 0.15 22);
+
+  --brand-soft:      oklch(0.28 0.05 317);
+}
+
+@theme inline {
+  --color-state-ok:        var(--state-ok);
+  --color-state-ok-soft:   var(--state-ok-soft);
+  --color-state-ok-text:   var(--state-ok-text);
+  --color-state-warn:      var(--state-warn);
+  --color-state-warn-soft: var(--state-warn-soft);
+  --color-state-warn-text: var(--state-warn-text);
+  --color-state-risk:      var(--state-risk);
+  --color-state-risk-soft: var(--state-risk-soft);
+  --color-state-risk-text: var(--state-risk-text);
+  --color-brand-soft:      var(--brand-soft);
+}
+
+@layer base {
+  /* ─── Objetivos táctiles ──────────────────────────────────────────────────
+     `pointer: coarse` = dedo. La restricción real es dedo contra mouse, no el
+     ancho de pantalla: una tablet con mouse no necesita 44px y un celular
+     apaisado sí. Con esto el escritorio conserva sus tablas compactas. */
+  @media (pointer: coarse) {
+    button:not([data-slot="sidebar-menu-button"]):not([role="tab"]),
+    [role="button"]:not([data-slot="sidebar-menu-button"]),
+    a[data-slot="button"],
+    [data-slot="select-trigger"],
+    [data-slot="pagination-link"] {
+      min-height: var(--tap);
+      min-width: var(--tap);
+    }
+
+    /* Los íconos sueltos dentro de una celda respiran un poco más */
+    td button, th button { margin-block: 0.125rem; }
+  }
+
+  /* ─── Números en columna ──────────────────────────────────────────────────
+     Precios, DNI, contadores: sin esto las columnas bailan al actualizarse. */
+  td, th, [data-numeric] { font-variant-numeric: tabular-nums; }
+
+  /* ─── Foco visible ────────────────────────────────────────────────────────
+     Un anillo con el violeta de marca, no el gris por defecto. */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: calc(var(--radius) * 0.5);
+  }
+
+  /* ─── Sin animación si el sistema lo pide ─────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ─── Scroll horizontal contenido ─────────────────────────────────────────
+     Las tablas anchas hacen scroll en su contenedor; el body nunca. */
+  body { overflow-x: hidden; }
+}

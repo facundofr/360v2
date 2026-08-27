@@ -1,0 +1,2972 @@
+[
+ {
+  "method": "POST",
+  "path": "/admin/categorias/:id/reset-round-robin",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/categorias/:id",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/categorias/:id",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/categorias/:id",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/categorias/carga-vendedores",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/categorias/distribucion/estado",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/categorias/distribucion/resetear-ronda",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/categorias/estadisticas",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/categorias/vendedor/:vendedorId/categoria",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/categorias",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/categorias",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/create-user",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/dashboard/metricas/funnel",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/dashboard/metricas/kpis",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/dashboard/metricas/prospectos-por-canal",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/dashboard/metricas/prospectos-por-dia",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/dashboard/metricas/ultimos-prospectos",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/dashboard/metricas",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/delete-user/:id",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/disable-user/:id",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/documentos/:documentoId/download",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/documentos/:documentoId/preview",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/documentos/:documentoId",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/documentos/estadisticas",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/enable-user/:id",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/health/rate-limits",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/list-users",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/lista-precios/aumentar/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/lista-precios/disminuir/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/lista-precios/exportar",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/lista-precios/template",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/metricas-avanzadas",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/metricas-comparativas",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/metricas-evolucion-temporal",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/metricas-por-fuente",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/metricas-rendimiento-vendedores",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/polizas/:id/auditoria",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/admin/polizas/:id/estado",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/polizas/:id/historial",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/admin/polizas/:id/restaurar",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/polizas/:id",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/polizas/:polizaId/documentos",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/polizas/estadisticas",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/polizas/filtros",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/polizas",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/prestadores/:id/estado",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/prestadores/:id",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/prestadores/:id",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/prestadores/:id",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/prestadores/:prestadorId/planes/:planId",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/prestadores/:prestadorId/planes/:planId",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/prestadores",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/prestadores",
+  "file": "routes/admin/prestadorRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/promociones/:id",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/promociones/:id",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/promociones",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/promociones",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/prospectos/:id/cotizaciones",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/admin/prospectos/:id/estado",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/prospectos/:id/historial",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/prospectos/:id/reasignar",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/prospectos/all",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/prospectos/estadisticas",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/rate-limits/info/:ip",
+  "file": "routes/admin/rateLimitRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/rate-limits/reset-bulk",
+  "file": "routes/admin/rateLimitRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/rate-limits/reset/:ip",
+  "file": "routes/admin/rateLimitRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/refritos/cargar",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/cola/:vendedorId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/descargar-ejemplo",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/refritos/eliminar-flujo",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/estadisticas",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/historial/:prospectoId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/listar",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/refritos/reasignar",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/reporte-vendedores",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/vendedor/:vendedorId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/refritos/visible/:vendedorId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/resend-verification/:id",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/resumen-ejecutivo",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/security/status",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/admin/supervisores/:id/toggle-status",
+  "file": "routes/admin/supervisoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/supervisores/:id",
+  "file": "routes/admin/supervisoresAdminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/supervisores/asignar-vendedor",
+  "file": "routes/admin/supervisoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/supervisores/metricas",
+  "file": "routes/admin/supervisoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/supervisores/sin-asignar",
+  "file": "routes/admin/supervisoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/supervisores",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/supervisores",
+  "file": "routes/admin/supervisoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad/estadisticas",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad/exportar",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad/prospecto/:prospectoId",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad/supervisores",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad/vendedor/:vendedorId/sesion",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad/vendedores",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/trazabilidad",
+  "file": "routes/admin/trazabilidadRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/update-user/:id",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/users/active",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/users/activity-stats",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/users/heartbeat",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/users/logout-activity",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/validacion-whatsapp/metricas",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/validacion-whatsapp/prospectos/:id/conversacion",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/validacion-whatsapp/prospectos",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/validacion-whatsapp",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/admin/validacion-whatsapp",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/vendedores/:id/metricas",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/vendedores/:id/prospectos",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/admin/vendedores/:id/toggle-status",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/admin/vendedores/:id",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/vendedores/:id",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/vendedores/asignar-categoria",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/vendedores/asignar-supervisor",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/vendedores/asignar",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/vendedores/metricas",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/admin/vendedores/reasignar-prospectos",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/vendedores",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/vendedores",
+  "file": "routes/admin/vendedoresAdminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/whatsapp/conversacion/:conversacionId/mensajes",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/admin/whatsapp/conversaciones/:telefono",
+  "file": "routes/admin/adminRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/categorias/:id/reset-round-robin",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/admin/categorias/:id",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/categorias/:id",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/categorias/:id",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/categorias/carga-vendedores",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/categorias/distribucion/estado",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/categorias/distribucion/resetear-ronda",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/categorias/estadisticas",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/categorias/vendedor/:vendedorId/categoria",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/categorias",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/categorias",
+  "file": "routes/admin/categoriasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/dashboard/metricas/funnel",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/dashboard/metricas/kpis",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/dashboard/metricas/prospectos-por-canal",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/dashboard/metricas/prospectos-por-dia",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/dashboard/metricas/ultimos-prospectos",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/dashboard/metricas",
+  "file": "routes/admin/dashboardMetricasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/admin/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/lista-precios/aumentar/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/lista-precios/disminuir/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/lista-precios/exportar",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/lista-precios/template",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/metricas-avanzadas",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/metricas-comparativas",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/metricas-evolucion-temporal",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/metricas-por-fuente",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/metricas-rendimiento-vendedores",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/admin/promociones/:id",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/promociones/:id",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/promociones",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/promociones",
+  "file": "routes/admin/promocionesRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/refritos/cargar",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/cola/:vendedorId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/descargar-ejemplo",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/refritos/eliminar-flujo",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/estadisticas",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/historial/:prospectoId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/listar",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/admin/refritos/reasignar",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/reporte-vendedores",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/vendedor/:vendedorId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/refritos/visible/:vendedorId",
+  "file": "routes/admin/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/resumen-ejecutivo",
+  "file": "routes/adminMetricas.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/validacion-whatsapp/metricas",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/validacion-whatsapp/prospectos/:id/conversacion",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/validacion-whatsapp/prospectos",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/admin/validacion-whatsapp",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/admin/validacion-whatsapp",
+  "file": "routes/admin/validacionWhatsappRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/alertas",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/dashboard",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/embudo",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/metricas/rendimiento",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/metricas",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/backoffice/polizas/:id/actualizar",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/:id/documentos/estadisticas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/backoffice/polizas/:id/documentos/multiple",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/:id/documentos",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/:id/editar",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/api/backoffice/polizas/:id/estado",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/:id/historial",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/backoffice/polizas/:id",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/conversaciones/:conversacion_id/mensajes",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/conversaciones/estadisticas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/conversaciones",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/backoffice/polizas/conversaciones",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/backoffice/polizas/documentos/:documentoId/actualizar",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/documentos/:documentoId/download",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/documentos/:documentoId/preview",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/backoffice/polizas/documentos/:documentoId",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/documentos/tipos",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/estadisticas/meses",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/estadisticas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/filtros",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas/prospectos/:prospecto_id/conversaciones",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/polizas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/backoffice/promociones/:id",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/promociones/:id",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/backoffice/promociones/:id",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/promociones/activas",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/promociones",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/backoffice/promociones",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/backoffice/prospectos/:id/asignar-vendedor",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/:id/cotizaciones",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/backoffice/prospectos/:id/estado",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/:id/historial",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/:id",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/estadisticas",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/exportar",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/filtros",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/whatsapp/conversaciones/:conversacionId/mensajes",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos/whatsapp/telefono/:telefono",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/prospectos",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/backoffice/reasignar-prospectos",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/api/backoffice/supervisores/:id/toggle-status",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/supervisores/:id",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/supervisores/:supervisorId",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/supervisores",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/tendencias",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores-sin-supervisor",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores-sin-supervisor",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores/:id/metricas",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores/:id/prospectos",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/api/backoffice/vendedores/:id/toggle-status",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/backoffice/vendedores/:id",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores/:id",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/backoffice/vendedores/asignar",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores/rendimiento",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/backoffice/vendedores",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/api/chat/conversaciones/:id/estado",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/api/chat/conversaciones/:id/marcar-leidos",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/chat/conversaciones/:id/mensajes/archivo",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/chat/conversaciones/:id/mensajes",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/chat/conversaciones/:id/mensajes",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/chat/conversaciones/prospecto/:prospecto_id",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/chat/conversaciones",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/chat/estadisticas",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/chat/plantillas",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/chat/plantillas",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/chat/verificar-numero/:telefono",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/fcm/register",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/fcm/test",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/fcm/tokens",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/fcm/unregister",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/gecros/buscar",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/gecros/consultar/cuil/:cuil",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/gecros/consultar/dni/:dni",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/gecros/credencial/:benId",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/monotributo/:id",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/monotributo/:id",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/monotributo/:id",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/monotributo/aumentar",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/monotributo",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/monotributo",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/polizas/:documento_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/:id/download",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/:id/estadisticas",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/polizas/:id/multiple",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/:id/preview",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/:id/tipos",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/:id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/download/:documento_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/polizas/firmada/cargar",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/poliza/:poliza_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/polizas/public/:hash",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/polizas/upload",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/public/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/public/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/public/lista-precios/aumentar/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/api/public/lista-precios/disminuir/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/public/lista-precios/exportar",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/public/lista-precios/template",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/public/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/public/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/candidatos",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/reasignaciones/ejecutar-manual",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/estadisticas-antiguedad",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/estadisticas-efectividad",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/estadisticas",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/feriados",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/historial",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/reasignaciones/reasignar",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/reasignaciones/vendedores-disponibles",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/vafirma/descargar-firmada/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/vafirma/documento-firmado/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/vafirma/enviar-poliza",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/vafirma/estado-doc/:docUUID",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/vafirma/estado/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/api/vafirma/solicitud/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/vafirma/webhook",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/api/vendedor/:id/enviar-supervisor",
+  "file": "routes/vendedor/polizasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/whatsapp/cierre-conversacion",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/whatsapp/informacion-adicional",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/api/whatsapp/plantillas",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/whatsapp/saludo-inicial",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/whatsapp/seguimiento-cotizacion",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/api/whatsapp/seguimiento-poliza",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/auth/login",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/auth/logout",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/auth/register",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/auth/request-password-reset",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/auth/reset-password/:token",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/auth/session-status",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/auth/verify/:token",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/auth/verify/:token",
+  "file": "routes/authRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/alertas",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/dashboard",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/embudo",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/metricas/rendimiento",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/metricas",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/backoffice/polizas/:id/actualizar",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/:id/documentos/estadisticas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/backoffice/polizas/:id/documentos/multiple",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/:id/documentos",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/:id/editar",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/backoffice/polizas/:id/estado",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/:id/historial",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/backoffice/polizas/:id",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/conversaciones/:conversacion_id/mensajes",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/conversaciones/estadisticas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/conversaciones",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/backoffice/polizas/conversaciones",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/backoffice/polizas/documentos/:documentoId/actualizar",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/documentos/:documentoId/download",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/documentos/:documentoId/preview",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/backoffice/polizas/documentos/:documentoId",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/documentos/tipos",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/estadisticas/meses",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/estadisticas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/filtros",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas/prospectos/:prospecto_id/conversaciones",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/polizas",
+  "file": "routes/backoffice/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/backoffice/promociones/:id",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/promociones/:id",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/backoffice/promociones/:id",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/promociones/activas",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/promociones",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/backoffice/promociones",
+  "file": "routes/backoffice/promocionesRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/backoffice/prospectos/:id/asignar-vendedor",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/:id/cotizaciones",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/backoffice/prospectos/:id/estado",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/:id/historial",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/:id",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/estadisticas",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/exportar",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/filtros",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/whatsapp/conversaciones/:conversacionId/mensajes",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos/whatsapp/telefono/:telefono",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/prospectos",
+  "file": "routes/backoffice/prospectosBackOfficeRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/backoffice/reasignar-prospectos",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/backoffice/supervisores/:id/toggle-status",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/supervisores/:id",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/supervisores/:supervisorId",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/supervisores",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/tendencias",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores-sin-supervisor",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores-sin-supervisor",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores/:id/metricas",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores/:id/prospectos",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/backoffice/vendedores/:id/toggle-status",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/backoffice/vendedores/:id",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores/:id",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/backoffice/vendedores/asignar",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores/rendimiento",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/backoffice/vendedores",
+  "file": "routes/backoffice/backOfficeRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/chat/conversaciones/:id/estado",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/chat/conversaciones/:id/marcar-leidos",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/chat/conversaciones/:id/mensajes/archivo",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chat/conversaciones/:id/mensajes",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/chat/conversaciones/:id/mensajes",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chat/conversaciones/prospecto/:prospecto_id",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chat/conversaciones",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chat/estadisticas",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chat/plantillas",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/chat/plantillas",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chat/verificar-numero/:telefono",
+  "file": "routes/vendedor/chatRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chatbot-vendedor/conversacion/:conversacionId",
+  "file": "routes/chatbot/chatbotVendedorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chatbot-vendedor/conversaciones",
+  "file": "routes/chatbot/chatbotVendedorRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/chatbot-vendedor/mensaje",
+  "file": "routes/chatbot/chatbotVendedorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/chatbot/conversacion/:conversacionId",
+  "file": "routes/chatbot/chatbotRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/chatbot/mensaje",
+  "file": "routes/chatbot/chatbotRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/cotizaciones/:cotizacionId/aplicar-ley19032",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "POST",
+  "path": "/cotizaciones/:cotizacionId/recalcular",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/cotizaciones/categorias",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/cotizaciones/planes",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/cotizaciones/tipos-familia",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/cotizaciones/todas",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/cotizaciones",
+  "file": "routes/cotizaciones/cotizaciones.js"
+ },
+ {
+  "method": "POST",
+  "path": "/cupones-pago/:cupon_id/reenviar-whatsapp",
+  "file": "routes/cuponPagoRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/cupones-pago/cotizacion/:cotizacion_id",
+  "file": "routes/cuponPagoRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/cupones-pago/prospecto/:prospecto_id",
+  "file": "routes/cuponPagoRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/export/estadisticas",
+  "file": "routes/exportRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/export/prospectos",
+  "file": "routes/exportRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/fcm/register",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/fcm/test",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/fcm/tokens",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/fcm/unregister",
+  "file": "routes/fcmRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/gecros/buscar",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/gecros/consultar/cuil/:cuil",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/gecros/consultar/dni/:dni",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/gecros/credencial/:benId",
+  "file": "routes/gecrosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/health/security",
+  "file": "server.js"
+ },
+ {
+  "method": "GET",
+  "path": "/health",
+  "file": "server.js"
+ },
+ {
+  "method": "GET",
+  "path": "/lead/:id/cotizaciones",
+  "file": "routes/formLead/formRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/lead/:id/preferencia-entrega",
+  "file": "routes/formLead/formRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/lead",
+  "file": "routes/formLead/formRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/localidades/buenos-aires",
+  "file": "routes/vendedor/localidadesRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/monotributo/:id",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "GET",
+  "path": "/monotributo/:id",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/monotributo/:id",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "POST",
+  "path": "/monotributo/aumentar",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "GET",
+  "path": "/monotributo",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "POST",
+  "path": "/monotributo",
+  "file": "routes/monotributo.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/poliza-documentos/:documento_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/:id/download",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/:id/estadisticas",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/poliza-documentos/:id/multiple",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/:id/preview",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/:id/tipos",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/:id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/download/:documento_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/poliza-documentos/firmada/cargar",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/poliza/:poliza_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/poliza-documentos/public/:hash",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/poliza-documentos/upload",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/:id/documentos",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/:id/documentos",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/:id/enviar-email",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/:id/enviar-whatsapp",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/:id/envios",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/polizas/:id/estado",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/:id/historial-estados",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/:id/pdf/public",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/:id/pdf",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/:id/reenviar",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/:id",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/:documento_id/descargar",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/polizas/documentos/:documento_id",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/polizas/documentos/:documento_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/polizas/documentos/:documentoId/actualizar",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/:id/download",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/:id/estadisticas",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/documentos/:id/multiple",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/:id/preview",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/:id/tipos",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/:id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/download/:documento_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/documentos/firmada/cargar",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/poliza/:poliza_id",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/documentos/public/:hash",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas/documentos/upload",
+  "file": "routes/poliza/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/pdf/:hash",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/prospecto/:prospecto_id",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/polizas/vendedor/:id/actualizar",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/vendedor/:id/editar",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/polizas/vendedor/:id/enviar-supervisor",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/polizas/vendedor/:id/estado",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/vendedor/:id",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/vendedor/estadisticas",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/vendedor/mis-polizas",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas/vendedor/verificar-numero-poliza",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/polizas",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/polizas",
+  "file": "routes/poliza/polizaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/prospectos/:id/historial",
+  "file": "routes/vendedor/historialRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/prospectos/:id/primer-contacto-whatsapp",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/prospectos/:id/recotizar",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/prospectos/:id/registrar-llamada",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/prospectos/:id",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/prospectos/:id",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/prospectos/:id",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/prospectos/enviar-whatsapp",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/prospectos",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/prospectos",
+  "file": "routes/vendedor/prospectoRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/public/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/public/lista-precios/:id",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/public/lista-precios/aumentar/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/public/lista-precios/disminuir/todos",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/public/lista-precios/exportar",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/public/lista-precios/template",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/public/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/public/lista-precios",
+  "file": "routes/admin/listaPreciosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/candidatos",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "POST",
+  "path": "/reasignaciones/ejecutar-manual",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/estadisticas-antiguedad",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/estadisticas-efectividad",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/estadisticas",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/feriados",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/historial",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "POST",
+  "path": "/reasignaciones/reasignar",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/reasignaciones/vendedores-disponibles",
+  "file": "routes/reasignaciones.js"
+ },
+ {
+  "method": "GET",
+  "path": "/security/alerts",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/security/block-ip",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/security/logs",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/security/restart-fail2ban",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/security/stats",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/security/unblock-ip",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/security/whitelist-ip",
+  "file": "routes/securityRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/session-status/active-users",
+  "file": "routes/sessionStatusRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/session-status/dashboard-summary",
+  "file": "routes/sessionStatusRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/session-status/multiple-users",
+  "file": "routes/sessionStatusRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/session-status/stats",
+  "file": "routes/sessionStatusRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/session-status/user/:userId",
+  "file": "routes/sessionStatusRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/session-status/vendedor/:vendedorId/disponibilidad",
+  "file": "routes/sessionStatusRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/sessions/end",
+  "file": "routes/session/sessionRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/sessions/renew",
+  "file": "routes/session/sessionRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/sessions/start",
+  "file": "routes/session/sessionRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/sessions/status",
+  "file": "routes/session/sessionRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/supervisor/cargar-multiples-documentos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/chat/conversaciones/:conversacion_id/mensajes",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/chat/conversaciones/prospecto/:prospecto_id",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/supervisor/chat/conversaciones",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/chat/mensajes/:conversacion_id",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/cotizaciones/:prospectoId",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/datos-grafica",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/supervisor/disable-vendedor/:vendedorId",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/supervisor/documentos/:documentoId/actualizar",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/documentos/:documentoId/download",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/supervisor/documentos/:documentoId",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/supervisor/enable-vendedor/:id",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/estadisticas-documentos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/estadisticas",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/metricas-vendedor",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/obtener-tipos-documentos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/supervisor/polizas/:id/actualizar",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/supervisor/polizas/:id/actualizar",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/documentos/estadisticas",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/supervisor/polizas/:id/documentos/multiple",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/documentos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/documentos",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/editar",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/editar",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/supervisor/polizas/:id/estado",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/supervisor/polizas/:id/estado",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/historial-estados",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/:id/historial",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/supervisor/polizas/:id",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/supervisor/polizas/documentos/:documentoId/actualizar",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/documentos/:documentoId/download",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/documentos/:documentoId/preview",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/supervisor/polizas/documentos/:documentoId",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/documentos/tipos",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/estadisticas/meses",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/estadisticas",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/estadisticas",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/filtros",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas/filtros",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/polizas",
+  "file": "routes/supervisor/polizasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/previsualizar-documento/:documentoId",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/promociones/:id",
+  "file": "routes/supervisor/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/promociones/activas",
+  "file": "routes/supervisor/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/promociones",
+  "file": "routes/supervisor/promocionesRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/supervisor/prospectos/:id/estado",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/prospectos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/supervisor/reasignar-prospectos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/resumen",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/vendedores/:id/metricas",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/vendedores/:vendedorId/prospectos",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/supervisor/vendedores/:vendedorId",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/supervisor/vendedores",
+  "file": "routes/supervisor/supervisorRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/tipos_afiliacion",
+  "file": "routes/vendedor/tipoAfiliacionRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vafirma/descargar-firmada/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/vafirma/documento-firmado/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/vafirma/enviar-poliza",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vafirma/estado-doc/:docUUID",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vafirma/estado/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/vafirma/solicitud/:polizaId",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/vafirma/webhook",
+  "file": "routes/vafirmaRoutes.js"
+ },
+ {
+  "method": "PATCH",
+  "path": "/vendedor/:id/enviar-supervisor",
+  "file": "routes/vendedor/polizasRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/vendedor/polizas/:id/actualizar",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/polizas/:id/documentos/estadisticas",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/vendedor/polizas/:id/documentos/multiple",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/polizas/:id/documentos",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/polizas/:id/editar",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "PUT",
+  "path": "/vendedor/polizas/documentos/:documentoId/actualizar",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/polizas/documentos/:documentoId/download",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/polizas/documentos/:documentoId/preview",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "DELETE",
+  "path": "/vendedor/polizas/documentos/:documentoId",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/polizas/documentos/tipos",
+  "file": "routes/vendedor/polizaDocumentosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/promociones",
+  "file": "routes/vendedor/promocionesRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/vendedor/prospectos/:id/aplicar-promocion",
+  "file": "routes/vendedor/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/prospectos/:prospectoId/promocion-actual",
+  "file": "routes/vendedor/promocionesRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/refritos/cola",
+  "file": "routes/vendedor/refritosRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/vendedor/refritos/visible",
+  "file": "routes/vendedor/refritosRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/whatsapp/cierre-conversacion",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/whatsapp/informacion-adicional",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "GET",
+  "path": "/whatsapp/plantillas",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/whatsapp/saludo-inicial",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/whatsapp/seguimiento-cotizacion",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ },
+ {
+  "method": "POST",
+  "path": "/whatsapp/seguimiento-poliza",
+  "file": "routes/whatsappPlantillasRoutes.js"
+ }
+]

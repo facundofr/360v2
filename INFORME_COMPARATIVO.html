@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Comparativo: frontend vs 360-v2</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b24;
+    --surface2: #202332;
+    --border: #2a2d3a;
+    --text: #e1e4ed;
+    --text-muted: #8b8fa3;
+    --primary: #7c5cfc;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+    --radius: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+  .subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: 1rem; }
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+    color: #fff;
+  }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #fff;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  tr:hover td { background: var(--surface2); }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .badge-success { background: rgba(52, 211, 153, 0.15); color: var(--success); }
+  .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
+  .badge-danger { background: rgba(248, 113, 113, 0.15); color: var(--danger); }
+  .badge-info { background: rgba(96, 165, 250, 0.15); color: var(--info); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .stat {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .stat-value { font-size: 2rem; font-weight: 700; color: #fff; }
+  .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+  .flex { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .mt-1 { margin-top: 0.75rem; }
+  .mt-2 { margin-top: 1.5rem; }
+  .mb-1 { margin-bottom: 0.75rem; }
+  .text-muted { color: var(--text-muted); }
+  .text-success { color: var(--success); }
+  .text-danger { color: var(--danger); }
+  .text-warning { color: var(--warning); }
+  .text-info { color: var(--info); }
+  code {
+    background: var(--surface2);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+    color: var(--primary);
+  }
+  pre {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    margin: 0.75rem 0;
+    color: var(--text);
+  }
+  .file-tree {
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+  .file-tree .folder { color: var(--info); }
+  .file-tree .file { color: var(--text); }
+  .file-tree .missing { color: var(--danger); text-decoration: line-through; }
+  .file-tree .indent-1 { padding-left: 1.5rem; }
+  .file-tree .indent-2 { padding-left: 3rem; }
+  .file-tree .indent-3 { padding-left: 4.5rem; }
+  .file-tree .indent-4 { padding-left: 6rem; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  @media (max-width: 768px) {
+    body { padding: 1rem; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    table { font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>📋 Informe Comparativo: <code>frontend</code> (actual) vs <code>360-v2</code> (nuevo)</h1>
+<p class="subtitle">Análisis integral de arquitectura, componentes, seguridad, rendimiento y estado de migración &mdash; Cober360 v2</p>
+
+<!-- ==================== RESUMEN EJECUTIVO ==================== -->
+<h2>Resumen Ejecutivo</h2>
+<div class="grid-3 mb-1">
+  <div class="stat">
+    <div class="stat-value">100%</div>
+    <div class="stat-label">Migración Completa</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">38%</div>
+    <div class="stat-label">Menos dependencias</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">0</div>
+    <div class="stat-label">Faltantes funcionales</div>
+  </div>
+</div>
+<div class="card">
+  <p><strong>360-v2</strong> representa una mejora sustancial sobre <strong>frontend</strong> en tipado, organización, rendimiento, mantenibilidad y stack tecnológico. La migración se encuentra <strong>100% completa</strong> en términos funcionales. Se recomienda una semana de QA funcional y la implementación de tests automatizados antes del corte definitivo.</p>
+</div>
+
+<!-- ==================== VISIÓN GLOBAL ==================== -->
+<h2>1. Visión Global de la Arquitectura</h2>
+<div class="card">
+<table>
+  <thead>
+    <tr><th>Aspecto</th><th><code>frontend</code> (actual)</th><th><code>360-v2</code> (nuevo)</th><th>Evaluación</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Lenguaje</strong></td><td>JavaScript (`.jsx`/`.js`)</td><td>TypeScript (`.tsx`/`.ts`)</td><td class="text-success">Mejora crítica: tipado estático</td></tr>
+    <tr><td><strong>Framework UI</strong></td><td>Bootstrap 5 + MUI 7 + Styled-components</td><td>Tailwind CSS v4 + shadcn/ui + Radix UI</td><td class="text-success">Mejora: bundle menor, sin dependencias UI pesadas</td></tr>
+    <tr><td><strong>React</strong></td><td>React 19.0.0</td><td>React 19.2.0</td><td>Equivalentes</td></tr>
+    <tr><td><strong>Vite</strong></td><td>Vite 6.2.0</td><td>Vite 7.2.4</td><td class="text-info">Mejora menor</td></tr>
+    <tr><td><strong>Router</strong></td><td>react-router-dom 7.4.1</td><td>react-router-dom 7.13.1</td><td>Equivalentes</td></tr>
+    <tr><td><strong>Code Splitting</strong></td><td>Manual chunks (react-vendor, bootstrap-vendor)</td><td>Manual chunks (react-vendor, recharts-vendor, ui-vendor)</td><td>Equivalentes</td></tr>
+    <tr><td><strong>Lazy Loading</strong></td><td class="text-danger">No implementado</td><td class="text-success">React.lazy() + Suspense</td><td class="text-success">Mejora: performance en carga inicial</td></tr>
+    <tr><td><strong>Total dependencias</strong></td><td>~39 dependencias</td><td>~24 dependencias</td><td class="text-success">38% menos dependencias</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== ARQUITECTURA DE CARPETAS ==================== -->
+<h2>2. Arquitectura de Carpetas</h2>
+<div class="grid-2 mt-1">
+<div class="card">
+<div class="card-header text-danger">frontend (actual) &mdash; Estructura plana</div>
+<pre class="file-tree">
+src/
+├── components/
+│   ├── common/          (21 archivos mezclados)
+│   ├── admin/           (3 archivos)
+│   ├── features/        (TODO el negocio)
+│   │   ├── vendedor/    (14 archivos + subcarpetas)
+│   │   ├── admin/       (19 archivos + refritos/)
+│   │   ├── supervisor/  (11 archivos)
+│   │   ├── backoffice/  (10 archivos + .scss)
+│   │   ├── auth/        (5 archivos)
+│   │   └── lead/        (1 archivo)
+│   ├── modals/          (2 archivos)
+│   ├── layout/          (1 archivo)
+│   ├── badges/buttons/supervisor/utils/
+│   └── config.js        ⚠️ mal ubicado
+├── contexts/            (2 contextos)
+├── hooks/               (9 hooks)
+├── services/            (3 servicios)
+├── styles/              (SCSS global + CSS)
+├── utils/               (2 utilidades)
+└── assets/              (imágenes + estilos)
+</pre>
+</div>
+<div class="card">
+<div class="card-header text-success">360-v2 (nuevo) &mdash; Feature-First modular</div>
+<pre class="file-tree">
+src/
+├── app/routes.tsx       (centralizado, lazy loading)
+├── features/            (feature-based)
+│   ├── auth/components/ (3 formularios)
+│   ├── vendedor/
+│   │   ├── pages/       (2 páginas)
+│   │   └── components/  (9 componentes)
+│   ├── supervisor/
+│   │   ├── pages/       (1 página)
+│   │   └── components/  (6 componentes)
+│   ├── admin/
+│   │   ├── pages/       (1 página)
+│   │   └── components/  (17 componentes)
+│   └── backoffice/
+│       ├── pages/       (1 página)
+│       └── components/  (7 componentes)
+├── components/
+│   ├── ui/              (36 shadcn atómicos)
+│   ├── common/          (12 shared components)
+│   ├── layout/          (8 layout: sidebar, nav)
+│   ├── modals/          (5 modales reutilizables)
+│   ├── badges/buttons/supervisor/
+├── lib/                 (4 infraestructura: api, auth, config, utils)
+├── contexts/            (2 contextos)
+├── hooks/               (9 hooks)
+├── services/            (3 servicios)
+├── utils/               (2 utilidades)
+├── pages/               (9 páginas públicas)
+└── assets/              (5 imágenes)
+</pre>
+</div>
+</div>
+
+<div class="card">
+<p><strong>Falencias de <code>frontend</code>:</strong> Archivos monstruo de 3000+ líneas (<code>ProspectosDashboard.jsx</code>: 3203, <code>ProspectoDetalle.jsx</code>: 2413). Mezcla de responsabilidades. Configuración en medio de componentes.</p>
+<p><strong>Aciertos de <code>360-v2</code>:</strong> Separación clara pages/components por feature, componentes UI atómicos, lazy loading, todo tipado con TypeScript.</p>
+</div>
+
+<!-- ==================== SISTEMA DE ESTILOS ==================== -->
+<h2>3. Sistema de Estilos</h2>
+<div class="grid-2">
+<div class="card">
+<div class="card-header text-danger">frontend &mdash; PROBLEMAS GRAVES</div>
+<ul style="padding-left:1.2rem;color:var(--text-muted);">
+  <li><strong>59KB+</strong> <code>estilos.scss</code> monolítico</li>
+  <li><strong>4 sistemas simultáneos</strong>: Bootstrap SCSS + Styled-components + MUI emotion + CSS plano</li>
+  <li>Duplicación: <code>NavBar.scss</code> + <code>NavBar.css</code></li>
+  <li>CSS sin namespacing &rarr; colisiones</li>
+  <li>Colores hardcodeados en múltiples lugares</li>
+  <li>Dependencias: bootstrap, react-bootstrap, @mui/material, @emotion/*, styled-components</li>
+  <li>Fuente Google Fonts (request externo)</li>
+</ul>
+</div>
+<div class="card">
+<div class="card-header text-success">360-v2 &mdash; MEJORA SUSTANCIAL</div>
+<ul style="padding-left:1.2rem;color:var(--text-muted);">
+  <li><strong>Tailwind CSS v4</strong> utility-first: purga automática de CSS no usado</li>
+  <li><strong>shadcn/ui</strong>: Componentes headless Radix UI estilizados con Tailwind</li>
+  <li><strong>Variables CSS nativas</strong> con OKLCH + dark mode via <code>next-themes</code></li>
+  <li><strong>Un solo <code>index.css</code></strong> de ~150 líneas con variables de diseño</li>
+  <li><strong>@fontsource/inter</strong>: Fuente auto-hosteada (sin request externo)</li>
+  <li><strong>Utilidad <code>cn()</code></strong> con tailwind-merge + clsx</li>
+  <li><strong>Cero dependencias CSS externas</strong></li>
+</ul>
+</div>
+</div>
+
+<!-- ==================== COMPONENTES COMUNES ==================== -->
+<h2>4. Componentes Comunes y Reusabilidad</h2>
+<div class="card">
+<table>
+  <thead>
+    <tr><th>Componente</th><th><code>frontend</code></th><th><code>360-v2</code></th><th>Estado</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>NavBar / Sidebar</td><td><code>NavBar.jsx</code> (Bootstrap)</td><td><code>app-sidebar.tsx</code> + <code>site-header.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>AuthContext</td><td><code>AuthContext.jsx</code></td><td><code>AuthContext.tsx</code> mejorado</td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ProtectedRoute</td><td><code>ProtectedRoute.jsx</code></td><td><code>RequireAuth.tsx</code> + <code>GuestRoute.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SessionManager</td><td><code>SessionManager.jsx</code></td><td><code>SessionManager.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ChatWidget</td><td><code>ChatWidget.jsx</code></td><td><code>ChatWidget.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ManualWidget</td><td><code>ManualWidget.jsx</code></td><td><code>ManualWidget.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>NotificationsInit</td><td><code>NotificationsInitializer.jsx</code></td><td><code>NotificationsInitializer.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PwaUpdateToast</td><td><code>PwaUpdateToast.jsx</code></td><td><code>PwaUpdateToast.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>Footer</td><td><code>Footer.jsx</code></td><td><code>Footer.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ModalExportacion</td><td><code>ModalExportacion.jsx</code></td><td><code>ModalExportacion.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>DocumentPreviewModal</td><td><code>DocumentPreviewModal.jsx</code> + .css</td><td><code>DocumentPreviewModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>CargaDocumentosModal</td><td><code>CargaDocumentosModal.jsx</code></td><td><code>CargaDocumentosModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BadgeEstadoFirma</td><td><code>BadgeEstadoFirma.jsx</code></td><td><code>BadgeEstadoFirma.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BotonConsultarFirma</td><td><code>BotonConsultarFirma.jsx</code></td><td><code>BotonConsultarFirma.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BotonDescargarPoliza</td><td><code>BotonDescargarPolizaFirmada.jsx</code></td><td><code>BotonDescargarPolizaFirmada.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BotonEnviarFirma</td><td><code>BotonEnviarFirma.jsx</code></td><td><code>BotonEnviarFirma.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BotonesEliminarFirma</td><td><code>BotonesEliminarFirma.jsx</code></td><td><code>BotonesEliminarFirma.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>CargaMultipleDocs</td><td><code>CargaMultipleDocumentos.jsx</code></td><td><code>CargaMultipleDocumentos.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PolizaDetalleSupervisor</td><td><code>PolizaDetalleSupervisor.jsx</code></td><td><code>PolizaDetalleSupervisor.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SubirDocumentosLibres</td><td><code>modals/SubirDocumentosLibresModal.jsx</code></td><td><code>SubirDocumentosLibresModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BotonEliminarPoliza</td><td><code>BotonEliminarPoliza.jsx</code></td><td><code>BotonEliminarPoliza.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>AccessDenied</td><td><code>AccessDenied.jsx</code> detallado</td><td><code>/unauthorized</code> simplificado</td><td><span class="badge badge-warning">Reemplazado</span></td></tr>
+    <tr><td>WhatsAppChat</td><td><code>WhatsAppChat.jsx</code> (common)</td><td><code>WhatsAppChatDialog.tsx</code> (wrapper modal de WhatsAppVista)</td><td><span class="badge badge-success">Migrado</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== FEATURES POR ROL ==================== -->
+<h2>5. Features por Rol &mdash; Estado de Migración</h2>
+
+<h3>Vendedor</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Feature</th><th>frontend</th><th>360-v2</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td>ProspectosDashboard</td><td>3203 líneas</td><td><code>ProspectosDashboardPage.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ProspectoDetalle</td><td>2413 líneas</td><td><code>ProspectoDetallePage.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PolizasDashboard</td><td>603 líneas</td><td><code>PolizasDashboard.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PolizaForm (6 pasos)</td><td><code>PolizaForm.jsx</code> + <code>poliza-form/</code></td><td><code>PolizaForm.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ChatVendedor</td><td><code>ChatVendedor.jsx</code> + .css</td><td><code>ChatVendedor.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>WhatsAppVista</td><td><code>WhatsAppVista.jsx</code> + .css</td><td><code>WhatsAppVista.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>EnviarCotizacionModal</td><td><code>EnviarCotizacionModal.jsx</code></td><td><code>EnviarCotizacionModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>Ley19032Modal</td><td><code>Ley19032Modal.jsx</code> + .css</td><td><code>Ley19032Modal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PromocionesModal</td><td><code>PromocionesModal.jsx</code></td><td><code>PromocionesModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>EditarPolizaModal</td><td><code>modals/EditarPolizaModal.jsx</code></td><td><code>EditarPolizaModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SubirDocumentosLibres</td><td><code>modals/SubirDocumentosLibresModal.jsx</code></td><td><code>SubirDocumentosLibresModal.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>BotonEliminarPoliza</td><td><code>BotonEliminarPoliza.jsx</code></td><td><code>BotonEliminarPoliza.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Supervisor</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Feature</th><th>frontend</th><th>360-v2</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td>SupervisorDashboard</td><td>2646 líneas</td><td><code>SupervisorDashboardPage.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SupervisorResumen</td><td><code>SupervisorResumen.jsx</code></td><td>Integrado en Dashboard</td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>VendedoresSupervisor</td><td><code>VendedoresSupervisor.jsx</code></td><td><code>SupervisorVendedoresView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>MetricasVendedor</td><td><code>MetricasVendedor.jsx</code></td><td><code>MetricasVendedorView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>CotizacionesPorUsuario</td><td><code>CotizacionesPorUsuario.jsx</code></td><td>Integrado en <code>SupervisorCotizacionesView</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SupervisorCotizaciones</td><td><code>SupervisorCotizaciones.jsx</code></td><td><code>SupervisorCotizacionesView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PolizasSupervisor</td><td><code>PolizasSupervisor.jsx</code></td><td><code>SupervisorPolizasView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SupervisorPromociones</td><td><code>SupervisorPromociones.jsx</code></td><td><code>SupervisorPromocionesView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>CotizacionesCard / Table</td><td><code>CotizacionesCard/Table.jsx</code></td><td>Reemplazado por TanStack Table</td><td><span class="badge badge-success">Migrado</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Admin</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Feature</th><th>frontend</th><th>360-v2</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td>AdminDashboard</td><td><code>AdminDashboard.jsx</code> + <code>DashboardAdmin.jsx</code></td><td><code>AdminDashboardPage.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>UsuariosAdmin</td><td>1526 líneas</td><td><code>UsuariosAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>VendedoresAdmin</td><td>1236 líneas</td><td><code>VendedoresAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SupervisoresAdmin</td><td><code>SupervisoresAdmin.jsx</code></td><td><code>SupervisoresAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ProspectosAdmin</td><td>1373 líneas</td><td><code>ProspectosAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PolizasAdmin</td><td><code>PolizasAdmin.jsx</code></td><td><code>PolizasAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PromocionesAdmin</td><td><code>promocionesAdmin.jsx</code></td><td><code>PromocionesAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>RefritosAdmin</td><td><code>RefritosAdmin.jsx</code></td><td><code>RefritosAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ReasignacionAuto</td><td><code>ReasignacionAutomaticaAdmin.jsx</code></td><td><code>ReasignacionAutomaticaAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>MonotributoAdmin</td><td><code>MonotributoAdmin.jsx</code></td><td><code>MonotributoAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ListaPreciosAdmin</td><td><code>ListaPreciosAdmin.jsx</code></td><td><code>ListaPreciosAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PrestadoresAdmin</td><td><code>PrestadoresAdmin.jsx</code></td><td><code>PrestadoresAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ActiveUsersMonitor</td><td><code>ActiveUsersMonitor.jsx</code></td><td><code>ActiveUsersMonitor.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>GestionCategorias</td><td><code>GestionCategorias.jsx</code></td><td><code>GestionCategorias.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SecurityDashboard</td><td><code>SecurityDashboard.jsx</code></td><td><code>SecurityDashboard.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>MetricasAvanzadas</td><td><code>MetricasAvanzadas.jsx</code></td><td><code>MetricasAvanzadas.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>MonitoringDashboard</td><td><code>MonitoringDashboard.jsx</code></td><td><code>MonitoringDashboard.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>DashboardMetricasProspectos</td><td><code>DashboardMetricasProspectos.jsx</code></td><td><code>DashboardMetricasAdmin.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td><strong>MapaProspectosBuenosAires</strong></td><td><code>MapaProspectosBuenosAires.jsx</code></td><td><code>MapaProspectosBuenosAires.tsx</code> (shadcn Table)</td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td><strong>MapaCoropleta</strong></td><td><code>MapaCoropleta.jsx</code></td><td><code>MapaCoropleta.tsx</code> (react-leaflet + shadcn Card)</td><td><span class="badge badge-success">Migrado</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Backoffice</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Feature</th><th>frontend</th><th>360-v2</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td>BackOfficeDashboard</td><td>610 líneas</td><td><code>BackofficeDashboardPage.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>MetricasAvanzadas</td><td>980 líneas</td><td><code>BackofficeMetricasView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PolizasBackOffice</td><td>1829 líneas</td><td><code>BackofficePolizasView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>ProspectosBackOffice</td><td>1373 líneas</td><td><code>BackofficeProspectosView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>SupervisoresBackOffice</td><td>575 líneas</td><td><code>BackofficeSupervisoresView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>VendedoresBackOffice</td><td>1236 líneas</td><td><code>BackofficeVendedoresView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>DetalleSupervisor</td><td>609 líneas</td><td><code>DetalleSupervisorView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>PromocionesBackOffice</td><td><code>PromocionesBackOffice.jsx</code></td><td><code>BackofficePromocionesView.tsx</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== SEGURIDAD ==================== -->
+<h2>6. Seguridad (Ciberseguridad)</h2>
+
+<h3>Backend &mdash; medidas activas</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Medida</th><th>Estado</th><th>Detalle</th></tr></thead>
+  <tbody>
+    <tr><td>Helmet security headers</td><td><span class="badge badge-success">Implementado</span></td><td><code>helmetConfig</code> en server.js</td></tr>
+    <tr><td>Rate limiting</td><td><span class="badge badge-success">Implementado</span></td><td><code>apiLimiter</code> + <code>failedAttemptLimiter</code></td></tr>
+    <tr><td>CORS</td><td><span class="badge badge-success">Configurado</span></td><td>Orígenes permitidos</td></tr>
+    <tr><td>SQL Injection prevention</td><td><span class="badge badge-success">Implementado</span></td><td><code>preventSQLInjection</code> middleware</td></tr>
+    <tr><td>Input sanitization</td><td><span class="badge badge-success">Implementado</span></td><td><code>sanitizeInputs</code> + <code>sanitizeInput</code></td></tr>
+    <tr><td>Suspicious IP detection</td><td><span class="badge badge-success">Implementado</span></td><td><code>suspiciousIpDetection</code></td></tr>
+    <tr><td>Activity tracking</td><td><span class="badge badge-success">Implementado</span></td><td><code>activityTracker</code> middleware</td></tr>
+    <tr><td>JWT authentication</td><td><span class="badge badge-success">Implementado</span></td><td>Bearer token + expiración</td></tr>
+    <tr><td>File upload limits</td><td><span class="badge badge-success">Implementado</span></td><td>50MB JSON, 10MB uploads</td></tr>
+    <tr><td>Security logging</td><td><span class="badge badge-success">Implementado</span></td><td>Morgan + securityLogger</td></tr>
+    <tr><td>Environment variables</td><td><span class="badge badge-success">.env</span></td><td>Sin secretos hardcodeados</td></tr>
+    <tr><td>Activity tracker avanzado</td><td><span class="badge badge-success">Implementado</span></td><td><code>advancedSecurity</code> middleware</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>frontend &mdash; riesgos detectados</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Riesgo</th><th>Severidad</th><th>Detalle</th></tr></thead>
+  <tbody>
+    <tr><td>Sin TypeScript</td><td><span class="badge badge-danger">ALTA</span></td><td>Posibles inyecciones XSS no detectadas en compilación</td></tr>
+    <tr><td>JWT en localStorage</td><td><span class="badge badge-warning">MEDIA</span></td><td>Expuesto a XSS (no hay alternativa HttpOnly en SPA)</td></tr>
+    <tr><td><strong>Secretos en repositorio</strong></td><td><span class="badge badge-danger">CRÍTICA</span></td><td><code>client_secret_*.json</code> de Google OAuth en la raíz del proyecto</td></tr>
+    <tr><td>reCAPTCHA v3</td><td><span class="badge badge-success">Bueno</span></td><td>Implementado en login / ambas versiones</td></tr>
+    <tr><td>Session timeout</td><td><span class="badge badge-success">Bueno</span></td><td>30 min de inactividad en ambas versiones</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>360-v2 &mdash; mejoras de seguridad</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Mejora</th><th>Beneficio</th></tr></thead>
+  <tbody>
+    <tr><td>TypeScript estricto</td><td>Previene errores de tipo que podrían ser vectores de ataque</td></tr>
+    <tr><td>Auth simplificado</td><td>Solo decodifica JWT localmente (menos surface area de ataque)</td></tr>
+    <tr><td>Validación Zod</td><td>Schemas de validación en formularios (previene datos maliciosos)</td></tr>
+    <tr><td>Dependencias reducidas</td><td>38% menos librerías = menos superficie de ataque</td></tr>
+    <tr><td>Axios interceptor robusto</td><td>Limpia todas las claves de autenticación en 401/403</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== BACKEND ==================== -->
+<h2>7. Backend &mdash; Integración con Frontends</h2>
+<div class="card">
+<p>Ambos frontends apuntan al mismo backend (<code>VITE_API_BASE_URL</code> &rarr; <code>https://wspflows.cober.online</code>). La migración es transparente para el backend.</p>
+<table>
+  <thead><tr><th>Módulo API</th><th>Endpoints</th><th>Función</th></tr></thead>
+  <tbody>
+    <tr><td>Auth</td><td><code>/api/auth/*</code></td><td>Login, session-status, logout</td></tr>
+    <tr><td>Prospectos</td><td><code>/api/prospectos/*</code></td><td>CRUD, filtros, búsqueda</td></tr>
+    <tr><td>Pólizas</td><td><code>/api/polizas/*</code></td><td>CRUD, firmas digitales, documentos</td></tr>
+    <tr><td>Chat / WhatsApp</td><td><code>/api/chat/*</code></td><td>Conversaciones, mensajes, WebSockets</td></tr>
+    <tr><td>Admin</td><td><code>/api/admin/*</code></td><td>Usuarios, seguridad, monitoreo</td></tr>
+    <tr><td>Supervisor</td><td><code>/api/supervisor/*</code></td><td>Métricas, vendedores, rendimiento</td></tr>
+    <tr><td>Backoffice</td><td><code>/api/backoffice/*</code></td><td>Gestión global de datos</td></tr>
+    <tr><td>Lead</td><td><code>/api/lead/*</code></td><td>Formulario público de lead</td></tr>
+    <tr><td>Firebase FCM</td><td>Firebase Cloud Messaging</td><td>Notificaciones push PWA</td></tr>
+    <tr><td>WebSocket</td><td>Socket.IO</td><td>Chat en tiempo real, monitoreo activo</td></tr>
+    <tr><td>VaFirma</td><td>API externa</td><td>Firma digital de pólizas</td></tr>
+    <tr><td>Google Sheets</td><td>Google Sheets API</td><td>Exportación de datos</td></tr>
+    <tr><td>Webhooks</td><td><code>/webhooks/*</code></td><td>Twilio, integraciones externas</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== DEVOPS ==================== -->
+<h2>8. DevOps &mdash; Build, Deploy, PWA</h2>
+<div class="card">
+<table>
+  <thead><tr><th>Aspecto</th><th><code>frontend</code></th><th><code>360-v2</code></th><th>Evaluación</th></tr></thead>
+  <tbody>
+    <tr><td>Base path</td><td><code>/afiliaciones/</code></td><td><code>/afiliaciones/</code></td><td><span class="badge badge-success">Compatible</span></td></tr>
+    <tr><td>Service Worker</td><td><code>sw.js</code> v1.8 (3 caches)</td><td><code>sw.js</code> PWA</td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>Firebase SW</td><td><code>firebase-messaging-sw.js</code></td><td><code>firebase-messaging-sw.js</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>Manifest</td><td>9 iconos, theme #8B7EC8</td><td>manifest.json en public/</td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>nginx.conf</td><td class="text-danger">No existe</td><td class="text-success">Incluido</td><td><span class="badge badge-success">Mejora DevOps</span></td></tr>
+    <tr><td>vercel.json</td><td class="text-danger">No existe</td><td class="text-success">Incluido</td><td><span class="badge badge-success">Mejora deploy</span></td></tr>
+    <tr><td>Prettier</td><td class="text-danger">No configurado</td><td class="text-success">.prettierrc + .prettierignore</td><td><span class="badge badge-success">Mejora calidad</span></td></tr>
+    <tr><td>TypeScript config</td><td class="text-danger">No existe</td><td class="text-success">3 tsconfig files</td><td><span class="badge badge-success">Mejora calidad</span></td></tr>
+    <tr><td>Icons generation</td><td><code>generate-icons.js</code></td><td><code>generate-icons.js</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>Serve PWA</td><td><code>serve-pwa.js</code></td><td><code>serve-pwa.js</code></td><td><span class="badge badge-success">Migrado</span></td></tr>
+    <tr><td>Source maps</td><td>No configurado</td><td><code>sourcemap: false</code></td><td><span class="badge badge-success">Producción segura</span></td></tr>
+    <tr><td>Linting</td><td>eslint.config.js (JS)</td><td>eslint.config.js (TS+JS)</td><td><span class="badge badge-success">Migrado</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== FALTANTES ==================== -->
+<h2>9. Faltantes y Diferencias</h2>
+
+<h3>Funcionalidades migradas en esta iteración</h3>
+<div class="card">
+<table>
+  <thead><tr><th>#</th><th>Funcionalidad</th><th>Archivo original</th><th>Archivo en 360-v2</th><th>Stack</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><strong>MapaProspectosBuenosAires</strong></td><td><code>MapaProspectosBuenosAires.jsx</code></td><td><code>features/admin/components/MapaProspectosBuenosAires.tsx</code></td><td>shadcn Card/Table/Badge</td></tr>
+    <tr><td>2</td><td><strong>MapaCoropleta</strong></td><td><code>MapaCoropleta.jsx</code></td><td><code>features/admin/components/MapaCoropleta.tsx</code></td><td>react-leaflet + shadcn Card</td></tr>
+    <tr><td>3</td><td><strong>WhatsAppChat (common)</strong></td><td><code>WhatsAppChat.jsx</code></td><td><code>components/common/WhatsAppChatDialog.tsx</code></td><td>shadcn Dialog + WhatsAppVista</td></tr>
+  </tbody>
+</table>
+<p class="text-success mt-2" style="font-size:0.9rem;"><strong>✅ Ya no hay funcionalidades pendientes de migrar.</strong></p>
+</div>
+
+<h3>Funcionalidades que YA EXISTEN (contra lo reportado en MIGRATION_STATUS.md)</h3>
+<div class="card">
+<table>
+  <thead><tr><th>#</th><th>Funcionalidad</th><th>Archivo en 360-v2</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>SubirDocumentosLibresModal</td><td><code>src/features/vendedor/components/SubirDocumentosLibresModal.tsx</code></td></tr>
+    <tr><td>2</td><td>BotonEliminarPoliza</td><td><code>src/components/buttons/BotonEliminarPoliza.tsx</code></td></tr>
+    <tr><td>3</td><td>Footer</td><td><code>src/components/common/Footer.tsx</code></td></tr>
+    <tr><td>4</td><td>PwaUpdateToast</td><td><code>src/components/common/PwaUpdateToast.tsx</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Diferencias de comportamiento (aceptables)</h3>
+<div class="card">
+<table>
+  <thead><tr><th>Diferencia</th><th><code>frontend</code></th><th><code>360-v2</code></th><th>Impacto</th></tr></thead>
+  <tbody>
+    <tr><td>Validación auth init</td><td>Pide session-status al backend</td><td>Decodifica JWT localmente</td><td class="text-success">Mejora performance</td></tr>
+    <tr><td>GuestRoute</td><td>No existe wrapper</td><td>GuestRoute redirige si autenticado</td><td>Comportamiento equivalente</td></tr>
+    <tr><td>Post-logout navigation</td><td>Navega a <code>/</code></td><td>Navega a <code>/login</code></td><td class="text-success">Mejora UX</td></tr>
+    <tr><td>Post-login navigation</td><td>Rutas planas</td><td>Rutas anidadas (<code>/vendedor/prospectos</code>)</td><td>Backward compatible via aliases</td></tr>
+    <tr><td>Logout toast</td><td>SweetAlert toast</td><td>Sin toast</td><td class="text-success">No molesta</td></tr>
+    <tr><td>Session renew</td><td><code>renewSession()</code></td><td>Backend + interceptor axios</td><td class="text-success">Simplificación</td></tr>
+    <tr><td>AccessDenied</td><td>Página detallada con rol/ruta</td><td>Redirige a <code>/unauthorized</code></td><td class="text-warning">Menos información al usuario</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== RENDIMIENTO ==================== -->
+<h2>10. Rendimiento</h2>
+<div class="card">
+<table>
+  <thead><tr><th>Métrica</th><th><code>frontend</code></th><th><code>360-v2</code></th><th>Ganador</th></tr></thead>
+  <tbody>
+    <tr><td>Bundle JS estimado</td><td>~1.2MB+ (MUI + Bootstrap)</td><td>~400KB+ (Tailwind + Radix)</td><td class="text-success">360-v2</td></tr>
+    <tr><td>Sistemas de UI</td><td>4 (Bootstrap+MUI+SC+Emotion)</td><td>1 (shadcn/Radix)</td><td class="text-success">360-v2</td></tr>
+    <tr><td>Lazy loading</td><td class="text-danger">No implementado</td><td class="text-success">React.lazy() por ruta</td><td class="text-success">360-v2</td></tr>
+    <tr><td>CSS purgado</td><td class="text-danger">Bootstrap completo (~200KB)</td><td class="text-success">Tailwind purge automático</td><td class="text-success">360-v2</td></tr>
+    <tr><td>Renderizado optimizado</td><td>Sin memoización</td><td>useMemo/useCallback</td><td class="text-success">360-v2</td></tr>
+    <tr><td>Tablas</td><td>MUI X DataGrid (pesada)</td><td>TanStack Table (headless, liviana)</td><td class="text-success">360-v2</td></tr>
+    <tr><td>Iconos</td><td>FontAwesome + react-icons + bootstrap-icons</td><td>lucide-react (tree-shakeable)</td><td class="text-success">360-v2</td></tr>
+    <tr><td>Gráficos</td><td>Chart.js + recharts</td><td>Solo recharts</td><td class="text-success">360-v2</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ==================== HALLAZGOS ==================== -->
+<h2>11. Hallazgos de Código y Buenas Prácticas</h2>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header text-danger">Problemas en <code>frontend</code></div>
+<ul style="padding-left:1.2rem;color:var(--text-muted);">
+  <li><strong>Archivos monstruo</strong>: 3203 líneas (<code>ProspectosDashboard</code>), 2413 (<code>ProspectoDetalle</code>) &mdash; violación SRP</li>
+  <li><strong>CSS monolítico</strong>: <code>estilos.scss</code> de ~59KB sin modularizar</li>
+  <li><strong>Duplicación de lógica</strong>: Estados de prospecto definidos en múltiples lugares</li>
+  <li><strong>Config en components/</strong>: <code>config.js</code> mal ubicado</li>
+  <li><strong>Sin lazy loading</strong>: Toda la app en un bundle</li>
+  <li><strong>Sin TypeScript</strong>: Errores prevenibles en producción</li>
+  <li><strong>4 sistemas de estilos</strong>: Bootstrap + MUI + Emotion + Styled-components</li>
+  <li><strong>AccessDenied duplicado</strong>: <code>AccessDenied.jsx</code> + <code>UnknownRole.jsx</code> suelto</li>
+</ul>
+</div>
+<div class="card">
+<div class="card-header text-success">Aciertos en <code>360-v2</code></div>
+<ul style="padding-left:1.2rem;color:var(--text-muted);">
+  <li><strong>Arquitectura feature-first</strong>: Cada feature con pages/ y components/</li>
+  <li><strong>Componentes atómicos</strong>: 36 shadcn componentes reutilizables en <code>ui/</code></li>
+  <li><strong>Rutas centralizadas</strong>: <code>app/routes.tsx</code> con lazy loading + alias legacy</li>
+  <li><strong>Capa lib/ separada</strong>: API client, auth, config, utils</li>
+  <li><strong>Validación Zod</strong>: Schemas de formularios tipados</li>
+  <li><strong>Sistema de temas</strong>: <code>next-themes</code> con dark mode completo</li>
+  <li><strong>TanStack Table</strong>: Data grid headless, performante y extensible</li>
+  <li><strong>Sonner</strong>: Reemplaza SweetAlert2 (más liviano, moderno)</li>
+  <li><strong>Prettier + plugin Tailwind</strong>: Formateo automático de clases</li>
+  <li><strong>Code splitting</strong>: manualChunks optimizados (react-vendor, recharts-vendor, ui-vendor)</li>
+</ul>
+</div>
+</div>
+
+<!-- ==================== RECOMENDACIONES ==================== -->
+<h2>12. Recomendaciones Finales</h2>
+
+<h3>Corto plazo &mdash; QA y pulido</h3>
+<div class="card">
+<ol style="padding-left:1.2rem;color:var(--text-muted);">
+  <li>Verificar que <strong>todos los alias legacy</strong> funcionan correctamente (rutas planas vs anidadas)</li>
+  <li>Realizar <strong>QA funcional completo</strong> contra el frontend actual, feature por feature</li>
+  <li>Verificar que el GeoJSON <code>pba-partidos.geo.json</code> se sirve correctamente desde <code>public/data/</code></li>
+  <li>Probar <code>WhatsAppChatDialog</code> desde distintas pantallas que requieran chat modal</li>
+</ol>
+</div>
+
+<h3>Mejoras recomendadas para 360-v2</h3>
+<div class="card">
+<table>
+  <thead><tr><th>#</th><th>Mejora</th><th>Prioridad</th><th>Detalle</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><strong>Testing automatizado</strong></td><td><span class="badge badge-danger">ALTA</span></td><td>Agregar Vitest + React Testing Library (actualmente 0 tests)</td></tr>
+    <tr><td>2</td><td><strong>Lazy loading completo</strong></td><td><span class="badge badge-info">MEDIA</span></td><td>Aplicar React.lazy() a todas las rutas restantes</td></tr>
+    <tr><td>3</td><td><strong>Image optimization</strong></td><td><span class="badge badge-warning">BAJA</span></td><td>Convertir PNG a WebP/AVIF en assets/</td></tr>
+    <tr><td>4</td><td><strong>Storybook</strong></td><td><span class="badge badge-warning">BAJA</span></td><td>Catálogo de componentes shadcn si el equipo crece</td></tr>
+    <tr><td>5</td><td><strong>CI/CD</strong></td><td><span class="badge badge-info">MEDIA</span></td><td>GitHub Actions para lint + typecheck + build</td></tr>
+    <tr><td>6</td><td><strong>Error boundaries</strong></td><td><span class="badge badge-info">MEDIA</span></td><td>Por feature para evitar caídas totales de la app</td></tr>
+    <tr><td>7</td><td><strong>i18n</strong></td><td><span class="badge badge-warning">BAJA</span></td><td>Preparar estructura de traducciones si hay planes de expansión</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Backend &mdash; observaciones</h3>
+<div class="card">
+<ul style="padding-left:1.2rem;color:var(--text-muted);">
+  <li>El backend es <strong>estable y funcional</strong> &mdash; no requiere cambios para soportar 360-v2</li>
+  <li>Documentación API disponible en <code>documentacionApi.md</code> y <code>docs/</code></li>
+  <li>Buenas prácticas de seguridad ya implementadas (helmet, rate limiting, sanitización)</li>
+  <li class="text-danger"><strong>⚠️ CRÍTICO</strong>: El archivo <code>client_secret_309224091758-*.json</code> de Google OAuth está en la raíz del repositorio &mdash; debe eliminarse y agregarse a <code>.gitignore</code> inmediatamente</li>
+</ul>
+</div>
+
+<!-- ==================== CONCLUSIÓN ==================== -->
+<h2>Conclusión General</h2>
+<div class="card" style="border-left: 4px solid var(--primary);">
+<p style="font-size:1.05rem;"><strong>360-v2</strong> representa una mejora sustancial sobre <strong>frontend</strong> en todos los aspectos evaluados:</p>
+<ul style="padding-left:1.2rem;color:var(--text-muted); margin-top:0.75rem;">
+  <li><span class="text-success">✅</span> <strong>Tipado</strong>: TypeScript estricto reemplaza JavaScript plano</li>
+  <li><span class="text-success">✅</span> <strong>Organización</strong>: Feature-first architecture vs estructura plana</li>
+  <li><span class="text-success">✅</span> <strong>Rendimiento</strong>: Lazy loading, TanStack Table, bundle ~3x menor</li>
+  <li><span class="text-success">✅</span> <strong>Mantenibilidad</strong>: Componentes atómicos, sin duplicación, sin CSS monolítico</li>
+  <li><span class="text-success">✅</span> <strong>DevOps</strong>: nginx.conf, vercel.json, Prettier, TypeScript config</li>
+  <li><span class="text-success">✅</span> <strong>Stack moderno</strong>: Tailwind v4 + shadcn + Radix UI, 38% menos dependencias</li>
+</ul>
+<p style="margin-top:0.75rem;">La migración está <strong>100% completa</strong> en términos funcionales. Todos los componentes del frontend original han sido migrados a 360-v2 con TypeScript, shadcn/ui y Tailwind CSS. <strong>El proyecto está listo para reemplazar al frontend actual</strong>, pero se recomienda una semana de QA funcional y la implementación de tests automatizados antes del corte definitivo.</p>
+</div>
+
+<hr>
+<p class="text-muted" style="text-align:center;">Informe generado el &mdash; Análisis integral de Cober360 v2 &mdash; <span class="text-success">Última actualización: implementados mapas (Leaflet + shadcn) y WhatsAppChatDialog</span></p>
+
+</div>
+</body>
+</html>
