@@ -896,3 +896,77 @@ Todos los schemas nuevos viven en `src/features/admin/schemas.ts`.
 preexistentes sin tocar, uno menos que antes: migrar `UsuariosAdmin` corrigió
 de paso un `no-unused-vars` viejo). Sin smoke test en navegador — sigue sin
 haber credenciales configuradas.
+
+---
+
+## 16. Reversión de los envíos de WhatsApp a `wa.me` — 2026-09-10
+
+§15 había cambiado "primer contacto" y "enviar cotización" del vendedor a un
+deep-link `wa.me`, con un comentario que afirmaba que producción había
+abandonado el envío por backend "en favor de wa.me" y dejado el código Twilio
+comentado. **Verificado hoy contra el código real de `frontend/`: esa premisa
+es falsa.**
+
+- `frontend/src/components/features/vendedor/ProspectosDashboard.jsx:1169`
+  (`handleEnviarPrimerContactoWhatsApp`) está **vivo y cableado** (botones en
+  1938 y 2326). Llama `POST /prospectos/:id/primer-contacto-whatsapp`. No hay
+  `wa.me` ni código comentado en ese archivo. El backend
+  (`prospectoController.js:634`) manda el template aprobado por Twilio, crea la
+  conversación en `chat_conversaciones_whatsapp`, mueve el prospecto a
+  "1º Contacto" y actualiza el Google Sheet.
+- `frontend/src/components/features/vendedor/EnviarCotizacionModal.jsx:77`
+  (`handleEnviar`) hace `POST /prospectos/enviar-whatsapp` con
+  `{ telefono, cotizacion, prospecto }`. Tampoco tiene `wa.me` ni comentario
+  "Reemplazada por".
+
+### Hecho
+
+Restaurada la paridad con producción, con UI shadcn (sin SweetAlert2):
+
+| Archivo v2 | Cambio |
+|---|---|
+| `src/pages/prospectos-dashboard.tsx` | `enviarPrimerContactoWhatsApp` vuelve a `POST /prospectos/:id/primer-contacto-whatsapp`. Confirmación con `useConfirm` (`alert-dialog`), estados con `toast.loading`/`success`/`error` de sonner, y `fetchProspectos()` al terminar. Eliminado el helper `numeroWhatsApp` (ya no se usa: el backend resuelve el número). |
+| `src/features/vendedor/components/EnviarCotizacionModal.tsx` | `handleEnviar` vuelve a `POST /prospectos/enviar-whatsapp`. Mensajes de éxito/info/error inline (mismos textos y tiempos que prod: éxito → info a los 2 s → cierre a los 6 s). Eliminado el helper `numeroWhatsApp` y el armado del texto `wa.me`. |
+
+### Chat del supervisor — sin cambios (ya estaba a la par)
+
+Revisado a pedido. El modal de WhatsApp del supervisor de producción
+(`SupervisorDashboard.jsx`, `Modal` de `modalConversaciones`) es **solo lectura**:
+lista de conversaciones → "Ver Historial" → burbujas de mensajes, con un único
+botón "Cerrar" en el footer. `handleNuevaConversacion`
+(`POST /supervisor/chat/conversaciones`) está **definido pero nunca referenciado
+en el JSX** — código muerto, igual que `actualizarPolizaTemporal` o `ChatWidget`.
+No hay input de respuesta ni envío de mensajes.
+
+`ConversacionWhatsappModal.tsx` de v2 (rol `supervisor`) ya reproduce eso —
+listado + hilo por conversación, sobre `Dialog` de shadcn — y además fusiona la
+línea de tiempo para el rol admin. No hay nada que restaurar.
+
+### `PUT /polizas/:id/temporal` — no es un gap
+
+`frontend/src/components/features/vendedor/PolizaForm.jsx:227`
+(`actualizarPolizaTemporal`) también es código muerto: `form.poliza_temp_id`
+no se setea en ningún lado y la función no se llama nunca. Que v2 no tenga el
+guardado de borrador no rompe paridad.
+
+### Verificación
+
+`npx tsc -b` limpio, `npm run build` verde (7,4 s), `eslint` sin errores en los
+archivos tocados. GAP de endpoints (`tools/paridad`): de 10 candidatos a 9, y
+los 9 son falsos positivos del análisis estático ya verificados a mano
+(`disable-user`/`enable-user`, `asignar`, `enviar-${via}`, `ENDPOINTS.PROSPECTOS`,
+`/cotizaciones/planes`, `/whatsapp/plantillas`, `tipos_afiliacion`).
+`primer-contacto-whatsapp` salió del GAP. Sin smoke test en navegador — sin
+credenciales.
+
+### Limpieza de código muerto (misma sesión)
+
+19 archivos sin ninguna referencia, borrados: 7 primitivas shadcn sin usar
+(`avatar`, `breadcrumb`, `calendar`, `collapsible`, `command`, `popover`,
+`radio-group`), `components/common/Footer.tsx`,
+`components/common/sortable-header.tsx` (+ `lib/orden.ts` en cascada),
+`features/supervisor/components/SupervisorChatView.tsx` (nunca se cableó a
+ninguna pestaña), `hooks/{useEstadoFirmaPoliza,useHeartbeat,usePageVisibility,useUserActivity}.ts`,
+`services/nacionalidadService.ts`, `pages/data.json` (dataset demo del starter).
+Además se montó `<Toaster />` de sonner en `main.tsx`: no estaba en el árbol, así
+que ninguno de los ~390 `toast.*` de la app renderizaba.

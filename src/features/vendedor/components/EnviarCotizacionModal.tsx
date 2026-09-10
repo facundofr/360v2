@@ -1,4 +1,5 @@
 import { useState, useEffect, startTransition } from "react"
+import axios from "axios"
 import { MessageCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -6,6 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { maskPhone } from "@/lib/mask"
+import { API_URL } from "@/lib/config"
+import { getAuthHeaders } from "@/lib/auth"
 
 interface Cotizacion {
   id?: number
@@ -78,58 +81,40 @@ export function EnviarCotizacionModal({ open, onClose, cotizacion, prospecto }: 
   const getNumeroEnvio = () =>
     modoEdicion && telefonoEditado.trim() !== "" ? telefonoEditado.trim() : telefonoReal
 
-  // Réplica de la implementación VIGENTE de prod
-  // (`EnviarCotizacionModal.jsx:89-135`): abre un deep-link `wa.me` con la
-  // cotización precargada, sin backend. El POST a `/prospectos/enviar-whatsapp`
-  // que llamaba esta función antes es la versión anterior (vía Twilio) que
-  // prod dejó comentada como "Reemplazada por el envío directo a wa.me".
-  function numeroWhatsApp(telefono: string): string {
-    let limpio = telefono.replace(/\D/g, "")
-    if (limpio.startsWith("00")) limpio = limpio.slice(2)
-    if (limpio.startsWith("0")) limpio = limpio.slice(1)
-    if (limpio.startsWith("54")) return limpio.startsWith("549") ? limpio : `549${limpio.slice(2)}`
-    return `549${limpio}`
-  }
-
-  const handleEnviar = () => {
+  // Paridad con producción (`EnviarCotizacionModal.jsx:77-135`): el envío pasa
+  // por el backend (`POST /prospectos/enviar-whatsapp`), que arma el mensaje con
+  // la cotización y lo manda por WhatsApp (Twilio) dejándolo registrado en la
+  // conversación del prospecto. No es un deep-link `wa.me`.
+  const handleEnviar = async () => {
     const numeroIngresado = getNumeroEnvio().trim()
     if (!numeroIngresado) {
       setMensaje({ texto: "Por favor ingresá un número de teléfono", tipo: "error" })
       return
     }
-    const numero = numeroWhatsApp(numeroIngresado)
-    if (numero.length < 12 || numero.length > 15) {
-      setMensaje({ texto: "El número de WhatsApp ingresado no es válido", tipo: "error" })
-      return
-    }
-
-    const nombreCliente = `${prospecto?.nombre ?? ""} ${prospecto?.apellido ?? ""}`.trim() || "Cliente"
-    const grupoFamiliar = cotizacion?.detalles?.length
-      ? cotizacion.detalles.map(d => d.vinculo).join(", ")
-      : "Individual"
-
-    const mensajeWhatsapp = `COBER - Cotización de Plan
-
-Hola ${nombreCliente}, te compartimos los detalles de tu cotización:
-
-Plan: ${cotizacion?.plan_nombre ?? "Plan seleccionado"}
-Grupo Familiar: ${grupoFamiliar}
-Tipo de Afiliación: ${cotizacion?.tipo_afiliacion_nombre ?? "Particular"}
-
-Detalle de precios:
-* Total Bruto: ${formatCurrency(cotizacion?.total_bruto)}
-* Descuento Aporte: ${formatCurrency(cotizacion?.total_descuento_aporte)}
-* Descuento Promoción: ${formatCurrency(cotizacion?.total_descuento_promocion)}
-
-TOTAL FINAL: ${formatCurrency(cotizacion?.total_final)}
-
-Para más información o para avanzar con la contratación, podés responder a este mensaje.`
-
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensajeWhatsapp)}`, "_blank", "noopener,noreferrer")
 
     setEnviando(true)
-    setMensaje({ texto: "Se abrió WhatsApp con la cotización precargada. Presioná Enviar en WhatsApp para completar el envío.", tipo: "success" })
-    setTimeout(() => onClose(), 3000)
+    setMensaje(null)
+    try {
+      await axios.post(
+        `${API_URL}/prospectos/enviar-whatsapp`,
+        { telefono: numeroIngresado, cotizacion, prospecto },
+        { headers: getAuthHeaders() },
+      )
+      setMensaje({ texto: "¡Cotización enviada por WhatsApp exitosamente! 📱", tipo: "success" })
+      setTimeout(() => {
+        setMensaje({
+          texto: "Cotización enviada correctamente. Para continuar la conversación con el cliente, dirigite a la sección de WhatsApp desde el menú lateral.",
+          tipo: "info",
+        })
+      }, 2000)
+      setTimeout(() => onClose(), 6000)
+    } catch (err: unknown) {
+      const texto =
+        (err as { response?: { data?: { error?: string } } })?.response?.data?.error ||
+        "Error al enviar la cotización. Intentalo nuevamente."
+      setMensaje({ texto, tipo: "error" })
+      setEnviando(false)
+    }
   }
 
   const mensajeClasses = {

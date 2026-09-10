@@ -758,35 +758,51 @@ export default function ProspectosDashboardPage() {
   }, [])
 
   // --- WhatsApp primer contacto --------------------------------------------
-  // Réplica de la implementación VIGENTE de prod (`ProspectosDashboard.jsx:1406`):
-  // abre un deep-link `wa.me` con el mensaje precargado, sin pasar por el
-  // backend. El POST a `/prospectos/:id/primer-contacto-whatsapp` que llamaba
-  // esta función antes es la implementación VIEJA que prod dejó comentada
-  // ("Implementación anterior: envío automático mediante Twilio/Meta").
-
-  function numeroWhatsApp(telefono: string): string {
-    let limpio = telefono.replace(/\D/g, "")
-    if (limpio.startsWith("00")) limpio = limpio.slice(2)
-    if (limpio.startsWith("0")) limpio = limpio.slice(1)
-    if (limpio.startsWith("54")) return limpio.startsWith("549") ? limpio : `549${limpio.slice(2)}`
-    return `549${limpio}`
-  }
+  // Paridad con producción (`ProspectosDashboard.jsx:1169`): el envío es real y
+  // pasa por el backend (`POST /prospectos/:id/primer-contacto-whatsapp`), que
+  // manda el template aprobado por Meta/WhatsApp vía Twilio, crea la
+  // conversación en la bandeja de chat y mueve el prospecto a "1º Contacto".
+  // No es un deep-link `wa.me`: el mensaje queda registrado.
 
   const enviarPrimerContactoWhatsApp = async (p: Prospecto) => {
-    const telefono = p.numero_contacto ?? ""
-    const numero = numeroWhatsApp(telefono)
-    if (!telefono || numero.length < 12 || numero.length > 15) {
-      toast.error("El prospecto debe tener un celular válido, preferentemente en formato +549XXXXXXXXXX.")
+    if (!p.numero_contacto) {
+      toast.error("Este prospecto no tiene número de contacto registrado")
       return
     }
-    const mensaje = `Hola ${p.nombre}, te contactamos desde Cober | Medicina Privada por la consulta que realizaste en nuestra web. Si querés recibir más información, respondé este mensaje.`
     const ok = await confirmar({
-      title: "¿Abrir conversación en WhatsApp?",
-      description: `Prospecto: ${p.nombre} ${p.apellido} — Teléfono: ${maskPhone(telefono)}. Mensaje precargado: "${mensaje}". Se abrirá WhatsApp Web o la app instalada; el mensaje no se envía hasta que lo confirmes ahí.`,
-      confirmText: "Abrir WhatsApp",
+      title: "¿Iniciar conversación por WhatsApp?",
+      description:
+        `Prospecto: ${p.nombre} ${p.apellido} — Teléfono: ${maskPhone(p.numero_contacto)}. ` +
+        "Se enviará el mensaje de primer contacto (template aprobado por Meta/WhatsApp) " +
+        "y la conversación quedará en tu bandeja de chat.",
+      confirmText: "Enviar WhatsApp",
     })
     if (!ok) return
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, "_blank", "noopener,noreferrer")
+    const tid = toast.loading("Enviando mensaje por WhatsApp…")
+    try {
+      const { data } = await axios.post(
+        `${API_URL}/prospectos/${p.id}/primer-contacto-whatsapp`,
+        {},
+        { headers: getHeaders() },
+      )
+      if (!(data as { success?: boolean })?.success) {
+        throw new Error((data as { message?: string })?.message || "Error al enviar el mensaje")
+      }
+      const convId = (data as { data?: { conversacion_id?: number } })?.data?.conversacion_id
+      toast.success(
+        convId
+          ? `Primer contacto enviado. Conversación #${convId} — cuando responda aparecerá en tu bandeja de chat.`
+          : "Primer contacto enviado por WhatsApp.",
+        { id: tid },
+      )
+      await fetchProspectos()
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        (err as { message?: string })?.message ||
+        "Error al enviar el mensaje por WhatsApp"
+      toast.error(msg, { id: tid })
+    }
   }
 
   // --- Registrar llamada ---------------------------------------------------
