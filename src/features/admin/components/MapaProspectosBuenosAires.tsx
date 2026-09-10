@@ -20,7 +20,7 @@ export default function MapaProspectosBuenosAires({ data = [] }: MapaProspectosB
             <CardTitle className="text-sm font-semibold">Prospectos por Localidad &mdash; Provincia de Buenos Aires</CardTitle>
             <p className="text-xs text-muted-foreground mt-0.5">Distribución seg&uacute;n campo &quot;localidad&quot;</p>
           </div>
-          <Badge variant="secondary" className="text-[10px]">Beta</Badge>
+          <Badge variant="secondary" className="text-[10.5px]">Beta</Badge>
         </div>
       </CardHeader>
       <CardContent>

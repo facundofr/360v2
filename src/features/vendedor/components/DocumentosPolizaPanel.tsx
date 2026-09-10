@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import DocumentPreviewModal from "@/components/modals/DocumentPreviewModal"
@@ -198,61 +197,72 @@ export const DocumentosPolizaPanel = React.forwardRef<DocumentosPolizaPanelRef, 
 
     return (
       <>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="reg reg--doc border-t-2 border-rule-heavy">
+          <div className="reg-row reg-head" role="presentation">
+            <span>Documento</span>
+            <span>Archivo</span>
+            <span>Integrante</span>
+            <span className="text-right">Tamaño</span>
+            <span>Subido</span>
+            <span />
+          </div>
+
           {documentos.map(doc => (
-            <Card key={doc.id} className="flex flex-col">
-              <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
-                <span className="text-sm font-semibold leading-tight">
-                  {doc.observaciones || formatTipoDocumento(doc.tipo_documento)}
-                </span>
-                {doc.integrante_index !== null && doc.integrante_index !== undefined && (
-                  <Badge variant="secondary" className="shrink-0 text-[10px]">
+            <div key={doc.id} className="reg-row reg-entry">
+              {/* 1 · documento — el eje */}
+              <span className="truncate text-[13px] font-semibold">
+                {doc.observaciones || formatTipoDocumento(doc.tipo_documento)}
+              </span>
+
+              {/* 2 · archivo */}
+              <span className="truncate text-[12.5px] text-muted-foreground" title={doc.nombre_original}>
+                {doc.nombre_original}
+              </span>
+
+              {/* 3 · integrante */}
+              <span className="min-w-0">
+                {doc.integrante_index !== null && doc.integrante_index !== undefined ? (
+                  <Badge variant="secondary" size="sm" className="pointer-events-none">
                     Integrante {doc.integrante_index + 1}
                   </Badge>
+                ) : (
+                  <span className="text-[12.5px] text-muted-foreground">—</span>
                 )}
-              </CardHeader>
+              </span>
 
-              <CardContent className="flex-1 space-y-2 text-xs">
-                <div>
-                  <p className="text-muted-foreground">Archivo</p>
-                  <p className="break-all font-medium">{doc.nombre_original}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Tamaño</p>
-                  <p className="font-medium tabular-nums">
-                    {formatFileSize(doc["tamaño_bytes"] ?? doc.tamano_bytes)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Subido</p>
-                  <p className="font-medium">
-                    {doc.created_at
-                      ? new Date(doc.created_at).toLocaleString("es-AR", {
-                          year: "numeric", month: "short", day: "numeric",
-                          hour: "2-digit", minute: "2-digit",
-                        })
-                      : "—"}
-                  </p>
-                </div>
-              </CardContent>
+              {/* 4 · tamaño */}
+              <span className="text-right text-[12.5px] tabular-nums text-muted-foreground">
+                {formatFileSize(doc["tamaño_bytes"] ?? doc.tamano_bytes)}
+              </span>
 
-              <CardFooter className="flex flex-wrap gap-2 pt-0">
-                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => descargar(doc)}>
-                  <Download className="size-3 mr-1" />Descargar
+              {/* 5 · subido */}
+              <span className="truncate text-[12px] tabular-nums text-muted-foreground">
+                {doc.created_at
+                  ? new Date(doc.created_at).toLocaleString("es-AR", {
+                      year: "numeric", month: "short", day: "numeric",
+                      hour: "2-digit", minute: "2-digit",
+                    })
+                  : "—"}
+              </span>
+
+              {/* 6 · acciones */}
+              <span className="reg-actions">
+                <Button size="icon" variant="ghost" className="size-7" title="Ver documento" onClick={() => previsualizar(doc)}>
+                  <Eye className="size-3.5" />
                 </Button>
-                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setAActualizar(doc); setNuevoArchivo(null); setMotivo("") }}>
-                  <Pencil className="size-3 mr-1" />Actualizar
+                <Button size="icon" variant="ghost" className="size-7" title="Descargar" onClick={() => descargar(doc)}>
+                  <Download className="size-3.5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="size-7" title="Actualizar" onClick={() => { setAActualizar(doc); setNuevoArchivo(null); setMotivo("") }}>
+                  <Pencil className="size-3.5" />
                 </Button>
                 {permitirEliminar && (
-                  <Button size="sm" variant="outline" className="h-7 text-xs text-destructive" onClick={() => eliminar(doc)}>
-                    <Trash2 className="size-3 mr-1" />Eliminar
+                  <Button size="icon" variant="ghost" className="size-7 text-destructive hover:text-destructive" title="Eliminar" onClick={() => eliminar(doc)}>
+                    <Trash2 className="size-3.5" />
                   </Button>
                 )}
-                <Button size="sm" variant="secondary" className="h-7 text-xs ml-auto" onClick={() => previsualizar(doc)}>
-                  <Eye className="size-3 mr-1" />Ver
-                </Button>
-              </CardFooter>
-            </Card>
+              </span>
+            </div>
           ))}
         </div>
 

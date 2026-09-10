@@ -89,14 +89,14 @@ export default function PWAStatus() {
 
       {/* Instalación */}
       {(isInstallable || isInstalled) && (
-        <Badge variant={isInstalled ? "default" : "secondary"} className="gap-1 text-[10px] px-2 py-0.5">
+        <Badge variant={isInstalled ? "default" : "secondary"} className="gap-1 text-[10.5px] px-2 py-0.5">
           <Download className="size-3" />
           {isInstalled ? "Instalada" : "Instalable"}
         </Badge>
       )}
 
       {lastUpdate && (
-        <span className="text-[10px] text-muted-foreground px-1">
+        <span className="text-[10.5px] text-muted-foreground px-1">
           {lastUpdate}
         </span>
       )}

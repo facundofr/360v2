@@ -8,9 +8,11 @@ import {
   Edit2, Trash2, Eye, ShieldOff, ShieldCheck,
   Mail, Phone, User, Lock, Shield, Ban, CheckCircle,
   LayoutGrid, List, Wifi, Info, Calendar, BarChart2
+,
+  Check, X, ClipboardList, AlertTriangle
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -274,7 +276,7 @@ export default function UsuariosAdmin() {
         </TabsTrigger>
         <TabsTrigger value="activos" className="flex items-center gap-1.5">
           <Wifi className="size-3.5" />Usuarios Activos
-          <Badge variant="ok" className="ml-1 text-[9px] px-1 py-0 h-4 leading-none">TIEMPO REAL</Badge>
+          <Badge variant="ok" size="sm" className="ml-1 px-1">Tiempo real</Badge>
         </TabsTrigger>
       </TabsList>
 
@@ -358,70 +360,87 @@ export default function UsuariosAdmin() {
 
       {/* Vista */}
       {loading ? (
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       ) : viewMode === "lista" ? (
         <DataTable columns={columns} data={usuariosFiltrados} emptyMessage="Sin resultados" />
       ) : (
-        /* Vista tarjetas */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        /* Registro de usuarios: una fila por persona, no una tarjeta por persona. */
+        <div className="reg reg--user border-t-2 border-rule-heavy">
+          <div className="reg-row reg-head" role="presentation">
+            <span>Usuario</span>
+            <span>Rol</span>
+            <span>Teléfono</span>
+            <span>Último acceso</span>
+            <span>Estado</span>
+            <span />
+          </div>
+
           {usuariosFiltrados.length === 0 && (
-            <p className="col-span-full text-center py-12 text-sm text-muted-foreground">Sin resultados</p>
+            <p className="py-12 text-center text-sm text-muted-foreground">Sin resultados</p>
           )}
+
           {usuariosFiltrados.map(u => (
-            <Card key={u.id} className="overflow-hidden hover:shadow-md transition-shadow">
-              <CardHeader className="pb-2 pt-4 px-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20">
-                      <span className="text-sm font-bold text-primary dark:text-purple-300">
-                        {u.first_name.charAt(0).toUpperCase()}{u.last_name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold truncate">{u.first_name} {u.last_name}</p>
-                      <p className="text-[11px] text-muted-foreground truncate">{u.email}</p>
-                    </div>
-                  </div>
-                  <Badge
-                    variant={u.is_enabled !== 0 ? "ok" : "secondary"}
-                    className="shrink-0 text-[10px]"
-                  >
-                    {u.is_enabled !== 0 ? "Activo" : "Inactivo"}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="px-4 pb-3 space-y-2">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Shield className="size-3 shrink-0" />
-                  <Badge variant="outline" className="text-[10px] py-0 h-4">{ROLE_LABELS[u.role] ?? "?"}</Badge>
-                </div>
-                {u.phone_number && (
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Phone className="size-3 shrink-0" />
-                    <span className="truncate">{u.phone_number}</span>
-                  </div>
-                )}
-                {u.last_login && (
-                  <p className="text-[10px] text-muted-foreground">
-                    Último acceso: {new Date(u.last_login).toLocaleDateString("es-AR")}
-                  </p>
-                )}
-                <div className="flex gap-1 pt-1 border-t">
-                  <Button size="icon" className="size-8 flex-1 bg-muted text-foreground border hover:bg-accent" onClick={() => setDetalleModal({ open: true, user: u })} title="Ver detalle">
-                    <Eye className="size-3.5" />
-                  </Button>
-                  <Button size="icon" className="size-8 flex-1 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(u)} title="Editar">
-                    <Edit2 className="size-3.5" />
-                  </Button>
-                  <Button size="icon" className="size-8 flex-1 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(u)} title={u.is_enabled !== 0 ? "Deshabilitar" : "Habilitar"}>
-                    {u.is_enabled !== 0 ? <ShieldOff className="size-3.5" /> : <ShieldCheck className="size-3.5" />}
-                  </Button>
-                  <Button size="icon" variant="destructive" className="size-8 flex-1" onClick={() => eliminar(u)} title="Eliminar">
-                    <Trash2 className="size-3.5" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={u.id} className="reg-row reg-entry">
+              {/* 1 · usuario — el eje */}
+              <span className="flex min-w-0 items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="flex size-7 shrink-0 items-center justify-center rounded-stamp bg-primary/10 text-[11px] font-bold text-primary dark:bg-primary/25 dark:text-purple-300"
+                >
+                  {u.first_name.charAt(0).toUpperCase()}{u.last_name.charAt(0).toUpperCase()}
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate text-[13px] font-semibold">{u.first_name} {u.last_name}</span>
+                  <span className="block truncate text-[11.5px] text-muted-foreground">{u.email}</span>
+                </span>
+              </span>
+
+              {/* 2 · rol */}
+              <span className="min-w-0">
+                <Badge variant="outline" size="sm" className="pointer-events-none">
+                  <Shield aria-hidden="true" />{ROLE_LABELS[u.role] ?? "?"}
+                </Badge>
+              </span>
+
+              {/* 3 · teléfono */}
+              <span className="truncate text-[12.5px] tabular-nums text-muted-foreground">
+                {u.phone_number || "—"}
+              </span>
+
+              {/* 4 · último acceso */}
+              <span className="truncate text-[12px] tabular-nums text-muted-foreground">
+                {u.last_login ? new Date(u.last_login).toLocaleDateString("es-AR") : "—"}
+              </span>
+
+              {/* 5 · estado */}
+              <span className="min-w-0">
+                <Badge variant={u.is_enabled !== 0 ? "ok" : "secondary"} size="sm" className="pointer-events-none">
+                  {u.is_enabled !== 0 ? "Activo" : "Inactivo"}
+                </Badge>
+              </span>
+
+              {/* 6 · acciones */}
+              <span className="reg-actions">
+                <Button size="icon" variant="ghost" className="size-7" title="Ver detalle" onClick={() => setDetalleModal({ open: true, user: u })}>
+                  <Eye className="size-3.5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="size-7" title="Editar" onClick={() => abrirEditar(u)}>
+                  <Edit2 className="size-3.5" />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="size-7"
+                  title={u.is_enabled !== 0 ? "Deshabilitar" : "Habilitar"}
+                  onClick={() => toggleEstado(u)}
+                >
+                  {u.is_enabled !== 0 ? <ShieldOff className="size-3.5" /> : <ShieldCheck className="size-3.5" />}
+                </Button>
+                <Button size="icon" variant="ghost" className="size-7 text-destructive hover:text-destructive" title="Eliminar" onClick={() => eliminar(u)}>
+                  <Trash2 className="size-3.5" />
+                </Button>
+              </span>
+            </div>
           ))}
         </div>
       )}
@@ -619,7 +638,7 @@ export default function UsuariosAdmin() {
                       <p className="text-muted-foreground text-xs">Email verificado</p>
                       {u.verified !== undefined ? (
                         <Badge variant={u.verified ? "ok" : "risk"} className="mt-0.5">
-                          {u.verified ? "✓ Verificado" : "✗ No verificado"}
+                          {u.verified ? <><Check className="mr-1 inline size-3 align-[-1px]" aria-hidden="true" />Verificado</> : <><X className="mr-1 inline size-3 align-[-1px]" aria-hidden="true" />No verificado</>}
                         </Badge>
                       ) : <p className="text-muted-foreground">—</p>}
                     </div>
@@ -637,7 +656,7 @@ export default function UsuariosAdmin() {
                       <Calendar className="size-4 text-primary" />
                       <span className="text-primary font-semibold text-xs uppercase tracking-wide">Fechas Importantes</span>
                     </div>
-                    <div className="rounded-xl bg-muted/40 border p-3 space-y-2">
+                    <div className="rounded-lg bg-muted/40 border p-3 space-y-2">
                       {u.created_at && (
                         <div>
                           <p className="font-semibold text-xs">Fecha de creación:</p>
@@ -667,15 +686,15 @@ export default function UsuariosAdmin() {
                     <span className="text-primary font-semibold text-xs uppercase tracking-wide">Estadísticas</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="rounded-xl bg-muted/40 border p-3 text-center">
+                    <div className="rounded-lg bg-muted/40 border p-3 text-center">
                       <p className="text-2xl font-bold text-foreground">{diasSistema ?? "—"}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">Días en el sistema</p>
                     </div>
-                    <div className="rounded-xl bg-muted/40 border p-3 flex flex-col items-center justify-center gap-1">
+                    <div className="rounded-lg bg-muted/40 border p-3 flex flex-col items-center justify-center gap-1">
                       <CheckCircle className={`size-6 ${u.verified !== 0 ? "text-state-ok-text" : "text-muted-foreground"}`} />
                       <p className="text-xs text-muted-foreground text-center">Email verificado</p>
                     </div>
-                    <div className="rounded-xl bg-muted/40 border p-3 flex flex-col items-center justify-center gap-1">
+                    <div className="rounded-lg bg-muted/40 border p-3 flex flex-col items-center justify-center gap-1">
                       <span className={`inline-block size-3 rounded-full ${u.is_enabled !== 0 ? "bg-state-ok" : "bg-state-risk"}`} />
                       <p className="text-xs text-muted-foreground text-center">Estado actual</p>
                     </div>
@@ -774,7 +793,7 @@ export default function UsuariosAdmin() {
               <div className="space-y-4 py-1">
                 {/* Datos del usuario */}
                 <div className="text-sm">
-                  <p className="font-semibold mb-1.5 flex items-center gap-1.5">📋 Usuario a eliminar:</p>
+                  <p className="mb-1.5 flex items-center gap-1.5 font-semibold"><ClipboardList className="size-3.5 shrink-0" aria-hidden="true" />Usuario a eliminar:</p>
                   <ul className="space-y-0.5 pl-4 list-disc text-foreground">
                     <li><strong>Nombre:</strong> {confirmEliminarModal.user.first_name} {confirmEliminarModal.user.last_name}</li>
                     <li><strong>Email:</strong> {confirmEliminarModal.user.email}</li>
@@ -784,7 +803,7 @@ export default function UsuariosAdmin() {
 
                 {/* Advertencia */}
                 <div className="rounded-lg p-3 text-sm bg-state-warn-soft border border-state-warn/30 text-state-warn-text flex gap-2">
-                  <span className="mt-0.5 shrink-0">⚠️</span>
+                  <AlertTriangle className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
                   <div>
                     <p className="font-semibold mb-0.5">Advertencia:</p>
                     Esta acción eliminará permanentemente al usuario y no se puede deshacer. Si el usuario tiene prospectos o pólizas asociadas, no podrá ser eliminado.

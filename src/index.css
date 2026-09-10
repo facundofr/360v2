@@ -4,6 +4,29 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Montserrat self-hosted. Antes venía por <link> a Google Fonts: una carga sin
+   red caía en la sans de la plataforma, que no es la voz de la marca. Fuente
+   variable, dos archivos cubren 400 a 800. Vite reescribe estas URL, así que
+   funciona igual bajo /afiliaciones que bajo /.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400 800;
+    font-display: swap;
+    src: url("./assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400 800;
+    font-display: swap;
+    src: url("./assets/fonts/montserrat-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -33,7 +56,7 @@
     --color-Vendedores: rgba(251, 162, 0, 1);  /* amarillo */
     --color-Ventas: rgba(8, 198, 176, 1);      /* celeste */
     --color-Polizas: rgba(0, 57, 109, 1);      /* azul */
-    --radius: 0.625rem;
+    --radius: 0.5rem; /* El Padrón: el radio del design system de Cober */
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.417 0.138 317);
@@ -259,4 +282,467 @@
   /* ─── Scroll horizontal contenido ─────────────────────────────────────────
      Las tablas anchas hacen scroll en su contenedor; el body nunca. */
   body { overflow-x: hidden; }
+}
+/* ═══════════════════════════════════════════════════════════════════════════
+   EL PADRÓN — gramática del registro
+   ───────────────────────────────────────────────────────────────────────────
+   Sistema aprobado en DESIGN.md. Lo que la app ya tenía (semánticos ok/warn/
+   risk, cifras tabulares, foco violeta, objetivos táctiles) no se toca: esto
+   agrega lo que faltaba, que es la gramática de registro.
+
+   La regla del violeta en esta app: VIOLETA = ACCIÓN. Todo lo que se puede
+   presionar es violeta; nada que sea dato o estado lo es. Los sellos, el
+   medidor de carga y las bandas de etapa van en tinta.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Tres grados de filete. Un registro se dibuja con reglas, no con cajas. */
+  --rule:        oklch(0.922 0 0);   /* hairline: entre filas */
+  --rule-firm:   oklch(0.80 0 0);    /* firme: bajo encabezados */
+  --rule-heavy:  oklch(0.145 0 0);   /* pesado: abre una sección */
+
+  /* Superficies del registro */
+  --paper-sunk:  oklch(0.985 0 0);   /* hover de fila, fondo de etapa */
+
+  /* Métrica de fila. 38px es la densidad de un turno completo. */
+  --row:         38px;
+
+  /* El radio se parte por intención: contenedores reales lo usan, el registro
+     no (es reglado, no encajado) y el sello lleva el suyo. */
+  --radius-stamp: 2px;
+}
+
+.dark {
+  --rule:        oklch(1 0 0 / 12%);
+  --rule-firm:   oklch(1 0 0 / 22%);
+  --rule-heavy:  oklch(0.985 0 0);
+  --paper-sunk:  oklch(0.19 0 0);
+}
+
+@theme inline {
+  --color-rule:       var(--rule);
+  --color-rule-firm:  var(--rule-firm);
+  --color-rule-heavy: var(--rule-heavy);
+  --color-paper-sunk: var(--paper-sunk);
+  --spacing-row:      var(--row);
+  --radius-stamp:     var(--radius-stamp);
+}
+
+@layer base {
+  /* ─── Superficies del navegador ───────────────────────────────────────────
+     Lo que no dibujaste igual lleva el diseño: selección, cursor y barra de
+     scroll traen defaults que no pertenecen a ningún sistema. */
+  ::selection { background: var(--primary); color: var(--primary-foreground); }
+  :where(input, textarea) { caret-color: var(--primary); }
+
+  * { scrollbar-width: thin; scrollbar-color: var(--rule-firm) transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: var(--rule-firm);
+    border: 3px solid var(--background);
+    border-radius: 99px;
+  }
+  *::-webkit-scrollbar-thumb:hover { background: var(--muted-foreground); }
+}
+
+@layer components {
+  /* ─── El medidor de carga del sello ───────────────────────────────────────
+     Cuatro segmentos que se llenan según --grade (0 a 4). El grado se lee
+     contando, sin depender del color: la elevación que donó la dirección de
+     tensegridad declinada. Ver DESIGN.md § Signature components. */
+  [data-slot="badge"][data-grade]::before {
+    content: "";
+    flex: none;
+    width: 16px;
+    height: 8px;
+    border: 1px solid currentColor;
+    background-image: linear-gradient(currentColor 0 0);
+    background-repeat: no-repeat;
+    background-size: calc(var(--grade, 0) / 4 * 100%) 100%;
+  }
+
+  /* Carga soltada: medidor vacío y de trazo cortado. */
+  [data-slot="badge"][data-grade="0"]::before { border-style: dashed; }
+
+  /* En el tamaño chico el medidor acompaña. */
+  [data-slot="badge"][data-grade][data-size="sm"]::before { width: 13px; height: 7px; }
+}
+
+@layer components {
+  /* ═════════════════════════════════════════════════════════════════════════
+     EL REGISTRO
+     ─────────────────────────────────────────────────────────────────────────
+     Una fila por persona, el documento como eje. La retícula se declara UNA
+     vez y la consumen el encabezado de columnas y cada fila: ninguna barra
+     flota en su propio sistema de coordenadas.
+
+     Degrada soltando columnas, no con scroll horizontal. A cada paso cae la
+     menos decisiva para saber a quién llamar; documento, nombre, estado y
+     acciones no caen nunca.
+     ═════════════════════════════════════════════════════════════════════════ */
+  .reg {
+    /* folio · documento · nombre · localidad · contacto · estado · comentario · acciones */
+    --cols: 52px 128px minmax(150px, 1.4fr) minmax(96px, .9fr) 124px 168px minmax(140px, 1.5fr) 146px;
+    width: 100%;
+  }
+
+  .reg-row {
+    display: grid;
+    grid-template-columns: var(--cols);
+    align-items: center;
+    gap: 0 12px;
+    padding: 0 16px;
+    min-height: var(--row);
+    border-bottom: 1px solid var(--rule);
+  }
+  /* Sin esto los hijos arrancan en min-width:auto y la fila desborda en vez
+     de elidir: el sello y las acciones se van fuera de pantalla. */
+  .reg-row > * { min-width: 0; }
+
+  .reg-head {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--background);
+    border-bottom: 1px solid var(--rule-firm);
+    min-height: 32px;
+  }
+  .reg-head > * {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  /* El eje del padrón es una línea visible que corre por todo el registro. */
+  .reg .reg-row > *:nth-child(2) {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--rule);
+    margin-right: -6px;
+    padding-right: 6px;
+  }
+
+  .reg-row.reg-entry:hover { background: var(--paper-sunk); }
+  .reg-row.reg-entry:focus-within { background: var(--paper-sunk); }
+
+  /* Las acciones aparecen en la fila enfocada, no flotando aparte. */
+  .reg-actions { display: flex; justify-content: flex-end; gap: 2px; }
+  .reg-actions > * { opacity: 0; transition: opacity .12s ease; }
+  .reg-row.reg-entry:hover .reg-actions > *,
+  .reg-row.reg-entry:focus-within .reg-actions > * { opacity: 1; }
+  @media (pointer: coarse) { .reg-actions > * { opacity: 1; } }
+
+  @media (max-width: 1380px) {
+    .reg { --cols: 48px 124px minmax(150px, 1.4fr) 124px 168px minmax(130px, 1.5fr) 146px; }
+    .reg .reg-row > *:nth-child(4) { display: none; }   /* cae localidad */
+  }
+
+  @media (max-width: 1180px) {
+    .reg { --cols: 46px 120px minmax(140px, 1.4fr) 164px minmax(120px, 1.5fr) 142px; }
+    .reg .reg-row > *:nth-child(5) { display: none; }   /* cae contacto */
+  }
+
+  @media (max-width: 760px) {
+    /* La fila se apila: quién · qué estado · qué comentario · qué hacer. */
+    .reg-head { display: none; }
+    .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "name    stamp"
+        "dni     dni"
+        "comment comment"
+        "actions actions";
+      gap: 6px 10px;
+      padding: 12px 14px;
+      min-height: 0;
+    }
+    .reg-row.reg-entry > *:nth-child(1),
+    .reg-row.reg-entry > *:nth-child(4),
+    .reg-row.reg-entry > *:nth-child(5) { display: none; }
+    .reg-row.reg-entry > *:nth-child(2) {
+      grid-area: dni;
+      border-right: 0; margin-right: 0; padding-right: 0; align-self: auto;
+    }
+    .reg-row.reg-entry > *:nth-child(3) { grid-area: name; }
+    .reg-row.reg-entry > *:nth-child(6) { grid-area: stamp; justify-self: end; max-width: 52vw; }
+    .reg-row.reg-entry > *:nth-child(7) { grid-area: comment; }
+    .reg-row.reg-entry > *:nth-child(8) { grid-area: actions; justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* Registro de pólizas: nº · titular · plan · total · contacto · estado ·
+     fecha · acciones. Misma gramática que el padrón de prospectos. */
+  .reg--pol {
+    --cols: 118px minmax(140px, 1.3fr) minmax(110px, 1fr) 104px minmax(120px, 1fr) 180px 92px 164px;
+  }
+  @media (max-width: 1380px) {
+    .reg--pol { --cols: 112px minmax(140px, 1.3fr) minmax(110px, 1fr) 104px 180px 92px 164px; }
+    .reg--pol .reg-row > *:nth-child(5) { display: none; }   /* cae contacto */
+  }
+  @media (max-width: 1180px) {
+    .reg--pol { --cols: 108px minmax(130px, 1.4fr) 100px 176px 88px 160px; }
+    .reg--pol .reg-row > *:nth-child(3) { display: none; }   /* cae plan */
+  }
+  @media (max-width: 760px) {
+    .reg--pol .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name stamp" "dni dni" "comment comment" "actions actions";
+    }
+    .reg--pol .reg-row.reg-entry > *:nth-child(3),
+    .reg--pol .reg-row.reg-entry > *:nth-child(5) { display: none; }
+    .reg--pol .reg-row.reg-entry > *:nth-child(1) { grid-area: dni; display: block; }
+    .reg--pol .reg-row.reg-entry > *:nth-child(2) { grid-area: name; }
+    .reg--pol .reg-row.reg-entry > *:nth-child(4) { grid-area: comment; }
+    .reg--pol .reg-row.reg-entry > *:nth-child(6) { grid-area: stamp; justify-self: end; }
+    .reg--pol .reg-row.reg-entry > *:nth-child(7) { display: none; }
+    .reg--pol .reg-row.reg-entry > *:nth-child(8) { grid-area: actions; justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* Indicador de "escribiendo": pulso de opacidad con salida exponencial.
+     Reemplaza a `animate-bounce`, cuyo rebote es de otro mundo — los objetos
+     reales desaceleran, no rebotan. */
+  @keyframes tecleando {
+    0%, 60%, 100% { opacity: .22; }
+    30%           { opacity: 1; }
+  }
+  .animate-tecleando {
+    animation: tecleando 1.25s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+}
+
+@layer components {
+  /* Registro de documentos: documento · archivo · integrante · tamaño ·
+     subido · acciones. */
+  .reg--doc {
+    --cols: minmax(140px, 1.3fr) minmax(140px, 1.4fr) 112px 84px 146px 136px;
+  }
+  @media (max-width: 1180px) {
+    .reg--doc { --cols: minmax(140px, 1.3fr) minmax(130px, 1.4fr) 84px 146px 136px; }
+    .reg--doc .reg-row > *:nth-child(3) { display: none; }   /* cae integrante */
+  }
+  @media (max-width: 900px) {
+    .reg--doc { --cols: minmax(130px, 1.4fr) 84px 136px; }
+    .reg--doc .reg-row > *:nth-child(2),
+    .reg--doc .reg-row > *:nth-child(5) { display: none; }   /* caen archivo y fecha */
+  }
+  @media (max-width: 640px) {
+    .reg--doc .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+      padding: 12px 14px;
+    }
+    .reg--doc .reg-row.reg-entry > *:nth-child(2),
+    .reg--doc .reg-row.reg-entry > *:nth-child(3),
+    .reg--doc .reg-row.reg-entry > *:nth-child(5) { display: none; }
+    .reg--doc .reg-actions { justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* Registro de usuarios: usuario · rol · teléfono · último acceso · estado ·
+     acciones. */
+  .reg--user {
+    --cols: minmax(170px, 1.6fr) 124px minmax(120px, 1fr) 126px 112px 140px;
+  }
+  @media (max-width: 1240px) {
+    .reg--user { --cols: minmax(170px, 1.6fr) 120px 126px 112px 140px; }
+    .reg--user .reg-row > *:nth-child(3) { display: none; }   /* cae teléfono */
+  }
+  @media (max-width: 1000px) {
+    .reg--user { --cols: minmax(150px, 1.6fr) 116px 112px 136px; }
+    .reg--user .reg-row > *:nth-child(4) { display: none; }   /* cae último acceso */
+  }
+  @media (max-width: 700px) {
+    .reg--user .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name stamp" "role role" "actions actions";
+      gap: 6px 10px; padding: 12px 14px; min-height: 0;
+    }
+    .reg--user .reg-row.reg-entry > *:nth-child(3),
+    .reg--user .reg-row.reg-entry > *:nth-child(4) { display: none; }
+    .reg--user .reg-row.reg-entry > *:nth-child(1) { grid-area: name; }
+    .reg--user .reg-row.reg-entry > *:nth-child(2) { grid-area: role; }
+    .reg--user .reg-row.reg-entry > *:nth-child(5) { grid-area: stamp; justify-self: end; }
+    .reg--user .reg-row.reg-entry > *:nth-child(6) { grid-area: actions; justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* ═════════════════════════════════════════════════════════════════════════
+     LA LECTURA
+     ─────────────────────────────────────────────────────────────────────────
+     Una regla horizontal continua de cifras, no seis tarjetas con hueco entre
+     ellas. El filete se dibuja con `gap` sobre fondo de regla, así que las
+     divisiones aparecen también donde la grilla envuelve.
+     ═════════════════════════════════════════════════════════════════════════ */
+  .readout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(142px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .readout > * {
+    min-width: 0;
+    padding: 12px 14px;
+    background: var(--card);
+  }
+  .readout dt, .readout .readout-label {
+    margin: 0 0 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .readout dd, .readout .readout-value {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -.025em;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Registro de pólizas del supervisor: titular · plan · total · vendedor ·
+     fecha · estado · acciones. Lleva nueve acciones, así que su columna de
+     acciones es fija y ancha, y las demás caen antes. */
+  .reg--sup-pol {
+    --cols: minmax(150px, 1.4fr) minmax(96px, 1fr) 92px minmax(100px, 1fr) 88px 168px 268px;
+  }
+  .reg--sup-pol .reg-actions { flex-wrap: wrap; row-gap: 2px; }
+
+  @media (max-width: 1440px) {
+    .reg--sup-pol { --cols: minmax(150px, 1.4fr) minmax(96px, 1fr) 92px 88px 164px 264px; }
+    .reg--sup-pol .reg-row > *:nth-child(4) { display: none; }   /* cae vendedor */
+  }
+  @media (max-width: 1240px) {
+    .reg--sup-pol { --cols: minmax(140px, 1.5fr) 92px 160px 260px; }
+    .reg--sup-pol .reg-row > *:nth-child(2),
+    .reg--sup-pol .reg-row > *:nth-child(5) { display: none; }   /* caen plan y fecha */
+  }
+  @media (max-width: 860px) {
+    .reg--sup-pol .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name stamp" "total total" "actions actions";
+      gap: 6px 10px; padding: 12px 14px; min-height: 0;
+    }
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(2),
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(4),
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(5) { display: none; }
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(1) { grid-area: name; }
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(3) { grid-area: total; text-align: left; }
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(6) { grid-area: stamp; justify-self: end; }
+    .reg--sup-pol .reg-row.reg-entry > *:nth-child(7) { grid-area: actions; justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* Registro de vendedores: vendedor · supervisor · prospectos · ventas ·
+     estado · acciones. */
+  .reg--vend {
+    --cols: minmax(160px, 1.5fr) minmax(118px, 1fr) 92px 84px 104px 200px;
+  }
+  @media (max-width: 1240px) {
+    .reg--vend { --cols: minmax(150px, 1.5fr) 92px 84px 104px 196px; }
+    .reg--vend .reg-row > *:nth-child(2) { display: none; }   /* cae supervisor */
+  }
+  @media (max-width: 980px) {
+    .reg--vend { --cols: minmax(140px, 1.5fr) 84px 100px 190px; }
+    .reg--vend .reg-row > *:nth-child(3) { display: none; }   /* cae prospectos */
+  }
+  @media (max-width: 760px) {
+    .reg--vend .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name stamp" "actions actions";
+      gap: 6px 10px; padding: 12px 14px; min-height: 0;
+    }
+    .reg--vend .reg-row.reg-entry > *:nth-child(2),
+    .reg--vend .reg-row.reg-entry > *:nth-child(3),
+    .reg--vend .reg-row.reg-entry > *:nth-child(4) { display: none; }
+    .reg--vend .reg-row.reg-entry > *:nth-child(1) { grid-area: name; }
+    .reg--vend .reg-row.reg-entry > *:nth-child(5) { grid-area: stamp; justify-self: end; }
+    .reg--vend .reg-row.reg-entry > *:nth-child(6) { grid-area: actions; justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* Registro de prospectos del backoffice: prospecto · contacto · asignación ·
+     conteos · estado · fecha · acciones. */
+  .reg--bo-pros {
+    --cols: minmax(140px, 1.4fr) minmax(120px, 1.1fr) minmax(110px, 1fr) 108px 152px 84px 172px;
+  }
+  @media (max-width: 1400px) {
+    .reg--bo-pros { --cols: minmax(140px, 1.4fr) minmax(120px, 1.1fr) 108px 148px 84px 168px; }
+    .reg--bo-pros .reg-row > *:nth-child(3) { display: none; }   /* cae asignación */
+  }
+  @media (max-width: 1200px) {
+    .reg--bo-pros { --cols: minmax(140px, 1.4fr) minmax(110px, 1.1fr) 144px 84px 164px; }
+    .reg--bo-pros .reg-row > *:nth-child(4) { display: none; }   /* caen conteos */
+  }
+  @media (max-width: 1000px) {
+    .reg--bo-pros { --cols: minmax(140px, 1.5fr) 140px 80px 160px; }
+    .reg--bo-pros .reg-row > *:nth-child(2) { display: none; }   /* cae contacto */
+  }
+  @media (max-width: 780px) {
+    .reg--bo-pros .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name stamp" "actions actions";
+      gap: 6px 10px; padding: 12px 14px; min-height: 0;
+    }
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(2),
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(3),
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(4),
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(6) { display: none; }
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(1) { grid-area: name; }
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(5) { grid-area: stamp; justify-self: end; }
+    .reg--bo-pros .reg-row.reg-entry > *:nth-child(7) { grid-area: actions; justify-content: flex-start; }
+  }
+}
+
+@layer components {
+  /* Registro de pólizas del backoffice: nº · titular · plan · total ·
+     asignación · estado · fecha · acciones. Nueve acciones, dos de ellas
+     componentes de firma, así que la columna de acciones envuelve. */
+  .reg--bo-pol {
+    --cols: 116px minmax(140px, 1.3fr) minmax(105px, 1fr) 98px minmax(108px, 1fr) 172px 84px 266px;
+  }
+  .reg--bo-pol .reg-actions { flex-wrap: wrap; row-gap: 2px; }
+
+  @media (max-width: 1520px) {
+    .reg--bo-pol { --cols: 116px minmax(140px, 1.3fr) minmax(105px, 1fr) 98px 168px 84px 262px; }
+    .reg--bo-pol .reg-row > *:nth-child(5) { display: none; }
+  }
+  @media (max-width: 1320px) {
+    .reg--bo-pol { --cols: 112px minmax(140px, 1.4fr) 98px 164px 84px 258px; }
+    .reg--bo-pol .reg-row > *:nth-child(3) { display: none; }
+  }
+  @media (max-width: 1140px) {
+    .reg--bo-pol { --cols: 108px minmax(130px, 1.4fr) 94px 160px 254px; }
+    .reg--bo-pol .reg-row > *:nth-child(7) { display: none; }
+  }
+  @media (max-width: 880px) {
+    .reg--bo-pol .reg-row.reg-entry {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name stamp" "total total" "actions actions";
+      gap: 6px 10px; padding: 12px 14px; min-height: 0;
+    }
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(1),
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(3),
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(5),
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(7) { display: none; }
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(2) { grid-area: name; }
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(4) { grid-area: total; text-align: left; }
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(6) { grid-area: stamp; justify-self: end; }
+    .reg--bo-pol .reg-row.reg-entry > *:nth-child(8) { grid-area: actions; justify-content: flex-start; }
+  }
 }

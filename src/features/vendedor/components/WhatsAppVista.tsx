@@ -80,11 +80,11 @@ const ACCEPT_ARCHIVOS =
 
 
 const PLANTILLAS_DEFAULT: Record<string, Plantilla> = {
-  saludo_inicial: { id: "saludo_inicial", nombre: "Saludo Inicial", descripcion: "👋 Primer contacto" },
-  seguimiento_cotizacion: { id: "seguimiento_cotizacion", nombre: "Seguimiento Cotización", descripcion: "📄 Seguimiento post-cotización" },
-  seguimiento_poliza: { id: "seguimiento_poliza", nombre: "Seguimiento Póliza", descripcion: "✅ Verificar recepción póliza" },
-  informacion_adicional: { id: "informacion_adicional", nombre: "Información Adicional", descripcion: "💙 Info sobre plan de salud" },
-  cierre_conversacion: { id: "cierre_conversacion", nombre: "Cierre Conversación", descripcion: "✨ Despedida cortés" },
+  saludo_inicial: { id: "saludo_inicial", nombre: "Saludo Inicial", descripcion: "Primer contacto" },
+  seguimiento_cotizacion: { id: "seguimiento_cotizacion", nombre: "Seguimiento Cotización", descripcion: "Seguimiento post-cotización" },
+  seguimiento_poliza: { id: "seguimiento_poliza", nombre: "Seguimiento Póliza", descripcion: "Verificar recepción póliza" },
+  informacion_adicional: { id: "informacion_adicional", nombre: "Información Adicional", descripcion: "Info sobre plan de salud" },
+  cierre_conversacion: { id: "cierre_conversacion", nombre: "Cierre Conversación", descripcion: "Despedida cortés" },
 }
 
 interface WhatsAppVistaProps {
@@ -320,7 +320,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
   const esEnviado = (msg: Mensaje) => msg.tipo === "enviado" || msg.origen === "vendedor"
 
   return (
-    <div className="flex h-[calc(100vh-80px)] border rounded-xl overflow-hidden">
+    <div className="flex h-[calc(100vh-80px)] border rounded-lg overflow-hidden">
       {/* ─── Lista de conversaciones ──── */}
       <div className={`w-full sm:w-80 border-r flex flex-col ${vistaMovil === "chat" ? "hidden sm:flex" : "flex"}`}>
         {/* Header Lista */}
@@ -338,12 +338,12 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
           {estadisticas && (
             <div className="flex flex-wrap gap-1.5 mb-2">
               {estadisticas.conversaciones_activas != null && (
-                <Badge variant="outline" className="text-[10px]">
+                <Badge variant="outline" className="text-[10.5px]">
                   {estadisticas.conversaciones_activas} activas
                 </Badge>
               )}
               {(estadisticas.mensajes_no_leidos ?? 0) > 0 && (
-                <Badge variant="warn" className="text-[10px]">
+                <Badge variant="warn" className="text-[10.5px]">
                   {estadisticas.mensajes_no_leidos} sin leer
                 </Badge>
               )}
@@ -371,7 +371,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
             conversacionesFiltradas.map(conv => (
               <button
                 key={conv.id}
-                className={`w-full text-left px-4 py-3 border-b hover:bg-muted/50 transition-colors flex items-start gap-3 ${conversacionActual?.id === conv.id ? "bg-muted" : ""}`}
+                className={`w-full text-left px-4 py-3 border-b hover:bg-paper-sunk transition-colors flex items-start gap-3 ${conversacionActual?.id === conv.id ? "bg-muted" : ""}`}
                 onClick={() => abrirConversacion(conv)}
               >
                 <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -473,7 +473,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className={`flex ${i % 2 === 0 ? "justify-start" : "justify-end"}`}>
-                    <Skeleton className="h-10 w-48 rounded-2xl" />
+                    <Skeleton className="h-10 w-48 rounded-lg" />
                   </div>
                 ))
               ) : mensajes.length === 0 ? (
@@ -483,7 +483,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
               ) : (
                 mensajes.map((msg, i) => (
                   <div key={msg.id ?? i} className={`flex ${esEnviado(msg) ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${
+                    <div className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
                       esEnviado(msg)
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-foreground"
@@ -510,7 +510,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
                         <p className="whitespace-pre-wrap">{msg.mensaje ?? msg.texto}</p>
                       )}
                       <div className="flex items-center justify-end gap-1 mt-0.5">
-                        <span className={`text-[10px] ${esEnviado(msg) ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                        <span className={`text-[10.5px] ${esEnviado(msg) ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                           {formatHora(msg.created_at)}
                         </span>
                         {esEnviado(msg) && (
@@ -532,7 +532,7 @@ export function WhatsAppVista({ onVolver }: WhatsAppVistaProps) {
               <>
                 {/* Archivo seleccionado */}
                 {archivoSeleccionado && (
-                  <div className="px-4 py-2 border-t bg-muted/50 flex items-center gap-2 text-sm">
+                  <div className="px-4 py-2 border-t bg-paper-sunk flex items-center gap-2 text-sm">
                     <Paperclip className="size-4 text-muted-foreground" />
                     <span className="flex-1 truncate">{archivoSeleccionado.name}</span>
                     <Button variant="ghost" size="icon" className="size-6" onClick={() => setArchivoSeleccionado(null)}>

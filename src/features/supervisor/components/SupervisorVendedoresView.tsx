@@ -564,7 +564,7 @@ export function SupervisorVendedoresView() {
 
       {/* Tabla desktop */}
       {loading ? (
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       ) : (
         <>
           <div className="hidden lg:block">
@@ -590,7 +590,7 @@ export function SupervisorVendedoresView() {
                       <CardTitle className="text-sm truncate">{nombreCompleto(v)}</CardTitle>
                       <p className="text-xs text-muted-foreground">ID: {v.id}</p>
                     </div>
-                    <Badge variant={isEnabled(v) ? "ok" : "secondary"} className="text-[10px] shrink-0">
+                    <Badge variant={isEnabled(v) ? "ok" : "secondary"} className="text-[10.5px] shrink-0">
                       {isEnabled(v) ? "Activo" : "Inactivo"}
                     </Badge>
                   </div>
@@ -784,7 +784,7 @@ export function SupervisorVendedoresView() {
             </Select>
           </div>
           {selectedProspectos.length > 0 && (
-            <div className="bg-muted/50 rounded-lg p-3 max-h-40 overflow-y-auto">
+            <div className="bg-paper-sunk rounded-lg p-3 max-h-40 overflow-y-auto">
               <p className="text-xs font-semibold mb-1">Prospectos seleccionados:</p>
               <ul className="text-xs space-y-0.5">
                 {prospectosVendedor

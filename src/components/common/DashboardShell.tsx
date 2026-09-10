@@ -67,23 +67,26 @@ export function DashboardShell({
     <SidebarProvider>
       <Sidebar variant="inset" className="border-r-0">
         <SidebarHeader className="pb-0">
-          <div className="relative overflow-hidden rounded-t-lg bg-gradient-to-br from-primary via-primary to-[#3d1a4d] px-4 pt-5 pb-4">
-            <div className="pointer-events-none absolute -top-6 -right-6 size-24 rounded-full bg-white/10" />
-            <div className="pointer-events-none absolute -bottom-4 -left-4 size-16 rounded-full bg-white/8" />
-            <div className="relative flex items-start justify-between">
+          {/* El violeta de marca, gastado entero en un plano macizo. Antes era
+              un degradado con dos círculos decorativos y una baldosa de vidrio
+              con blur: tres adornos que no comunicaban nada. */}
+          <div className="rounded-t-lg bg-primary px-4 pt-5 pb-4">
+            <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/20 ring-2 ring-white/30 backdrop-blur-sm overflow-hidden">
-                  <Logo className={logoClassName} />
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-tight text-white">{roleLabel}</p>
-                  <p className="text-[11px] leading-tight text-white/70">{userName ?? "Panel"}</p>
+                <Logo className={logoClassName} />
+                <div className="min-w-0">
+                  <p className="truncate text-sm leading-tight font-bold text-primary-foreground">{roleLabel}</p>
+                  <p className="truncate text-[11px] leading-tight text-primary-foreground/70">{userName ?? "Panel"}</p>
                 </div>
               </div>
               <ShellMobileClose />
             </div>
             <div className="mt-3 flex items-center gap-2">
-              <Badge className="bg-white/20 text-white border-0 text-[10px] font-semibold hover:bg-white/30">
+              <Badge
+                variant="outline"
+                size="sm"
+                className="border-primary-foreground/40 text-primary-foreground"
+              >
                 {roleBadgeLabel}
               </Badge>
             </div>
@@ -103,7 +106,7 @@ export function DashboardShell({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium truncate">{userName ?? roleLabel}</p>
-              <p className="text-[10px] text-muted-foreground truncate">{userEmail ?? ""}</p>
+              <p className="text-[10.5px] text-muted-foreground truncate">{userEmail ?? ""}</p>
             </div>
             <Button
               variant="ghost"

@@ -234,7 +234,7 @@ export default function ReasignacionAutomaticaAdmin() {
 
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {[1,2,3,4].map(i => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}
+          {[1,2,3,4].map(i => <Skeleton key={i} className="h-24 w-full rounded-lg" />)}
         </div>
       ) : (
         <>
@@ -322,7 +322,7 @@ export default function ReasignacionAutomaticaAdmin() {
             </Card>
           )}
 
-          <div className="rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground">
+          <div className="rounded-lg bg-paper-sunk p-3 text-xs text-muted-foreground">
             Vista simplificada: última corrida, efectividad del día, promedios por hora y backlog de candidatos.
           </div>
 
@@ -376,7 +376,7 @@ export default function ReasignacionAutomaticaAdmin() {
                             className={`border rounded-md p-1.5 text-center min-h-12 ${cell.isHoliday ? "bg-state-ok-soft" : ""} ${cell.inMonth ? "" : "opacity-50"}`}
                           >
                             <p className="font-semibold text-xs leading-none">{cell.date.getDate()}</p>
-                            {cell.isHoliday && <Badge variant="ok" className="mt-1 text-[9px] px-1 py-0">Feriado</Badge>}
+                            {cell.isHoliday && <Badge variant="ok" size="sm" className="mt-1 px-1">Feriado</Badge>}
                           </div>
                         )
                       })}

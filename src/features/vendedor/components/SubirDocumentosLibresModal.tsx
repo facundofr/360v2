@@ -246,7 +246,7 @@ export function SubirDocumentosLibresModal({ open, onOpenChange, poliza, apiCont
                   className={item.file && !item.titulo.trim() ? "border-destructive" : ""}
                 />
                 {item.titulo.trim() && (
-                  <p className="text-[10px] text-muted-foreground">{100 - item.titulo.length} caracteres restantes</p>
+                  <p className="text-[10.5px] text-muted-foreground">{100 - item.titulo.length} caracteres restantes</p>
                 )}
               </div>
 
@@ -259,7 +259,7 @@ export function SubirDocumentosLibresModal({ open, onOpenChange, poliza, apiCont
                     <FileText className="size-4 text-state-ok-text shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium truncate">{item.file.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{formatBytes(item.file.size)}</p>
+                      <p className="text-[10.5px] text-muted-foreground">{formatBytes(item.file.size)}</p>
                     </div>
                     <CheckCircle className="size-4 text-state-ok-text shrink-0" />
                     <Button variant="link" size="sm" className="h-auto p-0 text-xs" onClick={() => {

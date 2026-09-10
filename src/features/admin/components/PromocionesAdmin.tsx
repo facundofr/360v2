@@ -204,7 +204,7 @@ export default function PromocionesAdmin() {
 
       {/* Tabla */}
       {loading ? (
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       ) : (
         <DataTable columns={columns} data={filtradas} emptyMessage="Sin promociones" />
       )}

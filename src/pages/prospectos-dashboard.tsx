@@ -11,8 +11,10 @@ import {
   PlusIcon, LayoutListIcon, LayoutGridIcon, UserIcon,
   Search, Eye, LogOut, TrendingUp, DollarSign, FileText,
   Trophy, Flame, Star, ChevronRight, MessageSquare, RefreshCw, MessageCircle,
-  Phone, Mail, MapPin, History, Tag, X as XIcon, Loader2,
+  Phone, History, Tag, X as XIcon, Loader2,
   CheckCircle2, AlertTriangle
+,
+  ClipboardList
 } from "lucide-react"
 import { ChatVendedor } from "@/features/vendedor/components/ChatVendedor"
 import CargaDocumentosModal from "@/components/modals/CargaDocumentosModal"
@@ -30,7 +32,6 @@ import {
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -304,10 +305,10 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium leading-tight">{v.label}</p>
-                  <p className="text-[10px] text-muted-foreground">{v.desc}</p>
+                  <p className="text-[10.5px] text-muted-foreground">{v.desc}</p>
                 </div>
                 {isWhatsapp && whatsappUnread > 0 && (
-                  <Badge variant="destructive" className="text-[10px] h-4 min-w-4 px-1 rounded-full">
+                  <Badge variant="destructive" className="text-[10.5px] h-4 min-w-4 px-1 rounded-full">
                     {whatsappUnread > 99 ? "99+" : whatsappUnread}
                   </Badge>
                 )}
@@ -332,7 +333,7 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium leading-tight">Exportar</p>
-              <p className="text-[10px] text-muted-foreground">Descargar datos</p>
+              <p className="text-[10.5px] text-muted-foreground">Descargar datos</p>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -352,7 +353,7 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium leading-tight">Nuevo Prospecto</p>
-              <p className="text-[10px] text-muted-foreground">Registrar lead</p>
+              <p className="text-[10.5px] text-muted-foreground">Registrar lead</p>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -372,7 +373,7 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
           ].map(({ label, value, icon }) => (
             <div key={label} className="bg-muted rounded-lg p-2 text-center">
               <div className="flex items-center justify-center gap-1 text-muted-foreground mb-0.5">
-                {icon}<span className="text-[10px]">{label}</span>
+                {icon}<span className="text-[10.5px]">{label}</span>
               </div>
               <p className="font-bold text-sm">{value}</p>
             </div>
@@ -394,10 +395,10 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
         )}
         {gaming.logros.length > 0 && (
           <div className="space-y-1">
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase">Logros</p>
+            <p className="text-[10.5px] font-semibold text-muted-foreground uppercase">Logros</p>
             <div className="flex flex-wrap gap-1">
               {gaming.logros.slice(-3).map((l, i) => (
-                <span key={i} className="text-[10px] bg-state-ok-soft text-state-ok-text rounded px-1.5 py-0.5">{l}</span>
+                <span key={i} className="text-[10.5px] bg-state-ok-soft text-state-ok-text rounded px-1.5 py-0.5">{l}</span>
               ))}
             </div>
           </div>
@@ -898,7 +899,7 @@ export default function ProspectosDashboardPage() {
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold truncate">{user?.name ?? "Vendedor"}</p>
-              <p className="text-[10px] text-muted-foreground">Panel Vendedor</p>
+              <p className="text-[10.5px] text-muted-foreground">Panel Vendedor</p>
             </div>
           </div>
         </SidebarHeader>
@@ -1040,8 +1041,23 @@ export default function ProspectosDashboardPage() {
 
               {/* Contenido */}
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-52 rounded-xl" />)}
+                /* El esqueleto toma la forma de la fila, no la de una tarjeta:
+                   lo que se está cargando es un registro. */
+                <div className="reg border-t-2 border-rule-heavy" aria-busy="true" aria-live="polite">
+                  <span className="sr-only">Cargando prospectos…</span>
+                  <RegistroHead />
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="reg-row">
+                      <Skeleton className="h-3 w-6 justify-self-end rounded-xs" />
+                      <Skeleton className="h-3.5 w-20 rounded-xs" />
+                      <Skeleton className="h-3.5 w-40 rounded-xs" />
+                      <Skeleton className="h-3 w-16 rounded-xs" />
+                      <Skeleton className="h-3 w-20 rounded-xs" />
+                      <Skeleton className="h-[22px] w-28 rounded-stamp" />
+                      <Skeleton className="h-3 w-32 rounded-xs" />
+                      <span />
+                    </div>
+                  ))}
                 </div>
               ) : prospectosFiltrados.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-2">
@@ -1050,11 +1066,13 @@ export default function ProspectosDashboardPage() {
                   {hayFiltros && <Button variant="ghost" size="sm" onClick={limpiarFiltros}>Limpiar filtros</Button>}
                 </div>
               ) : tipoVista === "tarjetas" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                  {prospectosPaginados.map(p => (
-                    <ProspectoCard
+                <div className="reg border-t-2 border-rule-heavy">
+                  <RegistroHead />
+                  {prospectosPaginados.map((p, i) => (
+                    <ProspectoRow
                       key={p.id}
                       prospecto={p}
+                      folio={(paginaSegura - 1) * PROSPECTOS_POR_PAGINA + i + 1}
                       tiposAfiliacion={tiposAfiliacion}
                       onEstadoChange={estado => guardarCambioProspecto(p, "estado", estado)}
                       onComentarioBlur={comentario => guardarCambioProspecto(p, "comentario", comentario)}
@@ -1404,8 +1422,8 @@ export default function ProspectosDashboardPage() {
             )}
 
             {resultadoAlta.prospectoId != null && (
-              <div className="rounded-lg border bg-muted/50 p-3">
-                <p className="font-semibold">📋 ID de referencia: #{resultadoAlta.prospectoId}</p>
+              <div className="rounded-lg border bg-paper-sunk p-3">
+                <p className="flex items-center gap-1.5 font-semibold"><ClipboardList className="size-3.5 shrink-0" aria-hidden="true" />ID de referencia: #{resultadoAlta.prospectoId}</p>
                 {resultadoAlta.tipo === "en-gestion" && (
                   <p className="text-xs text-muted-foreground mt-0.5">
                     Informá este número al back office para localizarlo.
@@ -1426,8 +1444,22 @@ export default function ProspectosDashboardPage() {
 
 // --- Tarjeta de prospecto -----------------------------------------------------
 
-interface ProspectoCardProps {
+/* ═══════════════════════════════════════════════════════════════════════════
+   EL PADRÓN — la fila del registro
+   ───────────────────────────────────────────────────────────────────────────
+   Reemplaza a ProspectoCard. La cola de prospectos es un registro nominal, no
+   una grilla de tarjetas: una fila por persona, el documento como eje, el
+   estado estampado en columna fija.
+
+   Conserva TODA la función de la tarjeta: DNI editable con consulta a Gecros,
+   cambio de estado en el lugar, comentario editable y las cinco acciones. La
+   barra de progreso se retiró porque era la misma información que el grado de
+   carga del sello, derivada del mismo estado.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+interface ProspectoRowProps {
   prospecto: Prospecto
+  folio: number
   tiposAfiliacion: TipoAfiliacion[]
   onEstadoChange: (estado: string) => void
   onComentarioBlur: (comentario: string) => void
@@ -1440,13 +1472,12 @@ interface ProspectoCardProps {
   onVerDetalle: () => void
 }
 
-function ProspectoCard({
-  prospecto: p, tiposAfiliacion, onEstadoChange, onComentarioBlur, onDniBlur,
+function ProspectoRow({
+  prospecto: p, folio, tiposAfiliacion, onEstadoChange, onComentarioBlur, onDniBlur,
   onGecros, onHistorial, onWhatsApp, onLlamada, onPromociones, onVerDetalle
-}: ProspectoCardProps) {
+}: ProspectoRowProps) {
   const [comentario, setComentario] = useState(p.comentario ?? "")
   const [dni, setDni] = useState(p.dni ?? "")
-  const progreso = ESTADO_PROGRESO[p.estado] ?? 0
 
   React.useEffect(() => { startTransition(() => setComentario(p.comentario ?? "")) }, [p.comentario])
   React.useEffect(() => { startTransition(() => setDni(p.dni ?? "")) }, [p.dni])
@@ -1454,128 +1485,121 @@ function ProspectoCard({
   const afiliacion = tiposAfiliacion.find(t => t.id === Number(p.tipo_afiliacion_id))
 
   return (
-    <Card className="overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-      <CardHeader className="pb-2">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="font-semibold text-sm leading-tight">{p.nombre} {p.apellido}</p>
-            <p className="text-xs text-muted-foreground">{p.edad} anos</p>
-            {p.gecros_estado && (
-              <Badge variant={p.gecros_estado === "Con Cobertura" ? "ok" : "secondary"} className="text-[10px] mt-0.5 pointer-events-none">
-                Gecros: {p.gecros_estado}
-              </Badge>
-            )}
-          </div>
-          <div className="flex flex-col items-end gap-1 shrink-0">
-            {getBadgeEstado(p.estado)}
-            {p.es_reciclado === 1 && p.visible_refrito === 1 && (
-              <Badge variant="warn" className="text-[10px] pointer-events-none">Reciclado</Badge>
-            )}
-          </div>
-        </div>
-      </CardHeader>
+    <div className="reg-row reg-entry">
+      {/* 1 · folio */}
+      <span className="text-right text-[11px] tabular-nums text-muted-foreground">
+        {String(folio).padStart(4, "0")}
+      </span>
 
-      <CardContent className="pt-0 flex-1 space-y-2">
-        {/* Contacto info */}
-        {(p.numero_contacto || p.correo || p.localidad) && (
-          <div className="text-xs text-muted-foreground space-y-0.5">
-            {p.numero_contacto && (
-              <div className="flex items-center gap-1">
-                <Phone className="size-3 shrink-0" />
-                <span>{maskPhone(p.numero_contacto)}</span>
-              </div>
-            )}
-            {p.correo && (
-              <div className="flex items-center gap-1">
-                <Mail className="size-3 shrink-0" />
-                <span className="truncate">{maskEmail(p.correo)}</span>
-              </div>
-            )}
-            {p.localidad && (
-              <div className="flex items-center gap-1">
-                <MapPin className="size-3 shrink-0" />
-                <span>{p.localidad}</span>
-              </div>
-            )}
-          </div>
-        )}
+      {/* 2 · documento — el eje */}
+      <span>
+        <Input
+          className="h-7 w-full border-0 bg-transparent px-0 text-[13.5px] font-semibold tabular-nums shadow-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-primary rounded-none"
+          placeholder="Sin DNI"
+          aria-label={`Documento de ${p.apellido}`}
+          value={dni}
+          onChange={e => setDni(e.target.value)}
+          onBlur={e => { if (e.target.value !== (p.dni ?? "")) onDniBlur(e.target.value) }}
+        />
+      </span>
 
-        {/* Tipo afiliacion */}
-        {afiliacion && (
-          <p className="text-xs text-muted-foreground">{afiliacion.etiqueta}</p>
-        )}
-
-        {/* DNI editable + Gecros */}
-        <div className="flex gap-1">
-          <Input
-            className="h-7 text-xs flex-1"
-            placeholder="DNI"
-            value={dni}
-            onChange={e => setDni(e.target.value)}
-            onBlur={e => {
-              const val = e.target.value
-              if (val !== (p.dni ?? "")) onDniBlur(val)
-            }}
-          />
-          {dni && (
-            <Button size="icon" variant="outline" className="size-7 shrink-0" onClick={onGecros} title="Consultar Gecros">
-              <Eye className="size-3" />
-            </Button>
+      {/* 3 · apellido y nombre */}
+      <span className="min-w-0">
+        <span className="flex items-center gap-1.5">
+          <span className="truncate text-[13px]">
+            <b className="font-semibold">{p.apellido}</b>
+            <span className="text-muted-foreground">, {p.nombre}</span>
+          </span>
+          {p.es_reciclado === 1 && p.visible_refrito === 1 && (
+            <Badge variant="warn" size="sm" className="pointer-events-none shrink-0">Reciclado</Badge>
           )}
-        </div>
+        </span>
+        <span className="block truncate text-[11.5px] text-muted-foreground">
+          {p.edad} años{afiliacion ? ` · ${afiliacion.etiqueta}` : ""}
+          {p.gecros_estado ? ` · Gecros: ${p.gecros_estado}` : ""}
+        </span>
+      </span>
 
-        {/* Estado */}
+      {/* 4 · localidad */}
+      <span className="truncate text-[12.5px] text-muted-foreground">{p.localidad || "—"}</span>
+
+      {/* 5 · contacto — teléfono y correo, ambos enmascarados */}
+      <span className="min-w-0 text-muted-foreground">
+        <span className="block truncate text-[12.5px] tabular-nums">
+          {p.numero_contacto ? maskPhone(p.numero_contacto) : "—"}
+        </span>
+        {p.correo && (
+          <span className="block truncate text-[11.5px]">{maskEmail(p.correo)}</span>
+        )}
+      </span>
+
+      {/* 6 · estado — el sello, y el disparador que lo cambia */}
+      <span className="min-w-0">
         <Select value={p.estado} onValueChange={onEstadoChange}>
-          <SelectTrigger className="h-7 text-xs">
-            <SelectValue />
+          <SelectTrigger
+            size="sm"
+            aria-label={`Estado de ${p.apellido}: ${p.estado}`}
+            className="h-auto w-fit max-w-full gap-1 border-0 bg-transparent p-0 shadow-none hover:opacity-75 focus-visible:ring-0 dark:bg-transparent dark:hover:bg-transparent [&_svg]:size-3 [&_svg]:opacity-40"
+          >
+            {getBadgeEstado(p.estado)}
           </SelectTrigger>
           <SelectContent>
             {ESTADOS.map(e => <SelectItem key={e} value={e} className="text-xs">{e}</SelectItem>)}
           </SelectContent>
         </Select>
+      </span>
 
-        {/* Progreso */}
-        <div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <div
-              className={cn("h-full rounded-full transition-all",
-                progreso === 100 ? "bg-state-ok" : progreso >= 75 ? "bg-primary/70" : progreso >= 50 ? "bg-state-warn" : progreso > 0 ? "bg-muted-foreground/40" : "bg-muted-foreground/20"
-              )}
-              style={{ width: `${progreso}%` }}
-            />
-          </div>
-          <p className="text-[10px] text-muted-foreground mt-0.5 text-right">{progreso}%</p>
-        </div>
-
-        {/* Comentario */}
-        <Textarea
-          className="text-xs min-h-[56px] resize-none"
-          placeholder="Agregar comentario..."
+      {/* 7 · comentario */}
+      <span>
+        <Input
+          className="h-7 w-full border-0 bg-transparent px-0 text-[12px] shadow-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-primary rounded-none placeholder:text-muted-foreground/60"
+          placeholder="Sin comentario"
+          aria-label={`Comentario sobre ${p.apellido}`}
           value={comentario}
           onChange={e => setComentario(e.target.value)}
           onBlur={e => onComentarioBlur(e.target.value)}
-          rows={2}
         />
-      </CardContent>
+      </span>
 
-      <CardFooter className="pt-0 pb-2 flex gap-1 flex-wrap">
+      {/* 8 · acciones */}
+      <span className="reg-actions">
         <Button size="icon" variant="ghost" className="size-7" title="Historial" onClick={onHistorial}>
-          <History className="size-3" />
+          <History className="size-3.5" />
         </Button>
-        <Button size="icon" variant="ghost" className="size-7 text-green-600" title="WhatsApp primer contacto" onClick={onWhatsApp} disabled={!p.numero_contacto}>
-          <MessageCircle className="size-3" />
+        <Button size="icon" variant="ghost" className="size-7" title="WhatsApp primer contacto" onClick={onWhatsApp} disabled={!p.numero_contacto}>
+          <MessageCircle className="size-3.5" />
         </Button>
         <Button size="icon" variant="ghost" className="size-7" title="Registrar llamada" onClick={onLlamada} disabled={!p.numero_contacto}>
-          <Phone className="size-3" />
+          <Phone className="size-3.5" />
         </Button>
         <Button size="icon" variant="ghost" className="size-7" title="Promociones" onClick={onPromociones}>
-          <Tag className="size-3" />
+          <Tag className="size-3.5" />
         </Button>
-        <Button variant="ghost" size="sm" className="flex-1 h-7 text-xs" onClick={onVerDetalle}>
-          <Eye className="size-3 mr-1" />Ver detalle
-          <ChevronRight className="size-3 ml-auto" />
+        {dni && (
+          <Button size="icon" variant="ghost" className="size-7" title="Consultar Gecros" onClick={onGecros}>
+            <Eye className="size-3.5" />
+          </Button>
+        )}
+        <Button size="icon" variant="ghost" className="size-7" title="Ver detalle" onClick={onVerDetalle}>
+          <ChevronRight className="size-3.5" />
         </Button>
-      </CardFooter>
-    </Card>
+      </span>
+    </div>
+  )
+}
+
+/** Encabezado de columnas del registro. Consume la misma retícula que la fila. */
+function RegistroHead() {
+  return (
+    <div className="reg-row reg-head" role="presentation">
+      <span className="text-right">Nº</span>
+      <span>Documento</span>
+      <span>Apellido y nombre</span>
+      <span>Localidad</span>
+      <span>Contacto</span>
+      <span>Estado</span>
+      <span>Comentario</span>
+      <span />
+    </div>
   )
 }

@@ -171,7 +171,7 @@ export default function CargaDocumentosModal({ polizaId, userRole = "supervisor"
                   {existentes.length > 0 && (
                     <div className="space-y-1">
                       {existentes.map(doc => (
-                        <div key={doc.id} className="flex items-center justify-between bg-muted/50 rounded p-2 text-xs">
+                        <div key={doc.id} className="flex items-center justify-between bg-paper-sunk rounded p-2 text-xs">
                           <span className="flex items-center gap-1.5 truncate">
                             <FileText className="size-3 shrink-0" />
                             {doc.nombre_archivo ?? `Documento #${doc.id}`}

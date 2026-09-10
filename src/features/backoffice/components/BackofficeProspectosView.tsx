@@ -5,7 +5,7 @@ import {
   Search, Filter, Download, RefreshCw, History, DollarSign,
   MessageCircle, Edit, ArrowLeftRight, Users, Calendar,
   FileText, ShieldCheck, TrendingUp, Phone, Mail, ChevronLeft, ChevronRight,
-  LayoutGrid, List
+  LayoutGrid, List, UserCog
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 
@@ -536,7 +536,7 @@ export function BackofficeProspectosView() {
       {/* Tabla / Tarjetas */}
       <Card>
         <CardContent className="p-0">
-          {loading ? <Skeleton className="h-64 w-full rounded-xl" /> : prospectos.length === 0 ? (
+          {loading ? <Skeleton className="h-64 w-full rounded-lg" /> : prospectos.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center gap-3">
               <div className="rounded-full bg-muted p-4"><Users className="size-8 text-muted-foreground" /></div>
               <div>
@@ -550,75 +550,96 @@ export function BackofficeProspectosView() {
               <DataTable columns={columnsProspectos} data={prospectos} pageSize={Number(itemsPerPage)} emptyMessage="Sin resultados" />
             </div>
           ) : (
-            /* ── Vista tarjetas ── */
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-              {prospectos.map(p => (
-                <Card key={p.id} className="flex flex-col shadow-sm hover:shadow-md transition-shadow">
-                  <div className="p-4 flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="font-semibold text-sm truncate">{p.nombre} {p.apellido}</p>
-                      {(p.edad || p.localidad) && (
-                        <p className="text-xs text-muted-foreground">{p.edad ? `${p.edad} años` : ""}{p.edad && p.localidad ? " · " : ""}{p.localidad ?? ""}</p>
-                      )}
-                    </div>
-                    <div className="shrink-0">{getBadgeEstado(p.estado)}</div>
-                  </div>
+            /* ── Vista registro ── */
+            <div className="reg reg--bo-pros border-t-2 border-rule-heavy">
+              <div className="reg-row reg-head" role="presentation">
+                <span>Prospecto</span>
+                <span>Contacto</span>
+                <span>Asignación</span>
+                <span>Actividad</span>
+                <span>Estado</span>
+                <span className="text-right">Registro</span>
+                <span />
+              </div>
 
-                  <div className="px-4 pb-3 space-y-2 flex-1">
-                    {p.correo && (
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground truncate">
-                        <Mail className="size-3.5 shrink-0 text-muted-foreground" /><span className="truncate">{p.correo}</span>
-                      </div>
+              {prospectos.map(p => (
+                <div key={p.id} className="reg-row reg-entry">
+                  {/* 1 · prospecto — el eje */}
+                  <span className="min-w-0">
+                    <span className="block truncate text-[13px] font-semibold">{p.apellido}<span className="font-normal text-muted-foreground">, {p.nombre}</span></span>
+                    {(p.edad || p.localidad) && (
+                      <span className="block truncate text-[11.5px] text-muted-foreground">
+                        {p.edad ? `${p.edad} años` : ""}{p.edad && p.localidad ? " · " : ""}{p.localidad ?? ""}
+                      </span>
                     )}
+                  </span>
+
+                  {/* 2 · contacto */}
+                  <span className="min-w-0 text-muted-foreground">
                     {p.numero_contacto && (
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Phone className="size-3.5 shrink-0 text-muted-foreground" /><span>{p.numero_contacto}</span>
-                        {p.whatsapp_opt_in && <MessageCircle className="size-3.5 text-muted-foreground" />}
-                      </div>
+                      <span className="flex items-center gap-1 truncate text-[12.5px] tabular-nums">
+                        <Phone className="size-3 shrink-0" aria-hidden="true" />{p.numero_contacto}
+                        {p.whatsapp_opt_in && <MessageCircle className="size-3 shrink-0" aria-hidden="true" />}
+                      </span>
                     )}
+                    {p.correo && (
+                      <span className="flex items-center gap-1 truncate text-[11.5px]">
+                        <Mail className="size-3 shrink-0" aria-hidden="true" />{p.correo}
+                      </span>
+                    )}
+                    {!p.numero_contacto && !p.correo && <span className="text-[12.5px]">—</span>}
+                  </span>
+
+                  {/* 3 · asignación */}
+                  <span className="min-w-0 text-muted-foreground">
                     {p.vendedor_nombre && (
-                      <p className="text-xs text-muted-foreground truncate">
-                        <span className="font-medium">Vendedor:</span> {p.vendedor_nombre} {p.vendedor_apellido ?? ""}
-                      </p>
+                      <span className="block truncate text-[12.5px]">{p.vendedor_nombre} {p.vendedor_apellido ?? ""}</span>
                     )}
                     {p.supervisor_nombre && (
-                      <p className="text-xs text-primary truncate font-medium">👔 {p.supervisor_nombre} {p.supervisor_apellido ?? ""}</p>
+                      <span className="flex items-center gap-1 truncate text-[11.5px] font-medium text-primary">
+                        <UserCog className="size-3 shrink-0" aria-hidden="true" />{p.supervisor_nombre} {p.supervisor_apellido ?? ""}
+                      </span>
                     )}
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex gap-1">
-                        {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs"><FileText className="size-3 mr-0.5" />{p.cotizaciones_count}</Badge>}
-                        {(p.polizas_count ?? 0) > 0 && <Badge variant="ok" className="text-xs"><ShieldCheck className="size-3 mr-0.5" />{p.polizas_count}</Badge>}
-                        {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" className="text-xs"><History className="size-3 mr-0.5" />{p.acciones_count}</Badge>}
-                      </div>
-                      <span className="text-xs text-muted-foreground">{fmtFecha(p.fecha_registro)}</span>
-                    </div>
-                  </div>
+                    {!p.vendedor_nombre && !p.supervisor_nombre && <span className="text-[12.5px]">Sin asignar</span>}
+                  </span>
 
-                  <div className="border-t px-3 py-2">
-                    <div className="flex gap-1 justify-center flex-wrap">
+                  {/* 4 · actividad */}
+                  <span className="flex min-w-0 flex-wrap items-center gap-1">
+                    {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" size="sm" className="pointer-events-none"><FileText aria-hidden="true" />{p.cotizaciones_count}</Badge>}
+                    {(p.polizas_count ?? 0) > 0 && <Badge variant="ok" size="sm" className="pointer-events-none"><ShieldCheck aria-hidden="true" />{p.polizas_count}</Badge>}
+                    {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" size="sm" className="pointer-events-none"><History aria-hidden="true" />{p.acciones_count}</Badge>}
+                  </span>
+
+                  {/* 5 · estado */}
+                  <span className="min-w-0">{getBadgeEstado(p.estado)}</span>
+
+                  {/* 6 · fecha de registro */}
+                  <span className="text-right text-[12px] tabular-nums text-muted-foreground">{fmtFecha(p.fecha_registro)}</span>
+
+                  {/* 7 · acciones */}
+                  <span className="reg-actions">
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirHistorial(p)}><History className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Historial</TooltipContent></Tooltip>
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCotizaciones(p)}><DollarSign className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Cotizaciones</TooltipContent></Tooltip>
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirWhatsapp(p)}><MessageCircle className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCambioEstado(p)}><Edit className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
+                    {opcionesFiltros.vendedores.length > 0 && (
                       <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirHistorial(p)}><History className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Historial</TooltipContent></Tooltip>
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirCotizaciones(p)}><DollarSign className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Cotizaciones</TooltipContent></Tooltip>
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-green-500 hover:bg-green-600 text-white border-0" onClick={() => abrirWhatsapp(p)}><MessageCircle className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirCambioEstado(p)}><Edit className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
-                      {opcionesFiltros.vendedores.length > 0 && (
-                        <Tooltip><TooltipTrigger asChild>
-                          <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
-                            onClick={() => { setProspectoSeleccionado(p); setNuevoVendedorId(""); setReasignarModal(true) }}>
-                            <ArrowLeftRight className="size-3.5" />
-                          </Button>
-                        </TooltipTrigger><TooltipContent>Reasignar vendedor</TooltipContent></Tooltip>
-                      )}
-                    </div>
-                  </div>
-                </Card>
+                        <Button size="icon" variant="ghost" className="size-7"
+                          onClick={() => { setProspectoSeleccionado(p); setNuevoVendedorId(""); setReasignarModal(true) }}>
+                          <ArrowLeftRight className="size-3.5" />
+                        </Button>
+                      </TooltipTrigger><TooltipContent>Reasignar vendedor</TooltipContent></Tooltip>
+                    )}
+                  </span>
+                </div>
               ))}
             </div>
           )}
@@ -684,9 +705,7 @@ export function BackofficeProspectosView() {
                 const personasCount = detalles.length || Number(c.cantidad_personas ?? 1)
                 const expanded = !!showDetallesCotizacion[i]
                 return (
-                  <div key={i} className="rounded-lg border shadow-sm overflow-hidden">
-                    {/* Colored top bar */}
-                    <div className="h-1.5 w-full" style={{ background: "linear-gradient(to right, #ef4444, #f97316, #eab308, #22c55e, #14b8a6, #3b82f6, #6366f1)" }} />
+                  <div key={i} className="overflow-hidden rounded-lg border border-rule">
                     {/* Header */}
                     <div className="flex items-start justify-between px-4 pt-3 pb-2 bg-card">
                       <div>

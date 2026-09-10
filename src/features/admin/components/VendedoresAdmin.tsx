@@ -487,7 +487,7 @@ export default function VendedoresAdmin() {
 
       {/* Tabla */}
       {loading ? (
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       ) : (
         <DataTable columns={columnasVendedores} data={vendedoresFiltrados} emptyMessage="Sin resultados" />
       )}
@@ -504,7 +504,7 @@ export default function VendedoresAdmin() {
             <div className="grid grid-cols-2 gap-3 text-sm">
               {Object.entries(vendedorMetricas).map(([key, val]) =>
                 (typeof val === "number" || typeof val === "string") ? (
-                  <div key={key} className="bg-muted/50 rounded p-3">
+                  <div key={key} className="bg-paper-sunk rounded p-3">
                     <p className="text-xs text-muted-foreground capitalize">{key.replace(/_/g, " ")}</p>
                     <p className="font-bold text-lg">{String(val)}</p>
                   </div>
@@ -617,7 +617,7 @@ export default function VendedoresAdmin() {
             <DialogTitle>Reasignar prospectos</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
-            <div className="rounded-lg bg-muted/50 p-3 text-sm space-y-1">
+            <div className="rounded-lg bg-paper-sunk p-3 text-sm space-y-1">
               <p>Reasignando <strong>{seleccionados.length}</strong> prospecto{seleccionados.length !== 1 ? "s" : ""} de:</p>
               <p className="font-semibold">{prospectosModal.vendedor?.first_name} {prospectosModal.vendedor?.last_name}</p>
             </div>

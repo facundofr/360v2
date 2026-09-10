@@ -277,7 +277,7 @@ export function ConversacionWhatsappModal({
                   key={c.id}
                   type="button"
                   onClick={() => setSeleccionada(c)}
-                  className="w-full text-left border rounded-lg p-3 hover:bg-muted/50 transition-colors"
+                  className="w-full text-left border rounded-lg p-3 hover:bg-paper-sunk transition-colors"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-medium text-sm">
@@ -335,7 +335,7 @@ export function ConversacionWhatsappModal({
                               : "bg-muted text-foreground"
                           )}
                         >
-                          <div className={cn("flex items-center gap-1 mb-0.5 flex-wrap text-[10px]", saliente ? "opacity-80" : "opacity-70")}>
+                          <div className={cn("flex items-center gap-1 mb-0.5 flex-wrap text-[10.5px]", saliente ? "opacity-80" : "opacity-70")}>
                             {saliente ? <Bot className="size-3" /> : <User className="size-3" />}
                             <span>{fechaDe(m) ? new Date(fechaDe(m)!).toLocaleString("es-AR") : ""}</span>
                             {esAdmin && m.vendedor_nombre && (
@@ -354,7 +354,7 @@ export function ConversacionWhatsappModal({
                           )}
 
                           {esAdmin && m.archivo_nombre && (
-                            <Badge variant="secondary" className="mt-1.5 gap-1 text-[10px] font-normal">
+                            <Badge variant="secondary" className="mt-1.5 gap-1 text-[10.5px] font-normal">
                               <Paperclip className="size-2.5" />
                               {m.archivo_nombre}
                               {m.archivo_tamaño ? ` (${(m.archivo_tamaño / 1024).toFixed(0)} KB)` : ""}
@@ -363,7 +363,7 @@ export function ConversacionWhatsappModal({
 
                           {esAdmin && m.estado && (
                             <div className="mt-1 flex justify-end">
-                              <Badge variant="outline" className="text-[10px] font-normal opacity-80">
+                              <Badge variant="outline" className="text-[10.5px] font-normal opacity-80">
                                 {ESTADO_ENTREGA_LABEL[m.estado] ?? m.estado}
                               </Badge>
                             </div>

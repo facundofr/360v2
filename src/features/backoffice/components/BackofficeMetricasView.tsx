@@ -142,7 +142,7 @@ const CAT_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
     bar: "bg-state-ok",
   },
   "Prospectos Iniciales": {
-    bg: "bg-muted/50",
+    bg: "bg-paper-sunk",
     text: "text-muted-foreground",
     bar: "bg-muted-foreground/40",
   },
@@ -157,7 +157,7 @@ const CAT_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
     bar: "bg-state-risk",
   },
   Otros: {
-    bg: "bg-muted/50",
+    bg: "bg-paper-sunk",
     text: "text-muted-foreground",
     bar: "bg-muted-foreground/40",
   },
@@ -317,10 +317,10 @@ export function BackofficeMetricasView() {
         <Skeleton className="h-10 w-64 rounded-lg" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-xl" />
+            <Skeleton key={i} className="h-24 rounded-lg" />
           ))}
         </div>
-        <Skeleton className="h-80 rounded-xl" />
+        <Skeleton className="h-80 rounded-lg" />
       </div>
     )
   }
@@ -470,7 +470,7 @@ export function BackofficeMetricasView() {
                     return (
                       <div
                         key={i}
-                        className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-muted/50"
+                        className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-paper-sunk"
                       >
                         <div className="min-w-0 flex-1">
                           <div className="mb-1 flex items-center justify-between">
@@ -531,7 +531,7 @@ export function BackofficeMetricasView() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b bg-muted/50">
+                    <tr className="border-b bg-paper-sunk">
                       <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">
                         Vendedor
                       </th>
@@ -675,7 +675,7 @@ export function BackofficeMetricasView() {
                 >
                   <SelectValue placeholder="Últimos 30 días" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-lg">
                   <SelectItem value="90d" className="rounded-lg">
                     Últimos 3 meses
                   </SelectItem>

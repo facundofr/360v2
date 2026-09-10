@@ -126,7 +126,7 @@ export function SupervisorPromocionesView() {
           <Card key={s.label} className="overflow-hidden">
             <CardContent className="p-0">
               <div className="flex items-center gap-3 p-4">
-                <div className={`rounded-xl p-2 ${s.bg} shrink-0`}>
+                <div className={`rounded-lg p-2 ${s.bg} shrink-0`}>
                   <span className={s.cls}>{s.icon}</span>
                 </div>
                 <div>

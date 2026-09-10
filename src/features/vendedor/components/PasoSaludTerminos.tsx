@@ -173,7 +173,7 @@ export function PasoSaludTerminos({
                 <span className="truncate max-w-[10rem]">
                   {p.nombre} {p.apellido}
                 </span>
-                <Badge variant={respondidas(idx) > 0 ? "secondary" : "outline"} className="text-[10px]">
+                <Badge variant={respondidas(idx) > 0 ? "secondary" : "outline"} className="text-[10.5px]">
                   {respondidas(idx)}/{totalPreguntas(p)}
                 </Badge>
               </TabsTrigger>
@@ -216,7 +216,7 @@ export function PasoSaludTerminos({
                     <AccordionTrigger className="text-sm">
                       <span className="flex flex-1 items-center justify-between gap-2 pr-2">
                         <span>{CATEGORIAS_SALUD[cat]}</span>
-                        <Badge variant="outline" className="text-[10px]">
+                        <Badge variant="outline" className="text-[10.5px]">
                           {respondidasCat}/{preguntas.length}
                         </Badge>
                       </span>

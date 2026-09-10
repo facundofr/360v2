@@ -6,7 +6,8 @@ import {
   Search, Filter, RefreshCw, FileText,
   DollarSign, ChevronLeft, ChevronRight,
   History, Edit, MessageCircle, AlertCircle, CheckCircle2, XCircle, FolderOpen, Download, Trash2, Eye,
-  TrendingUp, Percent, Save, X, Upload, ArrowLeftRight, LayoutGrid, List, FilePlus
+  TrendingUp, Percent, Save, X, Upload, ArrowLeftRight, LayoutGrid, List, FilePlus,
+  UserCog, Stethoscope
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 
@@ -528,7 +529,7 @@ export function BackofficePolizasView() {
         const pol = row.original
         return (
           <div className="flex items-start gap-1">
-            <span className="text-primary mt-0.5">👔</span>
+            <UserCog className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" />
             <div>
               <p className="font-semibold text-sm text-primary">{pol.supervisor_nombre ?? "—"}</p>
               {pol.supervisor_email && <p className="text-xs text-muted-foreground">{pol.supervisor_email}</p>}
@@ -547,7 +548,7 @@ export function BackofficePolizasView() {
             {pol.estado ? getBadgeEstado(pol.estado) : <Badge variant="outline">—</Badge>}
             <BadgeEstadoFirma poliza={pol} />
             {pol.requiere_auditoria_medica === 1 && (
-              <Badge variant="risk" title="Requiere auditoría médica por IMC elevado">🏥 Auditoría</Badge>
+              <Badge variant="risk" title="Requiere auditoría médica por IMC elevado"><Stethoscope aria-hidden="true" />Auditoría</Badge>
             )}
           </div>
         )
@@ -790,77 +791,98 @@ export function BackofficePolizasView() {
               <DataTable columns={columnsPolizas} data={polizas} pageSize={perPage} emptyMessage="Sin pólizas" />
             </div>
           ) : (
-            /* ── Vista tarjetas ── */
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+            /* ── Vista registro ── */
+            <div className="reg reg--bo-pol border-t-2 border-rule-heavy">
+              <div className="reg-row reg-head" role="presentation">
+                <span>Nº póliza</span>
+                <span>Titular</span>
+                <span>Plan</span>
+                <span className="text-right">Total</span>
+                <span>Asignación</span>
+                <span>Estado</span>
+                <span className="text-right">Fecha</span>
+                <span />
+              </div>
+
               {polizas.map(pol => (
-                <Card key={pol.id} className="flex flex-col shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start gap-2">
-                      <div className="min-w-0">
-                        <p className="font-bold text-sm truncate">{pol.numero_poliza_oficial ?? pol.numero_poliza ?? "—"}</p>
-                        {pol.numero_poliza_oficial && pol.numero_poliza && (
-                          <p className="text-xs text-muted-foreground font-mono">#{pol.numero_poliza}</p>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-end gap-1 shrink-0">
-                        {pol.estado ? getBadgeEstado(pol.estado) : <Badge variant="outline">—</Badge>}
-                        <BadgeEstadoFirma poliza={pol} />
-                        {pol.requiere_auditoria_medica === 1 && (
-                          <Badge variant="risk" title="Requiere auditoría médica por IMC elevado">🏥 Auditoría</Badge>
-                        )}
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="py-2 flex-1 space-y-1.5">
-                    <p className="font-semibold text-sm truncate">{pol.prospecto_nombre} {pol.prospecto_apellido}</p>
-                    {pol.prospecto_telefono && <p className="text-xs text-muted-foreground">{pol.prospecto_telefono}</p>}
-                    <div className="text-xs text-muted-foreground">
-                      <span className="font-medium">Plan:</span> {pol.plan_nombre ?? "—"}
-                      {pol.anio_plan && <span className="ml-1 text-muted-foreground">· Año {pol.anio_plan}</span>}
-                    </div>
-                    {pol.vendedor_nombre && (
-                      <p className="text-xs text-muted-foreground truncate">
-                        <span className="font-medium">Vendedor:</span> {pol.vendedor_nombre}
-                      </p>
+                <div key={pol.id} className="reg-row reg-entry">
+                  <span className="min-w-0">
+                    <span className="block truncate text-[13px] font-semibold tabular-nums">
+                      {pol.numero_poliza_oficial ?? pol.numero_poliza ?? "—"}
+                    </span>
+                    {pol.numero_poliza_oficial && pol.numero_poliza && (
+                      <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">#{pol.numero_poliza}</span>
                     )}
+                  </span>
+
+                  <span className="min-w-0">
+                    <span className="block truncate text-[13px] font-semibold">
+                      {pol.prospecto_apellido}<span className="font-normal text-muted-foreground">, {pol.prospecto_nombre}</span>
+                    </span>
+                    {pol.prospecto_telefono && (
+                      <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">{pol.prospecto_telefono}</span>
+                    )}
+                  </span>
+
+                  <span className="min-w-0 text-muted-foreground">
+                    <span className="block truncate text-[12.5px]">{pol.plan_nombre ?? "—"}</span>
+                    {pol.anio_plan && <span className="block truncate text-[11.5px]">Año {pol.anio_plan}</span>}
+                  </span>
+
+                  <span className="text-right text-[13px] font-semibold tabular-nums">
+                    {pol.total_final != null ? fmtPeso(pol.total_final) : "—"}
+                  </span>
+
+                  <span className="min-w-0 text-muted-foreground">
+                    {pol.vendedor_nombre && <span className="block truncate text-[12.5px]">{pol.vendedor_nombre}</span>}
                     {pol.supervisor_nombre && (
-                      <p className="text-xs text-primary truncate font-medium">👔 {pol.supervisor_nombre}</p>
+                      <span className="flex items-center gap-1 truncate text-[11.5px] font-medium text-primary">
+                        <UserCog className="size-3 shrink-0" aria-hidden="true" />{pol.supervisor_nombre}
+                      </span>
                     )}
-                    <div className="flex items-center justify-between pt-1">
-                      <span className="font-bold text-sm">{pol.total_final != null ? fmtPeso(pol.total_final) : "—"}</span>
-                      <span className="text-xs text-muted-foreground">{fmtFecha(pol.created_at)}</span>
-                    </div>
-                  </CardContent>
-                  <div className="border-t px-3 py-2">
-                    <div className="flex gap-1 flex-wrap justify-center">
+                    {!pol.vendedor_nombre && !pol.supervisor_nombre && <span className="text-[12.5px]">—</span>}
+                  </span>
+
+                  <span className="flex min-w-0 flex-wrap items-center gap-1">
+                    {pol.estado ? getBadgeEstado(pol.estado) : <Badge variant="outline" size="sm">—</Badge>}
+                    <BadgeEstadoFirma poliza={pol} />
+                    {pol.requiere_auditoria_medica === 1 && (
+                      <Badge variant="risk" size="sm" className="pointer-events-none" title="Requiere auditoría médica por IMC elevado">
+                        <Stethoscope aria-hidden="true" />Auditoría
+                      </Badge>
+                    )}
+                  </span>
+
+                  <span className="text-right text-[12px] tabular-nums text-muted-foreground">{fmtFecha(pol.created_at)}</span>
+
+                  <span className="reg-actions">
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => descargarPDF(pol)}><Download className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Descargar PDF</TooltipContent></Tooltip>
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirDocumentos(pol)}><FolderOpen className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Ver documentos</TooltipContent></Tooltip>
+                    <BotonEnviarFirma poliza={pol} userRole="backoffice" onExito={fetchPolizas} />
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => { setPolizaCargarFirmada(pol); setCargarFirmadaModal(true) }}><Upload className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Cargar firmada</TooltipContent></Tooltip>
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCambioEstado(pol)}><ArrowLeftRight className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirHistorial(pol)}><History className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Ver historial</TooltipContent></Tooltip>
+                    <BotonesEliminarFirma poliza={pol} onActualizar={fetchPolizas} />
+                    <Tooltip><TooltipTrigger asChild>
+                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirEditar(pol)}><Edit className="size-3.5" /></Button>
+                    </TooltipTrigger><TooltipContent>Editar póliza</TooltipContent></Tooltip>
+                    {pol.numero_contacto && (
                       <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => descargarPDF(pol)}><Download className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Descargar PDF</TooltipContent></Tooltip>
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted hover:bg-muted/80 text-foreground border" onClick={() => abrirDocumentos(pol)}><FolderOpen className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Ver documentos</TooltipContent></Tooltip>
-                      <BotonEnviarFirma poliza={pol} userRole="backoffice" onExito={fetchPolizas} />
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => { setPolizaCargarFirmada(pol); setCargarFirmadaModal(true) }}><Upload className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Cargar firmada</TooltipContent></Tooltip>
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirCambioEstado(pol)}><ArrowLeftRight className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirHistorial(pol)}><History className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Ver historial</TooltipContent></Tooltip>
-                      <BotonesEliminarFirma poliza={pol} onActualizar={fetchPolizas} />
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirEditar(pol)}><Edit className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>Editar póliza</TooltipContent></Tooltip>
-                      {pol.numero_contacto && (
-                        <Tooltip><TooltipTrigger asChild>
-                          <Button size="icon" className="size-8 bg-green-500 hover:bg-green-600 text-white border-0" onClick={() => abrirWhatsapp(pol)}><MessageCircle className="size-3.5" /></Button>
-                        </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
-                      )}
-                    </div>
-                  </div>
-                </Card>
+                        <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirWhatsapp(pol)}><MessageCircle className="size-3.5" /></Button>
+                      </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
+                    )}
+                  </span>
+                </div>
               ))}
             </div>
           )}

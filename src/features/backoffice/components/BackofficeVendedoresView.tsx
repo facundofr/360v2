@@ -6,7 +6,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { StatCard } from "@/components/common/StatCard"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -499,47 +499,77 @@ export function BackofficeVendedoresView() {
           </CardContent>
         </Card>
       ) : (
-        /* Vista grilla */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="reg reg--vend border-t-2 border-rule-heavy">
+          <div className="reg-row reg-head" role="presentation">
+            <span>Vendedor</span>
+            <span>Supervisor</span>
+            <span className="text-right">Prospectos</span>
+            <span className="text-right">Ventas</span>
+            <span>Estado</span>
+            <span />
+          </div>
+
           {filtrados.map(v => (
-            <Card key={v.id} className={v.is_enabled === 0 ? "opacity-60" : ""}>
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <CardTitle className="text-sm">{getNombre(v)}</CardTitle>
-                  <Badge variant={v.is_enabled !== 0 ? "ok" : "secondary"} className="text-xs">
-                    {v.is_enabled !== 0 ? "Activo" : "Inactivo"}
-                  </Badge>
-                </div>
-                {v.email && <p className="text-xs text-muted-foreground">{v.email}</p>}
-                {getSupervisorNombre(v) && <p className="text-xs text-muted-foreground">Sup: {getSupervisorNombre(v)}</p>}
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="flex gap-4 mb-3">
-                  <div><p className="text-xs text-muted-foreground">Prospectos</p><p className="font-bold text-sm">{v.total_prospectos ?? "—"}</p></div>
-                  <div><p className="text-xs text-muted-foreground">Ventas</p><p className="font-bold text-sm">{v.conversiones ?? "—"}</p></div>
-                </div>
-                <div className="flex gap-1 flex-wrap">
-                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => verDetalle(v)}><Eye className="size-3 mr-1" />Detalle</Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => abrirAsignarSupervisor(v)}><UserCog className="size-3 mr-1" />Supervisor</Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => abrirProspectos(v)}><FileText className="size-3 mr-1" />Prospectos</Button>
-                  {categorias.length > 0 && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => abrirCategoria(v)}><Tag className="size-3 mr-1" />Categoría</Button>
-                  )}
-                  <Button size="sm" variant="outline" className="h-7 text-xs"
-                    disabled={savingToggle === v.id}
-                    onClick={() => toggleEstado(v)}>
-                    {v.is_enabled !== 0 ? <ToggleRight className="size-3" /> : <ToggleLeft className="size-3" />}
+            <div key={v.id} className={`reg-row reg-entry${v.is_enabled === 0 ? " opacity-60" : ""}`}>
+              {/* 1 · vendedor — el eje */}
+              <span className="min-w-0">
+                <span className="block truncate text-[13px] font-semibold">{getNombre(v)}</span>
+                {v.email && <span className="block truncate text-[11.5px] text-muted-foreground">{v.email}</span>}
+              </span>
+
+              {/* 2 · supervisor */}
+              <span className="truncate text-[12.5px] text-muted-foreground">
+                {getSupervisorNombre(v) || "—"}
+              </span>
+
+              {/* 3 · prospectos */}
+              <span className="text-right text-[13px] font-semibold tabular-nums">{v.total_prospectos ?? "—"}</span>
+
+              {/* 4 · ventas */}
+              <span className="text-right text-[13px] font-semibold tabular-nums">{v.conversiones ?? "—"}</span>
+
+              {/* 5 · estado */}
+              <span className="min-w-0">
+                <Badge variant={v.is_enabled !== 0 ? "ok" : "secondary"} size="sm" className="pointer-events-none">
+                  {v.is_enabled !== 0 ? "Activo" : "Inactivo"}
+                </Badge>
+              </span>
+
+              {/* 6 · acciones */}
+              <span className="reg-actions">
+                <Button size="icon" variant="ghost" className="size-7" title="Ver detalle" onClick={() => verDetalle(v)}>
+                  <Eye className="size-3.5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="size-7" title="Asignar supervisor" onClick={() => abrirAsignarSupervisor(v)}>
+                  <UserCog className="size-3.5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="size-7" title="Ver prospectos" onClick={() => abrirProspectos(v)}>
+                  <FileText className="size-3.5" />
+                </Button>
+                {categorias.length > 0 && (
+                  <Button size="icon" variant="ghost" className="size-7" title="Categoría" onClick={() => abrirCategoria(v)}>
+                    <Tag className="size-3.5" />
                   </Button>
-                  <Button size="sm" variant="destructive" className="h-7 text-xs"
-                    disabled={deletingId === v.id}
-                    onClick={() => eliminarVendedor(v)}>
-                    <Trash2 className="size-3 mr-1" />Eliminar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                )}
+                <Button size="icon" variant="ghost" className="size-7"
+                  title={v.is_enabled !== 0 ? "Deshabilitar" : "Habilitar"}
+                  disabled={savingToggle === v.id}
+                  onClick={() => toggleEstado(v)}>
+                  {v.is_enabled !== 0 ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
+                </Button>
+                <Button size="icon" variant="ghost" className="size-7 text-destructive hover:text-destructive"
+                  title="Eliminar vendedor"
+                  disabled={deletingId === v.id}
+                  onClick={() => eliminarVendedor(v)}>
+                  <Trash2 className="size-3.5" />
+                </Button>
+              </span>
+            </div>
           ))}
-          {filtrados.length === 0 && <p className="text-sm text-muted-foreground col-span-full text-center py-12">Sin vendedores</p>}
+
+          {filtrados.length === 0 && (
+            <p className="py-12 text-center text-sm text-muted-foreground">Sin vendedores</p>
+          )}
         </div>
       )}
 
@@ -603,19 +633,19 @@ export function BackofficeVendedoresView() {
               <Separator />
               <div className="space-y-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Métricas</p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <dl className="readout">
                   {[
                     { label: "Total prospectos", value: vendedorMetricas.total_prospectos },
                     { label: "Prospectos activos", value: vendedorMetricas.prospectos_activos },
                     { label: "Ventas confirmadas", value: vendedorMetricas.ventas_confirmadas },
                     { label: "Pólizas generadas", value: vendedorMetricas.polizas },
                   ].map(m => (
-                    <Card key={m.label}><CardContent className="p-3 text-center">
-                      <p className="text-xl font-bold">{m.value ?? "—"}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{m.label}</p>
-                    </CardContent></Card>
+                    <div key={m.label}>
+                      <dt>{m.label}</dt>
+                      <dd>{m.value ?? "—"}</dd>
+                    </div>
                   ))}
-                </div>
+                </dl>
               </div>
             </>
           )}

@@ -37,12 +37,31 @@ function getQuantileThresholds(values: number[]) {
   }
 }
 
+/**
+ * Escala secuencial de cuartiles, en la familia del violeta de marca.
+ *
+ * Antes eran cuatro tonos sueltos (carmesí, naranja, ámbar, cyan): un arcoíris
+ * donde el color no ordenaba nada y había que leer la leyenda para saber si
+ * naranja era más o menos que cyan. Esta escala es monótona en luminosidad, así
+ * que "más oscuro" se lee como "más alto" sin leyenda.
+ *
+ * Es fija a propósito: el mapa se dibuja sobre teselas que no siguen el tema,
+ * así que estos valores no pueden depender de claro/oscuro.
+ */
+const ESCALA_CUARTILES = {
+  bajo:      "#E4D3EB",
+  medio:     "#BC90CC",
+  medioAlto: "#8C43A6",
+  alto:      "#660E80",
+  sinDatos:  "#D4D4D4",
+} as const
+
 function getBubbleColor(value: number, thresholds: { q25: number; q50: number; q75: number }) {
-  if (!thresholds || thresholds.q75 === 0) return "#9e9ac8"
-  if (value >= thresholds.q75) return "#c7254e"
-  if (value >= thresholds.q50) return "#ec971f"
-  if (value >= thresholds.q25) return "#f0ad4e"
-  return "#5bc0de"
+  if (!thresholds || thresholds.q75 === 0) return ESCALA_CUARTILES.sinDatos
+  if (value >= thresholds.q75) return ESCALA_CUARTILES.alto
+  if (value >= thresholds.q50) return ESCALA_CUARTILES.medioAlto
+  if (value >= thresholds.q25) return ESCALA_CUARTILES.medio
+  return ESCALA_CUARTILES.bajo
 }
 
 function getBubbleRadius(value: number, max: number) {
@@ -152,10 +171,10 @@ export default function MapaCoropleta({ data = [] }: MapaCoropletaProps) {
   const top5 = [...geoPoints].sort((a, b) => b.cantidad - a.cantidad).slice(0, 5)
 
   const leyenda = [
-    { color: "#c7254e", label: `Alto (≥${quantileThresholds.q75})` },
-    { color: "#ec971f", label: `Medio-alto (≥${quantileThresholds.q50})` },
-    { color: "#f0ad4e", label: `Medio (≥${quantileThresholds.q25})` },
-    { color: "#5bc0de", label: `Bajo (<${quantileThresholds.q25})` },
+    { color: ESCALA_CUARTILES.alto,      label: `Alto (≥${quantileThresholds.q75})` },
+    { color: ESCALA_CUARTILES.medioAlto, label: `Medio-alto (≥${quantileThresholds.q50})` },
+    { color: ESCALA_CUARTILES.medio,     label: `Medio (≥${quantileThresholds.q25})` },
+    { color: ESCALA_CUARTILES.bajo,      label: `Bajo (<${quantileThresholds.q25})` },
   ]
 
   return (
@@ -224,7 +243,7 @@ export default function MapaCoropleta({ data = [] }: MapaCoropletaProps) {
               className="absolute bottom-3 left-3 z-[1000] bg-background/95 backdrop-blur-sm rounded-lg p-2.5 shadow-lg"
               style={{ fontSize: 11 }}
             >
-              <p className="font-bold mb-2 text-[10px] text-muted-foreground uppercase tracking-wide">
+              <p className="font-bold mb-2 text-[10.5px] text-muted-foreground uppercase tracking-wide">
                 Escala (cuartiles)
               </p>
               <div className="space-y-1.5">
@@ -238,7 +257,7 @@ export default function MapaCoropleta({ data = [] }: MapaCoropletaProps) {
                         boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
                       }}
                     />
-                    <span className="text-[10px] text-muted-foreground">{label}</span>
+                    <span className="text-[10.5px] text-muted-foreground">{label}</span>
                   </div>
                 ))}
               </div>
@@ -250,7 +269,7 @@ export default function MapaCoropleta({ data = [] }: MapaCoropletaProps) {
                 className="absolute top-3 right-3 z-[1000] bg-background/95 backdrop-blur-sm rounded-lg p-2.5 shadow-lg"
                 style={{ maxWidth: 180 }}
               >
-                <p className="font-bold mb-2 text-[10px] text-muted-foreground uppercase tracking-wide">
+                <p className="font-bold mb-2 text-[10.5px] text-muted-foreground uppercase tracking-wide">
                   Top 5
                 </p>
                 <div className="space-y-1">
@@ -262,10 +281,10 @@ export default function MapaCoropleta({ data = [] }: MapaCoropletaProps) {
                         borderBottom: i < top5.length - 1 ? "1px solid hsl(var(--border))" : "none",
                       }}
                     >
-                      <span className="text-[10px] text-muted-foreground truncate flex-1">
+                      <span className="text-[10.5px] text-muted-foreground truncate flex-1">
                         {i + 1}. {p.partido}
                       </span>
-                      <span className="font-bold text-[10px] ml-1.5 shrink-0">
+                      <span className="font-bold text-[10.5px] ml-1.5 shrink-0">
                         {p.cantidad.toLocaleString("es-AR")}
                       </span>
                     </div>

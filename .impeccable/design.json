@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-04T00:00:00Z",
+  "title": "Design System: Cober360 · El Padrón",
+  "scope": "design-concepts/ only. The React app in src/ is not governed by this system.",
+  "extensions": {
+    "colorMeta": {
+      "violet": {
+        "role": "primary",
+        "displayName": "Cober Violet",
+        "canonical": "#660E80",
+        "darkTheme": "#C77DDB",
+        "tonalRamp": [
+          "#1F0426",
+          "#33073F",
+          "#4E0A62",
+          "#660E80",
+          "#8B2FA6",
+          "#B268C6",
+          "#D6A9E2",
+          "#F4EDF7"
+        ]
+      },
+      "violet-deep": {
+        "role": "primary",
+        "displayName": "Violet Deep",
+        "canonical": "#4E0A62",
+        "darkTheme": "#E0B3EE",
+        "tonalRamp": [
+          "#180320",
+          "#280534",
+          "#3B0749",
+          "#4E0A62",
+          "#6C1785",
+          "#9445AE",
+          "#DCC0E6",
+          "#EEDCF4"
+        ]
+      },
+      "violet-wash": {
+        "role": "primary",
+        "displayName": "Violet Wash",
+        "canonical": "#F4EDF7",
+        "darkTheme": "#2A1832",
+        "tonalRamp": [
+          "#2A1832",
+          "#3E2349",
+          "#573562",
+          "#7A5586",
+          "#A183AB",
+          "#C7B3CE",
+          "#E4D8E9",
+          "#F4EDF7"
+        ]
+      },
+      "ink": {
+        "role": "secondary",
+        "displayName": "Register Ink",
+        "canonical": "#121212",
+        "darkTheme": "#FAFAFA",
+        "tonalRamp": [
+          "#000000",
+          "#121212",
+          "#242424",
+          "#3D3D3D",
+          "#737373",
+          "#A6A6A6",
+          "#C9C9C9",
+          "#E5E5E5"
+        ]
+      },
+      "ink-2": {
+        "role": "secondary",
+        "displayName": "Ink Two",
+        "canonical": "#3D3D3D",
+        "darkTheme": "#D4D4D4",
+        "tonalRamp": [
+          "#0A0A0A",
+          "#1C1C1C",
+          "#2E2E2E",
+          "#3D3D3D",
+          "#5C5C5C",
+          "#8A8A8A",
+          "#B8B8B8",
+          "#E0E0E0"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Gray",
+        "canonical": "#737373",
+        "darkTheme": "#A6A6A6",
+        "tonalRamp": [
+          "#171717",
+          "#2B2B2B",
+          "#404040",
+          "#565656",
+          "#737373",
+          "#9B9B9B",
+          "#C4C4C4",
+          "#EDEDED"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#FFFFFF",
+        "darkTheme": "#121212",
+        "tonalRamp": [
+          "#121212",
+          "#1F1F1F",
+          "#3D3D3D",
+          "#737373",
+          "#C9C9C9",
+          "#E5E5E5",
+          "#FAFAFA",
+          "#FFFFFF"
+        ]
+      },
+      "paper-sunk": {
+        "role": "neutral",
+        "displayName": "Sunk Paper",
+        "canonical": "#FAFAFA",
+        "darkTheme": "#1A1A1A",
+        "tonalRamp": [
+          "#1A1A1A",
+          "#2E2E2E",
+          "#4D4D4D",
+          "#7A7A7A",
+          "#B0B0B0",
+          "#DEDEDE",
+          "#F2F2F2",
+          "#FAFAFA"
+        ]
+      },
+      "paper-mark": {
+        "role": "neutral",
+        "displayName": "Marked Paper",
+        "canonical": "#F4F1F6",
+        "darkTheme": "#241A28",
+        "tonalRamp": [
+          "#241A28",
+          "#38293D",
+          "#514059",
+          "#7A6982",
+          "#A99BB0",
+          "#CFC5D4",
+          "#E9E3EC",
+          "#F4F1F6"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline Rule",
+        "canonical": "#E5E5E5",
+        "darkTheme": "#333333",
+        "tonalRamp": [
+          "#141414",
+          "#262626",
+          "#3D3D3D",
+          "#5C5C5C",
+          "#8A8A8A",
+          "#B8B8B8",
+          "#E5E5E5",
+          "#F7F7F7"
+        ]
+      },
+      "rule-firm": {
+        "role": "neutral",
+        "displayName": "Firm Rule",
+        "canonical": "#C9C9C9",
+        "darkTheme": "#4D4D4D",
+        "tonalRamp": [
+          "#141414",
+          "#292929",
+          "#404040",
+          "#5E5E5E",
+          "#8C8C8C",
+          "#C9C9C9",
+          "#E2E2E2",
+          "#F5F5F5"
+        ]
+      },
+      "rule-heavy": {
+        "role": "neutral",
+        "displayName": "Heavy Ink Rule",
+        "canonical": "#121212",
+        "darkTheme": "#FAFAFA",
+        "tonalRamp": [
+          "#000000",
+          "#121212",
+          "#242424",
+          "#3D3D3D",
+          "#737373",
+          "#A6A6A6",
+          "#C9C9C9",
+          "#E5E5E5"
+        ]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Sale Green (text-safe)",
+        "canonical": "#15803D",
+        "darkTheme": "#4ADE80",
+        "note": "Derived text partner for the design system's success fill 142 71% 45%, which measures ~2.3:1 on white.",
+        "tonalRamp": [
+          "#052E16",
+          "#14532D",
+          "#15803D",
+          "#16A34A",
+          "#22C55E",
+          "#4ADE80",
+          "#86EFAC",
+          "#DCFCE7"
+        ]
+      },
+      "ok-fill": {
+        "role": "tertiary",
+        "displayName": "Sale Green Fill",
+        "canonical": "#22C55E",
+        "note": "Fill and stamp ground only. Never text.",
+        "tonalRamp": [
+          "#052E16",
+          "#14532D",
+          "#15803D",
+          "#16A34A",
+          "#22C55E",
+          "#4ADE80",
+          "#86EFAC",
+          "#DCFCE7"
+        ]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Docket Amber (text-safe)",
+        "canonical": "#854D0E",
+        "darkTheme": "#FBBF24",
+        "note": "Derived text partner for the design system's warning fill 48 96% 53%, which measures ~1.6:1 on white.",
+        "tonalRamp": [
+          "#422006",
+          "#713F12",
+          "#854D0E",
+          "#A16207",
+          "#CA8A04",
+          "#FACC15",
+          "#FDE68A",
+          "#FEF9C3"
+        ]
+      },
+      "warn-fill": {
+        "role": "tertiary",
+        "displayName": "Docket Amber Fill",
+        "canonical": "#FACC15",
+        "note": "Fill and stamp ground only, at 9%. Never text.",
+        "tonalRamp": [
+          "#422006",
+          "#713F12",
+          "#854D0E",
+          "#A16207",
+          "#CA8A04",
+          "#FACC15",
+          "#FDE68A",
+          "#FEF9C3"
+        ]
+      },
+      "risk": {
+        "role": "tertiary",
+        "displayName": "Alert Red (text-safe)",
+        "canonical": "#B91C1C",
+        "darkTheme": "#F87171",
+        "note": "Derived text partner for the design system's destructive fill 0 84% 60%, which measures ~3.8:1 on white.",
+        "tonalRamp": [
+          "#450A0A",
+          "#7F1D1D",
+          "#991B1B",
+          "#B91C1C",
+          "#DC2626",
+          "#EF4444",
+          "#FCA5A5",
+          "#FEE2E2"
+        ]
+      },
+      "risk-fill": {
+        "role": "tertiary",
+        "displayName": "Alert Red Fill",
+        "canonical": "#EF4444",
+        "note": "Fill and notice ground only, at 7%. Never text.",
+        "tonalRamp": [
+          "#450A0A",
+          "#7F1D1D",
+          "#991B1B",
+          "#B91C1C",
+          "#DC2626",
+          "#EF4444",
+          "#FCA5A5",
+          "#FEE2E2"
+        ]
+      },
+      "on-violet": {
+        "role": "neutral",
+        "displayName": "On Violet",
+        "canonical": "#FFFFFF",
+        "darkTheme": "#1A0620",
+        "tonalRamp": [
+          "#1A0620",
+          "#3A1445",
+          "#5E2E6C",
+          "#8A5F95",
+          "#B694BE",
+          "#D9C6DE",
+          "#F0E8F2",
+          "#FFFFFF"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Set index title and the login pull quote. Entry surfaces only, one per page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Dashboard readout figures and the login form title. The size a number gets when it is the point."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Folio h1, modal titles, empty-state headings. Working surfaces top out here."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Row cells and running prose. Capped at 46ch in empty states, 68ch in the index lede."
+      },
+      "annotation": {
+        "displayName": "Annotation",
+        "purpose": "Prose that qualifies rather than states: folio range, the blocked-against reason, modal subtitles, hints, errors, inline links. Sentence case, never the label style."
+      },
+      "register": {
+        "displayName": "Register",
+        "purpose": "The document column — the padrón's axis. Largest type in a row, tabular figures."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Column headers, stage names, field labels, readout terms, ruled-section headings. Uppercase, wide-tracked."
+      }
+    },
+    "shadows": [
+      {
+        "name": "modal-lift",
+        "value": "0 12px 32px -8px rgb(0 0 0 / .22), 0 2px 6px -2px rgb(0 0 0 / .12)",
+        "purpose": "The only shadow in the product. A dialog is genuinely above the page and says so once."
+      },
+      {
+        "name": "focus-halo",
+        "value": "0 0 0 3px var(--violet-wash)",
+        "purpose": "State ring on focused fields and inputs, paired with a violet border shift. Not elevation."
+      },
+      {
+        "name": "modal-backdrop",
+        "value": "rgb(18 18 18 / .38)",
+        "purpose": "The dialog scrim."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-state",
+        "value": "background .12s ease, border-color .12s ease",
+        "purpose": "Button hover and border firming."
+      },
+      {
+        "name": "modal-rise",
+        "value": "rise .18s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Dialog entrance: 6px translate plus fade."
+      },
+      {
+        "name": "skeleton-sweep",
+        "value": "sweep 1.4s ease-in-out infinite",
+        "purpose": "Loading bar gradient sweep."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce → all durations .01ms, iteration 1",
+        "purpose": "Global honor of the OS preference."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "columns-1",
+        "value": "1380px",
+        "purpose": "Drop age + origin (prospectos) / seller (backoffice). Gutters 16px."
+      },
+      {
+        "name": "columns-2",
+        "value": "1180px",
+        "purpose": "Drop locality (prospectos) / policy nº (backoffice). Gutters 14px."
+      },
+      {
+        "name": "rail-flip",
+        "value": "1024px",
+        "purpose": "Rail becomes a 56px horizontal tab strip; login collapses to one pane."
+      },
+      {
+        "name": "row-stack",
+        "value": "720px",
+        "purpose": "Register row becomes a three-line named-area block; column headers hide; row action always visible at 32px."
+      }
+    ],
+    "invariantColumns": [
+      "documento",
+      "nombre",
+      "estado",
+      "trabado en",
+      "tiempo desde contacto"
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The violet action. Exactly one per screen — the accent's first of two roles.",
+      "html": "<button class=\"ds-btn ds-btn-primary\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M8 3v10M3 8h10\"/></svg>Nuevo asiento</button>",
+      "css": ".ds-btn { height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: .5rem; border: 1px solid #C9C9C9; background: #FFFFFF; color: #121212; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .12s ease, border-color .12s ease; } .ds-btn-primary { background: #660E80; border-color: #660E80; color: #FFFFFF; } .ds-btn-primary:hover { background: #4E0A62; border-color: #4E0A62; } .ds-btn-primary:focus-visible { outline: 2px solid #660E80; outline-offset: 1px; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Paper ground, firm hairline. The workhorse control in the folio bar and modal footers.",
+      "html": "<button class=\"ds-btn-default\" type=\"button\">Filtros</button>",
+      "css": ".ds-btn-default { height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: .5rem; border: 1px solid #C9C9C9; background: #FFFFFF; color: #121212; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .12s ease, border-color .12s ease; } .ds-btn-default:hover { background: #F4F1F6; border-color: #737373; } .ds-btn-default:focus-visible { outline: 2px solid #660E80; outline-offset: 1px; } .ds-btn-default:disabled { opacity: .45; cursor: not-allowed; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "The folio bar's search shell: icon, borderless input, and the '/' keycap that announces its own shortcut on screen.",
+      "html": "<label class=\"ds-field\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"7\" cy=\"7\" r=\"4.5\"/><path d=\"M10.5 10.5 14 14\"/></svg><input type=\"search\" placeholder=\"Documento, apellido, teléfono…\" aria-label=\"Buscar\"><kbd>/</kbd></label>",
+      "css": ".ds-field { height: 30px; width: 210px; display: flex; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: .5rem; background: #FFFFFF; color: #737373; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; } .ds-field:focus-within { border-color: #660E80; box-shadow: 0 0 0 3px #F4EDF7; } .ds-field input { border: 0; outline: 0; background: none; padding: 0; font: inherit; font-size: 12.5px; color: #121212; width: 100%; } .ds-field input::placeholder { color: #737373; } .ds-field kbd { font: inherit; font-size: 10px; font-weight: 600; color: #737373; border: 1px solid #E5E5E5; border-radius: 3px; padding: 1px 4px; flex: none; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Modal form field with its uppercase label; error text deliberately reverts to sentence case.",
+      "html": "<label class=\"ds-lbl\"><span>Documento</span><input class=\"ds-inp\" value=\"40.118.552\"><span class=\"ds-err\">Ese documento ya tiene un asiento abierto.</span></label>",
+      "css": ".ds-lbl { display: grid; gap: 5px; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; } .ds-lbl > span { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #737373; } .ds-lbl > span.ds-err { font-size: 11.5px; letter-spacing: normal; text-transform: none; color: #B91C1C; font-weight: 600; } .ds-inp { height: 32px; width: 100%; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: .5rem; background: #FFFFFF; color: #121212; font: inherit; font-size: 13px; } .ds-inp:focus { outline: 0; border-color: #660E80; box-shadow: 0 0 0 3px #F4EDF7; }"
+    },
+    {
+      "name": "State Stamp",
+      "kind": "chip",
+      "refersTo": "stamp",
+      "description": "Signature component. A stamped rectangle whose four-segment meter encodes load ordinally (--grade 0-4); the word always prints, and color only confirms the count.",
+      "html": "<div style=\"display:flex;gap:8px;flex-wrap:wrap;font-family:Montserrat,sans-serif\"><span class=\"ds-stamp\" data-load=\"inerte\">Lead</span><span class=\"ds-stamp\" data-load=\"curso\">En contacto</span><span class=\"ds-stamp\" data-load=\"firme\">Cotizado</span><span class=\"ds-stamp\" data-load=\"venta\">Venta</span><span class=\"ds-stamp\" data-load=\"caido\">Caído</span></div>",
+      "css": ".ds-stamp { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 6px; border: 1px solid #C9C9C9; border-radius: 2px; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .015em; text-transform: uppercase; color: #737373; white-space: nowrap; } .ds-stamp::before { content: \"\"; flex: none; width: 16px; height: 8px; border: 1px solid currentColor; background-image: linear-gradient(currentColor 0 0); background-repeat: no-repeat; background-size: calc(var(--grade, 0) / 4 * 100%) 100%; } .ds-stamp[data-load=\"inerte\"] { --grade: 1; color: #737373; border-color: #E5E5E5; } .ds-stamp[data-load=\"curso\"] { --grade: 2; color: #854D0E; border-color: color-mix(in srgb, #854D0E 42%, #E5E5E5); background: color-mix(in srgb, #FACC15 9%, transparent); } .ds-stamp[data-load=\"firme\"] { --grade: 3; color: #121212; border-color: #121212; } .ds-stamp[data-load=\"venta\"] { --grade: 4; color: #15803D; border-color: color-mix(in srgb, #15803D 42%, #E5E5E5); background: color-mix(in srgb, #22C55E 11%, transparent); } .ds-stamp[data-load=\"caido\"] { --grade: 0; color: #B91C1C; border-color: color-mix(in srgb, #B91C1C 34%, #E5E5E5); } .ds-stamp[data-load=\"caido\"]::before { border-style: dashed; }"
+    },
+    {
+      "name": "Register Row",
+      "kind": "custom",
+      "refersTo": "register-row",
+      "description": "The world's core unit: one ruled 38px line per person on a shared column grid, with the document column carrying the 1px vertical rule that runs the whole register.",
+      "html": "<div class=\"ds-reg\"><div class=\"ds-reg-row ds-reg-head\"><span class=\"ds-num\">#</span><span>Documento</span><span>Apellido y nombre</span><span>Estado</span><span style=\"text-align:right\">Contacto</span><span></span></div><div class=\"ds-reg-row ds-entry\"><span class=\"ds-f-num ds-tab\">0001</span><span class=\"ds-f-dni ds-tab\">40.118.552</span><span class=\"ds-f-name\"><b>Quiroga</b>, <span>Bruno Ezequiel</span></span><span><span class=\"ds-stamp\" data-load=\"curso\">En contacto</span></span><span class=\"ds-f-time ds-tab\">2 d</span><span class=\"ds-f-act\"><button class=\"ds-btn-sm\" type=\"button\">Trabajar</button></span></div><div class=\"ds-reg-row ds-entry\"><span class=\"ds-f-num ds-tab\">0002</span><span class=\"ds-f-dni ds-tab\">33.907.214</span><span class=\"ds-f-name\"><b>Benítez</b>, <span>Carla Soledad</span></span><span><span class=\"ds-stamp\" data-load=\"firme\">Cotizado</span></span><span class=\"ds-f-time ds-tab\">6 h</span><span class=\"ds-f-act\"><button class=\"ds-btn-sm\" type=\"button\">Trabajar</button></span></div></div>",
+      "css": ".ds-reg { --cols: 60px 104px minmax(150px, 1.3fr) 150px 84px 84px; width: 100%; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; } .ds-reg-row { display: grid; grid-template-columns: var(--cols); align-items: center; gap: 0 14px; padding: 0 20px; min-height: 38px; border-bottom: 1px solid #E5E5E5; } .ds-reg-row > * { min-width: 0; } .ds-reg-head { background: #FFFFFF; border-bottom: 1px solid #C9C9C9; min-height: 30px; } .ds-reg-head > * { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #737373; } .ds-tab { font-variant-numeric: tabular-nums; } .ds-entry:hover { background: #FAFAFA; } .ds-entry[aria-selected=\"true\"], .ds-entry:focus-within { background: #F4EDF7; } .ds-f-num { font-size: 11px; font-weight: 600; color: #737373; } .ds-reg-row > *:nth-child(2) { align-self: stretch; display: flex; align-items: center; border-right: 1px solid #E5E5E5; margin-right: -7px; padding-right: 7px; } .ds-f-dni { font-size: 13.5px; font-weight: 600; letter-spacing: .01em; color: #121212; } .ds-f-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px; } .ds-f-name b { font-weight: 600; } .ds-f-name span { color: #737373; } .ds-f-time { text-align: right; font-size: 12px; color: #3D3D3D; } .ds-f-act { display: flex; justify-content: flex-end; } .ds-f-act .ds-btn-sm { opacity: 0; height: 26px; padding: 0 9px; border-radius: .5rem; border: 1px solid #C9C9C9; background: #FFFFFF; color: #121212; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; } .ds-entry:hover .ds-btn-sm, .ds-entry:focus-within .ds-btn-sm { opacity: 1; } .ds-stamp { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 6px; border: 1px solid #C9C9C9; border-radius: 2px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #737373; white-space: nowrap; } .ds-stamp::before { content: \"\"; flex: none; width: 16px; height: 8px; border: 1px solid currentColor; background-image: linear-gradient(currentColor 0 0); background-repeat: no-repeat; background-size: calc(var(--grade, 0) / 4 * 100%) 100%; } .ds-stamp[data-load=\"curso\"] { --grade: 2; color: #854D0E; border-color: #B08A4E; background: rgba(250,204,21,.09); } .ds-stamp[data-load=\"firme\"] { --grade: 3; color: #121212; border-color: #121212; }"
+    },
+    {
+      "name": "Stage Band",
+      "kind": "custom",
+      "refersTo": "stage-band",
+      "description": "The ruled section head that groups the register by funnel stage. The active band is violet — the accent's second and last role per screen.",
+      "html": "<div><div class=\"ds-stage\"><h2>Sin trabajar</h2><span class=\"ds-n\">96</span><span class=\"ds-axis\"></span></div><div class=\"ds-stage\" data-active><h2>En contacto</h2><span class=\"ds-n\">58</span><span class=\"ds-axis\"></span></div></div>",
+      "css": ".ds-stage { display: flex; align-items: center; gap: 10px; padding: 0 20px; height: 30px; background: #FAFAFA; border-top: 1px solid #E5E5E5; border-bottom: 1px solid #E5E5E5; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; } .ds-stage h2 { margin: 0; font-size: 10.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #3D3D3D; } .ds-stage .ds-n { font-size: 10.5px; font-weight: 600; color: #737373; font-variant-numeric: tabular-nums; } .ds-stage .ds-axis { flex: 1; height: 1px; background: #E5E5E5; } .ds-stage[data-active] { background: #F4EDF7; border-top: 2px solid #660E80; border-bottom-color: #660E80; } .ds-stage[data-active] h2, .ds-stage[data-active] .ds-n { color: #660E80; } .ds-stage[data-active] .ds-axis { background: color-mix(in srgb, #660E80 28%, transparent); }"
+    },
+    {
+      "name": "Rail Navigation",
+      "kind": "nav",
+      "refersTo": "rail-link",
+      "description": "The 208px sunk rail. The current page is marked by weight and ground, never by a colored edge filet.",
+      "html": "<nav class=\"ds-rail\"><p class=\"ds-rail-group\">Mi trabajo</p><a class=\"ds-rail-link\" href=\"#\" aria-current=\"page\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01\"/></svg>Prospectos<span class=\"ds-rail-count\">412</span></a><a class=\"ds-rail-link\" href=\"#\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 2H4.5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L9 2Z\"/><path d=\"M9 2v3.5h3.5\"/></svg>Pólizas<span class=\"ds-rail-count\">38</span></a></nav>",
+      "css": ".ds-rail { width: 208px; background: #FAFAFA; border-right: 1px solid #E5E5E5; padding: 14px 0; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; } .ds-rail-group { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #737373; padding: 0 20px 6px; margin: 0; } .ds-rail-link { display: flex; align-items: center; gap: 10px; padding: 0 20px; height: 32px; color: #3D3D3D; text-decoration: none; font-size: 12.5px; font-weight: 500; } .ds-rail-link svg { flex: none; opacity: .62; } .ds-rail-link:hover { background: #F4F1F6; color: #121212; } .ds-rail-link[aria-current=\"page\"] { color: #121212; font-weight: 700; background: #F4F1F6; } .ds-rail-link[aria-current=\"page\"] svg { opacity: 1; } .ds-rail-count { margin-left: auto; font-size: 11px; color: #737373; font-variant-numeric: tabular-nums; } .ds-rail-link:focus-visible { outline: 2px solid #660E80; outline-offset: 1px; }"
+    },
+    {
+      "name": "Readout Strip",
+      "kind": "card",
+      "refersTo": "readout",
+      "description": "The dashboards' replacement for a row of stat cards: one ruled band of auto-fitting cells divided by hairlines.",
+      "html": "<dl class=\"ds-readout\"><div><dt>Asientos</dt><dd><b>412</b><span class=\"ds-trend ds-up\">+18</span></dd></div><div><dt>En contacto</dt><dd><b>58</b><span class=\"ds-trend ds-flat\">=</span></dd></div><div><dt>Caídos</dt><dd><b>31</b><span class=\"ds-trend ds-down\">-4</span></dd></div></dl>",
+      "css": ".ds-readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); border-top: 2px solid #121212; border-bottom: 1px solid #C9C9C9; margin: 0; font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; } .ds-readout > div { padding: 12px 16px 12px 0; border-right: 1px solid #E5E5E5; min-width: 0; } .ds-readout > div:last-child { border-right: 0; } .ds-readout > div + div { padding-left: 16px; } .ds-readout dt { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #737373; margin: 0 0 5px; } .ds-readout dd { margin: 0; display: flex; align-items: baseline; gap: 7px; } .ds-readout dd b { font-size: 21px; font-weight: 700; letter-spacing: -.025em; font-variant-numeric: tabular-nums; } .ds-trend { font-size: 11px; font-weight: 600; } .ds-up { color: #15803D; } .ds-down { color: #B91C1C; } .ds-flat { color: #737373; }"
+    },
+    {
+      "name": "Modal",
+      "kind": "custom",
+      "refersTo": "modal",
+      "description": "The only element in the system permitted a drop shadow, because it is the only one genuinely off the page.",
+      "html": "<div class=\"ds-modal\"><div class=\"ds-modal-head\"><h2>Registrar contacto</h2><span class=\"ds-sub\">Quiroga, Bruno Ezequiel</span></div><div class=\"ds-modal-body\"><label class=\"ds-m-lbl\"><span>Resultado</span><input class=\"ds-m-inp\" value=\"Atendió — pide llamar el lunes\"></label></div><div class=\"ds-modal-foot\"><span class=\"ds-push\"></span><button class=\"ds-m-btn\" type=\"button\">Cancelar</button><button class=\"ds-m-btn ds-m-btn-primary\" type=\"button\">Guardar</button></div></div>",
+      "css": ".ds-modal { border: 1px solid #C9C9C9; border-radius: .5rem; background: #FFFFFF; color: #121212; width: min(560px, 100%); box-shadow: 0 12px 32px -8px rgb(0 0 0 / .22), 0 2px 6px -2px rgb(0 0 0 / .12); font-family: Montserrat, ui-sans-serif, system-ui, sans-serif; overflow: hidden; } .ds-modal-head { display: flex; align-items: baseline; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #E5E5E5; } .ds-modal-head h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; } .ds-modal-head .ds-sub { font-size: 11.5px; color: #737373; } .ds-modal-body { padding: 18px; display: grid; gap: 14px; } .ds-m-lbl { display: grid; gap: 5px; } .ds-m-lbl > span { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #737373; } .ds-m-inp { height: 32px; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: .5rem; background: #FFFFFF; color: #121212; font: inherit; font-size: 13px; } .ds-m-inp:focus { outline: 0; border-color: #660E80; box-shadow: 0 0 0 3px #F4EDF7; } .ds-modal-foot { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-top: 1px solid #E5E5E5; background: #FAFAFA; } .ds-push { margin-left: auto; } .ds-m-btn { height: 30px; padding: 0 12px; border-radius: .5rem; border: 1px solid #C9C9C9; background: #FFFFFF; color: #121212; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: background .12s ease, border-color .12s ease; } .ds-m-btn:hover { background: #F4F1F6; border-color: #737373; } .ds-m-btn-primary { background: #660E80; border-color: #660E80; color: #FFFFFF; } .ds-m-btn-primary:hover { background: #4E0A62; border-color: #4E0A62; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Padrón",
+    "overview": "A padrón is an Argentine civil register: one ruled line per person, the identity document as the spine, nothing floating. This system is that book rendered for a seller working a full shift. It rejects the card-per-prospect grid the incumbent screen uses — a card wraps one person in a box and forces the eye to re-enter it 400 times. Here the register is one continuous ruled sheet: the folio bar says how many exist and which ones you see, stage bands say where in the funnel you are, and each row says who, what state, blocked against what, and how long since contact. Nothing is hidden behind an expand.\n\nThe world is white paper (#FFFFFF), near-black ink (#121212), and 1px rules. Density is deliberately high: rows are 38px, body text is 12.5px, the base font-size is 13px. That density is the product argument — a seller scanning hundreds of records should get more per screen, not a more comfortable card. Depth is drawn, not lit: there is exactly one shadow in the entire product surface (the modal), and everything else separates by rule weight and tonal ground.\n\nBrand identity is honored where it is binding and translated where it fails. Montserrat is self-hosted as a variable font in two subsets (latin, latin-ext) covering weights 400–800; the build deliberately refuses @import from Google Fonts because a cold open without network fell back to system-ui, which would put the platform's default sans in a display role. The Cober violet #660E80 is the brand accent, never the primary, and it is rationed. The system's --radius: .5rem is honored on real containers and is absent from the register, which is ruled rather than boxed.",
+    "keyCharacteristics": [
+      "One ruled register, never a card grid; one row per person.",
+      "The document column carries a visible 1px vertical rule — the padrón's axis.",
+      "Violet appears exactly twice per screen, in fixed roles.",
+      "State is an ordinal four-segment meter first, a color second, and always carries its printed word.",
+      "Density over comfort: 38px rows, 13px base, tabular figures on every compared number.",
+      "Depth by rule weight and tonal ground; a single shadow, on the modal."
+    ],
+    "rules": [
+      {
+        "name": "The Two Violets Rule",
+        "body": "Violet appears in exactly two roles per screen: the primary action and the active stage band. It is not a highlight, not a link default, not a left border on the current nav item, not a chart series. If a third violet appears, one of them was decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fill-Is-Not-Text Rule",
+        "body": "The design system's semantic colors are fills. Never set them as text or as a 1px border alone. Use the derived text ink for words and the fill for grounds, at the observed dilutions (9% amber, 11% green, 7% red) and borders mixed against rule.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink-Carries-Data Rule",
+        "body": "Quantities are drawn in ink. Proportion bars, meters, and the committed stamp are ink or rule-firm, never brand color — a bar chart in violet would spend the accent on something that is not an action.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Column Rule",
+        "body": "Any figure compared vertically down a column — document, age, elapsed time, counts — carries font-variant-numeric: tabular-nums. Proportional digits in a register are a defect, not a preference.",
+        "section": "typography"
+      },
+      {
+        "name": "The Label-Is-Not-Prose Rule",
+        "body": "The uppercase 10.5px label style is for naming a field or a column. Errors and hints inside a labelled field explicitly override it back to 11.5px sentence case: an error message rendered as a gray uppercase label is unreadable at the moment it matters.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Montserrat carries every role. Do not introduce a display serif, a mono for figures, or a second sans for labels; tabular figures come from the variant setting, not a second font.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Shadow Rule",
+        "body": "The modal is the only element permitted a drop shadow, because it is the only element genuinely off the page. Panels, rows, bars, stamps and readouts separate by rule weight.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Sticky-Not-Floating Rule",
+        "body": "Bars pin to the edge of their scroll container and are bounded by a rule, not by a shadow or a blur. The folio, the column headers, the stage bands and the selection bar all obey this.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put new tabular surfaces on the register grammar: one --cols custom property declared once on the container and consumed by both the header row and every data row.",
+      "Do give any vertically-compared figure tabular numerals.",
+      "Do spend violet on exactly two things per screen: the primary action and the active stage band.",
+      "Do print the word next to any colored state, at constant scale, in a fixed column.",
+      "Do honor .5rem on real containers (buttons, fields, inputs, modals) and 0 on ruled register surfaces.",
+      "Do separate surfaces with graded rule weights — 1px hairline, 1px firm, 2px ink — and one step of sunk ground.",
+      "Do degrade a wide register by dropping the least decisive column at 1380 / 1180 / 1024, and keep document, name, state, blocked-against and elapsed time at every width.",
+      "Do self-host any face the system depends on, so a cold or offline open never falls back to system-ui in a display role.",
+      "Do use the derived semantic text inks for words and the system's semantic values only as fills and stamp grounds."
+    ],
+    "donts": [
+      "Don't reintroduce card-per-record layouts for list surfaces; the register is the thesis and a card grid is exactly what it replaces.",
+      "Don't add a drop shadow to anything but the modal.",
+      "Don't round a register surface — rows, stage bands, sticky bars, ruled sections and readouts stay at 0.",
+      "Don't set the design system's semantic fills as text color; they fail WCAG AA on white.",
+      "Don't use violet for data: no violet bars, meters, trend figures, chart series, or the \"comprometido\" stamp. Data is drawn in ink.",
+      "Don't mark the current nav item with a colored edge rule; weight plus paper-mark ground is the marker, and above 1px an edge filet is a craft-floor violation anyway.",
+      "Don't let a register scroll horizontally to preserve columns.",
+      "Don't render a state as a floating pill or as color without its printed word.",
+      "Don't style an inline error or hint with the uppercase label role; errors are sentence-case prose.",
+      "Don't omit min-width: 0 on grid children in this system — every overflow defect in the build traced to that default."
+    ],
+    "knownGaps": [
+      "Print stylesheet — a padrón that cannot be printed is incomplete.",
+      "Sortable column heads with aria-sort.",
+      "Per-band subtotals on stage sections.",
+      "A density switch."
+    ]
+  }
+}

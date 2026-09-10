@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 export function AppVersion({ className }: { className?: string }) {
   const version = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "dev"
   return (
-    <span className={cn("text-[10px] text-muted-foreground", className)}>
+    <span className={cn("text-[10.5px] text-muted-foreground", className)}>
       v{version}
     </span>
   )

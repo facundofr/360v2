@@ -491,7 +491,7 @@ export default function PolizasAdmin() {
 
       {/* Tabla */}
       {loading ? (
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       ) : (
         <>
           {/* pageSize = PER_PAGE: cada página ya viene acotada por el backend

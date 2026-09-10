@@ -7,6 +7,8 @@ import {
   User, Users, History, CreditCard, Loader2, ExternalLink,
   Tag, Send, Calculator, PlusCircle, ChevronDown, ChevronUp,
   MessageCircle, LogOut, Trash2
+,
+  Check
 } from "lucide-react"
 import {
   SidebarProvider, Sidebar, SidebarContent, SidebarHeader,
@@ -534,8 +536,8 @@ export default function ProspectoDetallePage() {
     return (
       <div className="p-6 space-y-4 max-w-4xl mx-auto">
         <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-48 w-full rounded-xl" />
-        <Skeleton className="h-80 w-full rounded-xl" />
+        <Skeleton className="h-48 w-full rounded-lg" />
+        <Skeleton className="h-80 w-full rounded-lg" />
       </div>
     )
   }
@@ -588,7 +590,7 @@ export default function ProspectoDetallePage() {
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold truncate">{user?.name ?? "Vendedor"}</p>
-              <p className="text-[10px] text-muted-foreground">Panel Vendedor</p>
+              <p className="text-[10.5px] text-muted-foreground">Panel Vendedor</p>
             </div>
           </div>
         </SidebarHeader>
@@ -608,7 +610,7 @@ export default function ProspectoDetallePage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium leading-tight">{v.label}</p>
-                      <p className="text-[10px] text-muted-foreground">{v.desc}</p>
+                      <p className="text-[10.5px] text-muted-foreground">{v.desc}</p>
                     </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -629,7 +631,7 @@ export default function ProspectoDetallePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium leading-tight">Nuevo Prospecto</p>
-                  <p className="text-[10px] text-muted-foreground">Registrar lead</p>
+                  <p className="text-[10.5px] text-muted-foreground">Registrar lead</p>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -693,7 +695,7 @@ export default function ProspectoDetallePage() {
         {/* Info principal */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2">
               <User className="size-4" />Información personal
             </CardTitle>
           </CardHeader>
@@ -814,7 +816,7 @@ export default function ProspectoDetallePage() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Cotizaciones guardadas</CardTitle>
+                  <CardTitle>Cotizaciones guardadas</CardTitle>
                   <div className="flex flex-wrap gap-2">
                     <Button
                       variant="outline" size="sm" className="h-8"
@@ -860,8 +862,8 @@ export default function ProspectoDetallePage() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <p className="font-medium text-sm">{cot.plan_nombre ?? `Plan #${cot.id}`}</p>
-                                  {yaGenerada && <Badge variant="ok" className="text-xs">✓ Póliza</Badge>}
-                                  {cuponGenerado && <Badge variant="ok" className="text-xs">Cupón ✓</Badge>}
+                                  {yaGenerada && <Badge variant="ok" size="sm"><Check aria-hidden="true" />Póliza</Badge>}
+                                  {cuponGenerado && <Badge variant="ok" size="sm"><Check aria-hidden="true" />Cupón</Badge>}
                                 </div>
                                 {cot.tipo_afiliacion_nombre && (
                                   <p className="text-xs text-muted-foreground">{cot.tipo_afiliacion_nombre}</p>
@@ -990,7 +992,7 @@ export default function ProspectoDetallePage() {
           <TabsContent value="polizas">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Pólizas generadas</CardTitle>
+                <CardTitle>Pólizas generadas</CardTitle>
               </CardHeader>
               <CardContent>
                 {polizas.length === 0 ? (
@@ -1007,7 +1009,7 @@ export default function ProspectoDetallePage() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Familiares a cargo</CardTitle>
+                  <CardTitle>Familiares a cargo</CardTitle>
                   <Button variant="outline" size="sm" className="h-8" onClick={() => setShowFamiliar(true)}>
                     + Agregar familiar
                   </Button>
@@ -1053,7 +1055,7 @@ export default function ProspectoDetallePage() {
           <TabsContent value="historial">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Historial de acciones</CardTitle>
+                <CardTitle>Historial de acciones</CardTitle>
               </CardHeader>
               <CardContent>
                 {historial.length === 0 ? (

@@ -1,13 +1,12 @@
 import * as React from "react"
 import axios from "axios"
 import { toast } from "sonner"
-import { Eye, Edit2, Download, ArrowRightLeft, LayoutGrid, List, Loader2, History, Upload } from "lucide-react"
+import { Eye, Edit2, Download, ArrowRightLeft, LayoutGrid, List, Loader2, History, Upload, Stethoscope } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 import { BadgeEstadoFirma } from "@/components/badges/BadgeEstadoFirma"
 import { maskPhone, maskEmail } from "@/lib/mask"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { DataTable } from "@/components/ui/data-table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
@@ -165,7 +164,7 @@ export default function PolizasDashboard({ polizas, loadingPolizas, onVerDocumen
           <div className="flex flex-col gap-1">
             {getEstadoBadge(p.estado)}
             <BadgeEstadoFirma poliza={p} />
-            {p.requiere_auditoria_medica && <Badge variant="warn" className="text-xs">🏥 Auditoría</Badge>}
+            {p.requiere_auditoria_medica && <Badge variant="warn" size="sm" className="pointer-events-none"><Stethoscope aria-hidden="true" />Auditoría</Badge>}
           </div>
         )
       },
@@ -242,74 +241,107 @@ export default function PolizasDashboard({ polizas, loadingPolizas, onVerDocumen
         <DataTable columns={columns} data={polizasArray} emptyMessage="No tienes pólizas generadas aún." />
       )}
 
-      {/* Vista tarjetas */}
+      {/* Vista registro — una fila por póliza, el número como eje */}
       {tipoVista === "tarjetas" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {polizasArray.length === 0 ? (
-            <div className="col-span-full text-center py-12 text-muted-foreground text-sm">No tienes pólizas generadas aún.</div>
-          ) : polizasArray.map(p => (
-            <Card key={p.id} className="flex flex-col">
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="font-bold text-sm">Póliza #{p.numero_poliza_oficial ?? p.numero_poliza ?? p.id}</p>
-                  <div className="flex flex-col gap-1 items-end">
-                    {getEstadoBadge(p.estado)}
-                    <BadgeEstadoFirma poliza={p} />
-                    {p.requiere_auditoria_medica && <Badge variant="warn" className="text-xs">🏥 Auditoría</Badge>}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 space-y-2 text-sm">
-                <p className="font-medium">{p.prospecto_nombre} {p.prospecto_apellido}</p>
-                <p className="text-xs text-muted-foreground">{p.plan_nombre}</p>
-                <p className="text-lg font-bold">{formatCurrency(p.total_final ?? 0)}</p>
-                {p.prospecto_telefono && (
-                  <p className="text-xs text-muted-foreground">
-                    <span className="mr-1">Contacto:</span>{maskPhone(p.prospecto_telefono)}
-                  </p>
-                )}
-                {p.prospecto_localidad && (
-                  <p className="text-xs text-muted-foreground">
-                    <span className="mr-1">Localidad:</span>{p.prospecto_localidad}
-                  </p>
-                )}
-                {p.prospecto_email && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    <span className="mr-1">Email:</span>{maskEmail(p.prospecto_email)}
-                  </p>
-                )}
-                <p className="text-xs text-muted-foreground">{formatFecha(p.created_at)}</p>
-                <div className="flex gap-1 pt-2 flex-wrap">
+        polizasArray.length === 0 ? (
+          <div className="py-12 text-center text-sm text-muted-foreground">No tienes pólizas generadas aún.</div>
+        ) : (
+          <div className="reg reg--pol border-t-2 border-rule-heavy">
+            <div className="reg-row reg-head" role="presentation">
+              <span>Nº póliza</span>
+              <span>Titular</span>
+              <span>Plan</span>
+              <span className="text-right">Total</span>
+              <span>Contacto</span>
+              <span>Estado</span>
+              <span className="text-right">Fecha</span>
+              <span />
+            </div>
+
+            {polizasArray.map(p => (
+              <div key={p.id} className="reg-row reg-entry">
+                {/* 1 · número — el eje */}
+                <span className="truncate text-[13px] font-semibold tabular-nums">
+                  {p.numero_poliza_oficial ?? p.numero_poliza ?? `#${p.id}`}
+                </span>
+
+                {/* 2 · titular */}
+                <span className="min-w-0">
+                  <span className="block truncate text-[13px]">
+                    <b className="font-semibold">{p.prospecto_apellido}</b>
+                    <span className="text-muted-foreground">, {p.prospecto_nombre}</span>
+                  </span>
+                  {p.prospecto_localidad && (
+                    <span className="block truncate text-[11.5px] text-muted-foreground">{p.prospecto_localidad}</span>
+                  )}
+                </span>
+
+                {/* 3 · plan */}
+                <span className="truncate text-[12.5px] text-muted-foreground">{p.plan_nombre ?? "—"}</span>
+
+                {/* 4 · total */}
+                <span className="text-right text-[13px] font-semibold tabular-nums">
+                  {formatCurrency(p.total_final ?? 0)}
+                </span>
+
+                {/* 5 · contacto */}
+                <span className="min-w-0 text-muted-foreground">
+                  <span className="block truncate text-[12.5px] tabular-nums">
+                    {p.prospecto_telefono ? maskPhone(p.prospecto_telefono) : "—"}
+                  </span>
+                  {p.prospecto_email && (
+                    <span className="block truncate text-[11.5px]">{maskEmail(p.prospecto_email)}</span>
+                  )}
+                </span>
+
+                {/* 6 · estado — sello, firma y auditoría */}
+                <span className="flex min-w-0 flex-wrap items-center gap-1">
+                  {getEstadoBadge(p.estado)}
+                  <BadgeEstadoFirma poliza={p} />
+                  {p.requiere_auditoria_medica && (
+                    <Badge variant="warn" size="sm" className="pointer-events-none">
+                      <Stethoscope aria-hidden="true" />Auditoría
+                    </Badge>
+                  )}
+                </span>
+
+                {/* 7 · fecha */}
+                <span className="text-right text-[12px] tabular-nums text-muted-foreground">
+                  {formatFecha(p.created_at)}
+                </span>
+
+                {/* 8 · acciones */}
+                <span className="reg-actions">
                   {onEditarPoliza && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => onEditarPoliza(p)}>
-                      <Edit2 className="size-3 mr-1" />Editar
+                    <Button size="icon" variant="ghost" className="size-7" title="Editar póliza" onClick={() => onEditarPoliza(p)}>
+                      <Edit2 className="size-3.5" />
                     </Button>
                   )}
                   {p.pdf_hash && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => window.open(`${API_URL}/polizas/pdf/${p.pdf_hash}`, "_blank")}>
-                      <Download className="size-3 mr-1" />PDF
+                    <Button size="icon" variant="ghost" className="size-7" title="Descargar PDF" onClick={() => window.open(`${API_URL}/polizas/pdf/${p.pdf_hash}`, "_blank")}>
+                      <Download className="size-3.5" />
                     </Button>
                   )}
                   {onVerDocumentos && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => onVerDocumentos(p)}>
-                      <Eye className="size-3 mr-1" />Docs
+                    <Button size="icon" variant="ghost" className="size-7" title="Ver documentos" onClick={() => onVerDocumentos(p)}>
+                      <Eye className="size-3.5" />
                     </Button>
                   )}
                   {onAgregarDocumentos && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => onAgregarDocumentos(p)}>
-                      <Upload className="size-3 mr-1" />Agregar
+                    <Button size="icon" variant="ghost" className="size-7" title="Agregar documentos" onClick={() => onAgregarDocumentos(p)}>
+                      <Upload className="size-3.5" />
                     </Button>
                   )}
                   {p.estado === "asesor" && (
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => { setModalSupervisor({ open: true, poliza: p }); setMotivo("") }}>
-                      <ArrowRightLeft className="size-3 mr-1" />Supervisor
+                    <Button size="icon" variant="ghost" className="size-7" title="Enviar a supervisor" onClick={() => { setModalSupervisor({ open: true, poliza: p }); setMotivo("") }}>
+                      <ArrowRightLeft className="size-3.5" />
                     </Button>
                   )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </span>
+              </div>
+            ))}
+          </div>
+        )
       )}
 
       {/* Modal enviar a supervisor */}

@@ -254,7 +254,7 @@ export default function CompensadorAdmin() {
     return (
       <div className="space-y-3">
         <Skeleton className="h-10 w-64" />
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       </div>
     )
   }

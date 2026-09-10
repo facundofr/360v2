@@ -151,7 +151,7 @@ export default function DashboardMetricasAdmin() {
       accessorKey: "estado",
       header: "Estado",
       cell: ({ row }) => (
-        <Badge className={`text-[10px] font-bold uppercase ${ESTADO_BADGE[row.original.estado] ?? "bg-gray-400 hover:bg-gray-400 text-white"}`}>
+        <Badge className={`text-[10.5px] font-bold uppercase ${ESTADO_BADGE[row.original.estado] ?? "bg-gray-400 hover:bg-gray-400 text-white"}`}>
           {row.original.estado}
         </Badge>
       ),
@@ -199,10 +199,10 @@ export default function DashboardMetricasAdmin() {
       {loading ? (
         <div className="space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
+            {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-lg" />)}
           </div>
-          <Skeleton className="h-48 rounded-xl" />
-          <Skeleton className="h-64 rounded-xl" />
+          <Skeleton className="h-48 rounded-lg" />
+          <Skeleton className="h-64 rounded-lg" />
         </div>
       ) : (
         <>
@@ -247,7 +247,7 @@ export default function DashboardMetricasAdmin() {
             {/* Card grande prospectos activos */}
             <Card className="sm:col-span-1">
               <CardContent className="p-4">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 mb-3">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 mb-3">
                   <BarChart3 className="size-5 text-primary" />
                 </div>
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wide font-medium mb-1">Prospectos Activos</p>
@@ -324,7 +324,7 @@ export default function DashboardMetricasAdmin() {
                   <div key={stage.etapa}>
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex size-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                        <span className="inline-flex size-5 items-center justify-center rounded-full text-[10.5px] font-bold text-white"
                           style={{ backgroundColor: FUNNEL_COLORS[i % FUNNEL_COLORS.length] }}>
                           {i + 1}
                         </span>
@@ -342,12 +342,12 @@ export default function DashboardMetricasAdmin() {
                       />
                     </div>
                     {i < funnelData.length - 1 && stage.cantidad > 0 && (
-                      <p className="text-[10px] text-muted-foreground text-right mt-0.5">
+                      <p className="text-[10.5px] text-muted-foreground text-right mt-0.5">
                         {Math.round((funnelData[i + 1].cantidad / stage.cantidad) * 100)}% pasan a la siguiente etapa
                       </p>
                     )}
                     {i < funnelData.length - 1 && stage.cantidad === 0 && (
-                      <p className="text-[10px] text-muted-foreground text-right mt-0.5">NaN% pasan a la siguiente etapa</p>
+                      <p className="text-[10.5px] text-muted-foreground text-right mt-0.5">NaN% pasan a la siguiente etapa</p>
                     )}
                   </div>
                 ))}

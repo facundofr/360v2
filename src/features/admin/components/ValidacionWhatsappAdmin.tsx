@@ -41,12 +41,12 @@ import { ValidacionConversacionModal } from "./ValidacionConversacionModal"
 const PAGE_SIZE = 20
 
 const ESTADOS = [
-  { key: "urgentes",      label: "Interesado (urgente)", color: "#198754" },
-  { key: "averiguando",   label: "Averiguando",          color: "#20c997" },
-  { key: "pendientes",    label: "Pendientes",           color: "#0dcaf0" },
-  { key: "timeout",       label: "Sin respuesta (auto)", color: "#ffc107" },
-  { key: "corregir",      label: "A corregir",           color: "#dc3545" },
-  { key: "no_interesado", label: "No interesado",        color: "#6c757d" },
+  { key: "urgentes",      label: "Interesado (urgente)", color: "var(--color-state-ok)" },
+  { key: "averiguando",   label: "Averiguando",          color: "var(--color-primary)" },
+  { key: "pendientes",    label: "Pendientes",           color: "var(--color-muted-foreground)" },
+  { key: "timeout",       label: "Sin respuesta (auto)", color: "var(--color-state-warn)" },
+  { key: "corregir",      label: "A corregir",           color: "var(--color-state-risk)" },
+  { key: "no_interesado", label: "No interesado",        color: "var(--color-rule-firm)" },
 ] as const
 
 /** Color del badge según el estado textual que devuelve el backend. */
@@ -100,9 +100,9 @@ interface Metricas {
 
 /** Qué pasa con los prospectos DESPUÉS de asignarse a un vendedor — paridad con `ValidacionWhatsappAdmin.jsx:228-253`. */
 const GESTION_BUCKETS = [
-  { key: "urgente", label: "Urgente", color: "#198754", icon: Flame },
-  { key: "averiguando", label: "Averiguando", color: "#20c997", icon: MessageCircle },
-  { key: "otros", label: "Otros (sin respuesta / legacy)", color: "#ffc107", icon: Hourglass },
+  { key: "urgente", label: "Urgente", color: "var(--color-state-ok-text)", icon: Flame },
+  { key: "averiguando", label: "Averiguando", color: "var(--color-primary)", icon: MessageCircle },
+  { key: "otros", label: "Otros (sin respuesta / legacy)", color: "var(--color-state-warn-text)", icon: Hourglass },
 ] as const
 
 /** Campos reales de `validacionWhatsappService.js` (listado paginado): no
@@ -383,22 +383,20 @@ export default function ValidacionWhatsappAdmin() {
       </Card>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <dl className="readout">
         {kpis.map(k => {
           const Icon = k.icon
           return (
-            <Card key={k.label}>
-              <CardContent className="p-3 text-center">
-                <Icon className={cn("size-4 mx-auto mb-1", k.color)} />
-                <p className="text-2xl font-bold">
-                  {loading ? <Skeleton className="h-7 w-10 mx-auto" /> : k.valor}
-                </p>
-                <p className="text-xs text-muted-foreground">{k.label}</p>
-              </CardContent>
-            </Card>
+            <div key={k.label}>
+              <dt className="flex items-center gap-1.5">
+                <Icon className={cn("size-3.5 shrink-0", k.color)} aria-hidden="true" />
+                {k.label}
+              </dt>
+              <dd>{loading ? <Skeleton className="h-5 w-10" /> : k.valor}</dd>
+            </div>
           )
         })}
-      </div>
+      </dl>
 
       {/* Tasas + gráfico */}
       <div className="grid gap-4 lg:grid-cols-[1fr_320px]">

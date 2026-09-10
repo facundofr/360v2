@@ -322,7 +322,7 @@ export default function GestionCategorias() {
       </div>
 
       {/* Tabla categorías */}
-      {loading ? <Skeleton className="h-48 w-full rounded-xl" /> : (
+      {loading ? <Skeleton className="h-48 w-full rounded-lg" /> : (
         <DataTable columns={columnasCategorias} data={categorias} emptyMessage="Sin categorías" />
       )}
 

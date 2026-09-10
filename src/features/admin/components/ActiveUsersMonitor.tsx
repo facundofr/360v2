@@ -247,7 +247,7 @@ export default function ActiveUsersMonitor() {
       header: "Rol",
       cell: ({ row }) => (
         row.original.role_name ? (
-          <Badge variant="outline" className={`text-[10px] font-bold uppercase ${roleBadgeClass(row.original.role_color)}`}>
+          <Badge variant="outline" className={`text-[10.5px] font-bold uppercase ${roleBadgeClass(row.original.role_color)}`}>
             {row.original.role_name}
           </Badge>
         ) : null
@@ -268,7 +268,7 @@ export default function ActiveUsersMonitor() {
       accessorKey: "minutes_since_activity",
       header: "Tiempo",
       cell: ({ row }) => (
-        <Badge variant="outline" className={`text-[10px] font-bold uppercase ${tiempoClass(row.original.minutes_since_activity)}`}>
+        <Badge variant="outline" className={`text-[10.5px] font-bold uppercase ${tiempoClass(row.original.minutes_since_activity)}`}>
           {formatTimeSince(row.original.minutes_since_activity)}
         </Badge>
       ),
@@ -337,16 +337,16 @@ export default function ActiveUsersMonitor() {
             <div className="flex items-center gap-2">
               <span>Estado:</span>
               {wsConnected ? (
-                <Badge variant="ok" className="text-[10px] gap-1">
+                <Badge variant="ok" className="text-[10.5px] gap-1">
                   <span className="inline-block size-1.5 rounded-full bg-state-ok animate-pulse" />
                   TIEMPO REAL
                 </Badge>
               ) : reconnecting ? (
-                <Badge variant="warn" className="text-[10px]">
+                <Badge variant="warn" className="text-[10.5px]">
                   Reconectando... ({connectionAttempts}/{MAX_RECONNECT})
                 </Badge>
               ) : (
-                <Badge variant="outline" className="text-muted-foreground text-[10px]">Modo Manual</Badge>
+                <Badge variant="outline" className="text-muted-foreground text-[10.5px]">Modo Manual</Badge>
               )}
             </div>
             {lastUpdated && (
@@ -360,7 +360,7 @@ export default function ActiveUsersMonitor() {
 
       {/* Tabla */}
       {loading ? (
-        <Skeleton className="h-48 w-full rounded-xl" />
+        <Skeleton className="h-48 w-full rounded-lg" />
       ) : (
         <Card>
           <CardHeader className="pb-2">

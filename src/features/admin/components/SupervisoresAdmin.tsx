@@ -69,33 +69,14 @@ const diasDesdeLogin = (lastLogin?: string) => {
  * desenganchó. Va de gris (cuenta apagada, no es una alarma) a rojo (lleva más
  * de una semana sin entrar) pasando por ámbar.
  */
-const BADGE_BASE = "font-semibold uppercase text-[10px] px-2 py-0.5 rounded-full border"
 
 function EstadoBadge({ isEnabled, lastLogin }: { isEnabled?: boolean; lastLogin?: string }) {
-  if (!isEnabled)
-    return (
-      <Badge className={`${BADGE_BASE} bg-muted text-muted-foreground`}>
-        Cuenta inactiva
-      </Badge>
-    )
+  if (!isEnabled) return <Badge variant="secondary" size="sm">Cuenta inactiva</Badge>
+
   const dias = diasDesdeLogin(lastLogin)
-  if (dias > 7)
-    return (
-      <Badge className={`${BADGE_BASE} bg-state-risk-soft text-state-risk-text border-state-risk/25`}>
-        Sin entrar hace 7+ días
-      </Badge>
-    )
-  if (dias > 3)
-    return (
-      <Badge className={`${BADGE_BASE} bg-state-warn-soft text-state-warn-text border-state-warn/25`}>
-        Sin entrar hace {dias} días
-      </Badge>
-    )
-  return (
-    <Badge className={`${BADGE_BASE} bg-state-ok-soft text-state-ok-text border-state-ok/25`}>
-      Activo
-    </Badge>
-  )
+  if (dias > 7) return <Badge variant="risk" size="sm">Sin entrar hace 7+ días</Badge>
+  if (dias > 3) return <Badge variant="warn" size="sm">Sin entrar hace {dias} días</Badge>
+  return <Badge variant="ok" size="sm">Activo</Badge>
 }
 
 // ── Componente principal ───────────────────────────────────────────────────
@@ -213,7 +194,7 @@ export default function SupervisoresAdmin() {
       header: "Equipo",
       meta: { className: "text-center", headerClassName: "text-center" },
       cell: ({ row }) => (
-        <Badge className="bg-primary hover:bg-primary text-white font-semibold uppercase text-[10px] px-3 py-1 rounded-full">
+        <Badge size="sm">
           {row.original.total_vendedores ?? 0} VENDEDORES
         </Badge>
       ),
@@ -287,19 +268,19 @@ export default function SupervisoresAdmin() {
       accessorKey: "total_prospectos",
       header: "Prospectos",
       meta: { className: "text-center", headerClassName: "text-center" },
-      cell: ({ row }) => <Badge className="bg-primary hover:bg-primary text-white text-xs rounded-full px-2">{row.original.total_prospectos ?? 0}</Badge>,
+      cell: ({ row }) => <Badge size="sm">{row.original.total_prospectos ?? 0}</Badge>,
     },
     {
       accessorKey: "ventas_realizadas",
       header: "Ventas",
       meta: { className: "text-center", headerClassName: "text-center" },
-      cell: ({ row }) => <Badge variant="ok" className="text-xs rounded-full px-2">{row.original.ventas_realizadas ?? 0}</Badge>,
+      cell: ({ row }) => <Badge variant="ok" size="sm">{row.original.ventas_realizadas ?? 0}</Badge>,
     },
     {
       accessorKey: "prospectos_activos",
       header: "Activos",
       meta: { className: "hidden lg:table-cell text-center", headerClassName: "hidden lg:table-cell text-center" },
-      cell: ({ row }) => <Badge variant="secondary" className="text-xs rounded-full px-2">{row.original.prospectos_activos ?? 0}</Badge>,
+      cell: ({ row }) => <Badge variant="secondary" size="sm">{row.original.prospectos_activos ?? 0}</Badge>,
     },
     {
       accessorKey: "categoria_nombre",
@@ -317,7 +298,7 @@ export default function SupervisoresAdmin() {
       header: "Estado",
       meta: { className: "text-center", headerClassName: "text-center" },
       cell: ({ row }) => (
-        <Badge variant={row.original.is_enabled !== false ? "ok" : "secondary"} className="text-[10px] rounded-full">
+        <Badge variant={row.original.is_enabled !== false ? "ok" : "secondary"} size="sm">
           {row.original.is_enabled !== false ? "Activo" : "Inactivo"}
         </Badge>
       ),
@@ -376,7 +357,7 @@ export default function SupervisoresAdmin() {
         <CardHeader className="pb-3 flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base font-semibold">Lista de Supervisores</CardTitle>
           <div className="flex items-center gap-2">
-            <Badge className="bg-primary hover:bg-primary text-white size-7 rounded-full flex items-center justify-center text-sm p-0">
+            <Badge className="flex size-7 items-center justify-center rounded-full p-0 text-sm">
               {filtrados.length}
             </Badge>
             <Button variant="ghost" size="icon" className="size-8" onClick={fetchAll} disabled={loading}>

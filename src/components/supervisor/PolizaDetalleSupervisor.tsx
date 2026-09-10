@@ -10,6 +10,8 @@ import CargaMultipleDocumentos from "@/components/supervisor/CargaMultipleDocume
 import {
   FileText, Upload, Eye, Download,
   CheckCircle, Loader2,
+  FileCheck, Stethoscope, IdCard, Receipt, CreditCard, Paperclip,
+  type LucideIcon,
 } from "lucide-react"
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
@@ -44,13 +46,15 @@ function formatBytes(b: number): string {
   return `${(b / 1024 ** 2).toFixed(1)} MB`
 }
 
-const TIPO_ICONS: Record<string, string> = {
-  poliza_firmada:                  "📄",
-  auditoria_medica:                "🏥",
-  documento_identidad_adicional:   "🆔",
-  comprobante_ingresos:            "💰",
-  autorizacion_debito:             "💳",
-  documento_adicional:             "📎",
+/* Íconos dibujados, no emoji: un emoji cambia de forma según el sistema
+   operativo y no comparte trazo ni peso con el resto de la interfaz. */
+const TIPO_ICONS: Record<string, LucideIcon> = {
+  poliza_firmada:                  FileCheck,
+  auditoria_medica:                Stethoscope,
+  documento_identidad_adicional:   IdCard,
+  comprobante_ingresos:            Receipt,
+  autorizacion_debito:             CreditCard,
+  documento_adicional:             Paperclip,
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -157,7 +161,8 @@ export default function PolizaDetalleSupervisor({ polizaId }: Props) {
               docs.length > 0 && (
                 <div key={tipo}>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                    {TIPO_ICONS[tipo] ?? "📄"} {tipo.replace(/_/g, " ")}
+                    {React.createElement(TIPO_ICONS[tipo] ?? FileText, { className: "mr-1.5 inline size-3.5 align-[-2px]", "aria-hidden": "true" })}
+                    {tipo.replace(/_/g, " ")}
                   </p>
                   <div className="space-y-1">
                     {docs.map((doc) => (

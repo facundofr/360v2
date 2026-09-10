@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospectos · Cober360</title>
+<meta name="description" content="Concepto de rediseño — registro de prospectos del vendedor.">
+<link rel="stylesheet" href="assets/cober.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2.5h2.5l1 3-1.5 1a8 8 0 0 0 3.5 3.5l1-1.5 3 1V13c0 .6-.4 1-1 1A10.5 10.5 0 0 1 2 3.5c0-.6.4-1 1-1Z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5A5.5 5.5 0 0 1 8.5 14H2l1.6-2.4A5.5 5.5 0 1 1 14 8.5Z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3.5 3.5L13 5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5 14.5 13.5H1.5L8 2.5Z"/><path d="M8 6.5v3M8 11.5h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></symbol>
+  <symbol id="i-list" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01"/></symbol>
+  <symbol id="i-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4.5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L9 2Z"/><path d="M9 2v3.5h3.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 13.5h11M5 11V6.5M8 11V3.5M11 11V8.5"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.2V3a.5.5 0 0 1 .5-.5h5.2a1 1 0 0 1 .7.3l4.3 4.3a1 1 0 0 1 0 1.4l-4.9 4.9a1 1 0 0 1-1.4 0L2.8 9.1a1 1 0 0 1-.3-.9Z"/><path d="M5.5 5.5h.01"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1M12.9 3.1l-1 1M4.1 11.9l-1 1M12.9 12.9l-1-1M4.1 4.1l-1-1"/></symbol>
+  <symbol id="i-send" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2 7 9M14 2l-4.5 12-2.5-5L2 6.5 14 2Z"/></symbol>
+</svg>
+
+<div class="frame">
+
+  <!-- ─── Riel ─────────────────────────────────────────────────────────── -->
+  <nav class="rail" aria-label="Secciones">
+    <div class="rail-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <rect width="18" height="18" rx="3" fill="#660E80"/>
+        <path d="M12.2 6.4a3.6 3.6 0 1 0 0 5.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <b>Cober360</b><br>
+        <span>Afiliaciones</span>
+      </div>
+    </div>
+
+    <div class="rail-nav">
+      <p class="rail-group">Mi trabajo</p>
+      <a class="rail-link" href="prospectos.html" aria-current="page">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-list"/></svg>
+        Prospectos <span class="rail-count tabular">412</span>
+      </a>
+      <a class="rail-link" href="#">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-file"/></svg>
+        Pólizas <span class="rail-count tabular">38</span>
+      </a>
+      <a class="rail-link" href="#">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-chat"/></svg>
+        WhatsApp <span class="rail-count tabular">7</span>
+      </a>
+      <a class="rail-link" href="#">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-tag"/></svg>
+        Promociones
+      </a>
+
+      <p class="rail-group">Otros paneles</p>
+      <a class="rail-link" href="supervisor.html">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-chart"/></svg>
+        Supervisor
+      </a>
+      <a class="rail-link" href="admin.html">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-chart"/></svg>
+        Admin
+      </a>
+      <a class="rail-link" href="backoffice.html">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-file"/></svg>
+        BackOffice
+      </a>
+    </div>
+
+    <div class="rail-foot">
+      <button class="btn btn-quiet btn-sm" data-theme-toggle type="button" aria-label="Cambiar tema">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-sun"/></svg>
+      </button>
+      <div class="who">
+        <b>M. Fernández</b>
+        <span>Vendedor · Eq. Norte</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── Folio ────────────────────────────────────────────────────────── -->
+  <main class="sheet">
+
+    <header class="folio">
+      <h1>Registro de prospectos</h1>
+
+      <p class="folio-count">
+        <b class="tabular">412</b>
+        <span>asientos</span>
+      </p>
+
+      <p class="folio-range">
+        Mostrando <b class="tabular">1–21</b> · filtro <b>mi cartera</b> · orden <b>etapa</b> <span class="keys">· <kbd>J</kbd><kbd>K</kbd> recorrer</span>
+      </p>
+
+      <div class="folio-tools">
+        <label class="field">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-search"/></svg>
+          <span class="sr">Buscar por documento, apellido o teléfono</span>
+          <input type="search" data-search placeholder="Documento, apellido, teléfono…">
+          <kbd>/</kbd>
+        </label>
+        <button class="btn" type="button">Filtros</button>
+        <button class="btn btn-primary" type="button" data-open="m-nuevo">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-plus"/></svg>
+          Nuevo asiento
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── Encabezados de columna ─────────────────────────────────────── -->
+    <div class="reg" role="table" aria-label="Registro de prospectos">
+      <div role="rowgroup">
+      <div role="row" class="reg-row reg-head">
+        <span role="columnheader" class="num"><input class="chk" type="checkbox" data-mark-all aria-label="Marcar todos"></span>
+        <span role="columnheader">Documento</span>
+        <span role="columnheader">Apellido y nombre</span>
+        <span role="columnheader" class="num">Edad</span>
+        <span role="columnheader">Localidad</span>
+        <span role="columnheader" class="h-origin">Origen</span>
+        <span role="columnheader">Estado</span>
+        <span role="columnheader">Trabado en</span>
+        <span role="columnheader" style="text-align:right">Contacto</span>
+        <span role="columnheader"></span>
+      </div>
+      </div>
+
+      <!-- ── Etapa: sin trabajar ──────────────────────────────────────── -->
+      <div role="rowgroup" aria-label="Etapa: Sin trabajar">
+      <div aria-hidden="true" class="stage">
+        <h2>Sin trabajar</h2>
+        <span class="n tabular">96</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0001"><span class="folio-n">0001</span></span>
+        <span role="cell" class="f-dni tabular">40.118.552</span>
+        <span role="cell" class="f-name"><b>Quiroga</b>, <span>Bruno Ezequiel</span></span>
+        <span role="cell" class="f-age tabular">27</span>
+        <span role="cell" class="f-plain">San Martín</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="inerte">Lead</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>Sin primer contacto</span></span>
+        <span role="cell" class="f-time tabular">—</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-contacto">Trabajar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0002"><span class="folio-n">0002</span></span>
+        <span role="cell" class="f-dni tabular">33.907.214</span>
+        <span role="cell" class="f-name"><b>Benítez</b>, <span>Carla Soledad</span></span>
+        <span role="cell" class="f-age tabular">36</span>
+        <span role="cell" class="f-plain">Vicente López</span>
+        <span role="cell" class="f-origin">Referido</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="inerte">Lead</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>Sin primer contacto</span></span>
+        <span role="cell" class="f-time tabular">—</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-contacto">Trabajar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0003"><span class="folio-n">0003</span></span>
+        <span role="cell" class="f-dni tabular">28.445.031</span>
+        <span role="cell" class="f-name"><b>Ledesma</b>, <span>Hugo Alberto</span></span>
+        <span role="cell" class="f-age tabular">48</span>
+        <span role="cell" class="f-plain">Tigre</span>
+        <span role="cell" class="f-origin">Campaña</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="inerte">Lead</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>Sin primer contacto</span></span>
+        <span role="cell" class="f-time tabular">—</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-contacto">Trabajar</button></span>
+      </div>
+
+      <!-- ── Etapa activa: en contacto ────────────────────────────────── -->
+      </div>
+      <div role="rowgroup" aria-label="Etapa: En contacto">
+      <div aria-hidden="true" class="stage" data-active>
+        <h2>En contacto</h2>
+        <span class="n tabular">58</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0004"><span class="folio-n">0004</span></span>
+        <span role="cell" class="f-dni tabular">35.612.788</span>
+        <span role="cell" class="f-name"><b>Sosa Bravo</b>, <span>Julieta</span></span>
+        <span role="cell" class="f-age tabular">34</span>
+        <span role="cell" class="f-plain">Escobar</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">1º Contacto</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-phone"/></svg><span>Espera devolución de llamada</span></span>
+        <span role="cell" class="f-time tabular">2 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-cotizacion">Cotizar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0005"><span class="folio-n">0005</span></span>
+        <span role="cell" class="f-dni tabular">30.221.904</span>
+        <span role="cell" class="f-name"><b>Maidana</b>, <span>Ricardo Omar</span></span>
+        <span role="cell" class="f-age tabular">45</span>
+        <span role="cell" class="f-plain">San Isidro</span>
+        <span role="cell" class="f-origin">Referido</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">Chat WhatsApp</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-chat"/></svg><span>Respondió, falta cotizar</span></span>
+        <span role="cell" class="f-time tabular">40 min</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-cotizacion">Cotizar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0006"><span class="folio-n">0006</span></span>
+        <span role="cell" class="f-dni tabular">26.880.117</span>
+        <span role="cell" class="f-name"><b>Ocampo</b>, <span>Silvia Beatriz</span></span>
+        <span role="cell" class="f-age tabular">52</span>
+        <span role="cell" class="f-plain">Pilar</span>
+        <span role="cell" class="f-origin">Campaña</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">No contesta</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-phone"/></svg><span>3º intento sin respuesta</span></span>
+        <span role="cell" class="f-time tabular" data-cold>6 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-contacto">Reintentar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0007"><span class="folio-n">0007</span></span>
+        <span role="cell" class="f-dni tabular">41.559.320</span>
+        <span role="cell" class="f-name"><b>Villalba</b>, <span>Nahuel</span></span>
+        <span role="cell" class="f-age tabular">25</span>
+        <span role="cell" class="f-plain">José C. Paz</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="inerte">WhatsApp enviado</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-chat"/></svg><span>Sin lectura desde el envío</span></span>
+        <span role="cell" class="f-time tabular">1 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-contacto">Reintentar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0008"><span class="folio-n">0008</span></span>
+        <span role="cell" class="f-dni tabular">24.113.667</span>
+        <span role="cell" class="f-name"><b>Arrieta</b>, <span>Norma Susana</span></span>
+        <span role="cell" class="f-age tabular">61</span>
+        <span role="cell" class="f-plain">Malvinas Argentinas</span>
+        <span role="cell" class="f-origin">Referido</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">Promo aplicada</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-tag"/></svg><span>Promo vence en 2 días</span></span>
+        <span role="cell" class="f-time tabular">5 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-cotizacion">Cotizar</button></span>
+      </div>
+
+      <!-- ── Etapa: calificado ────────────────────────────────────────── -->
+      </div>
+      <div role="rowgroup" aria-label="Etapa: Calificado">
+      <div aria-hidden="true" class="stage">
+        <h2>Calificado</h2>
+        <span class="n tabular">31</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0009"><span class="folio-n">0009</span></span>
+        <span role="cell" class="f-dni tabular">32.044.891</span>
+        <span role="cell" class="f-name"><b>Peralta</b>, <span>Diego Martín</span></span>
+        <span role="cell" class="f-age tabular">39</span>
+        <span role="cell" class="f-plain">San Fernando</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">Cotización</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-file"/></svg><span>Cotización enviada, sin respuesta</span></span>
+        <span role="cell" class="f-time tabular">3 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Seguir</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0010"><span class="folio-n">0010</span></span>
+        <span role="cell" class="f-dni tabular">37.902.145</span>
+        <span role="cell" class="f-name"><b>Godoy</b>, <span>Ana Laura</span></span>
+        <span role="cell" class="f-age tabular">31</span>
+        <span role="cell" class="f-plain">Del Viso</span>
+        <span role="cell" class="f-origin">Campaña</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="firme">Póliza</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg><span>Listo para alta</span></span>
+        <span role="cell" class="f-time tabular">1 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Dar de alta</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0011"><span class="folio-n">0011</span></span>
+        <span role="cell" class="f-dni tabular">29.336.470</span>
+        <span role="cell" class="f-name"><b>Ferreyra</b>, <span>Gustavo</span></span>
+        <span role="cell" class="f-age tabular">44</span>
+        <span role="cell" class="f-plain">Garín</span>
+        <span role="cell" class="f-origin">Referido</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="venta">Pago</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg><span>Medio de pago validado</span></span>
+        <span role="cell" class="f-time tabular">22 min</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Dar de alta</button></span>
+      </div>
+
+      <!-- ── Etapa: póliza en curso ───────────────────────────────────── -->
+      </div>
+      <div role="rowgroup" aria-label="Etapa: Póliza en curso">
+      <div aria-hidden="true" class="stage">
+        <h2>Póliza en curso</h2>
+        <span class="n tabular">18</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0012"><span class="folio-n">0012</span></span>
+        <span role="cell" class="f-dni tabular">31.775.208</span>
+        <span role="cell" class="f-name"><b>Cabrera</b>, <span>Marina</span></span>
+        <span role="cell" class="f-age tabular">41</span>
+        <span role="cell" class="f-plain">Boulogne</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="firme">Póliza generada</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>Falta DDJJ del cónyuge</span></span>
+        <span role="cell" class="f-time tabular">4 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Completar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0013"><span class="folio-n">0013</span></span>
+        <span role="cell" class="f-dni tabular">27.610.983</span>
+        <span role="cell" class="f-name"><b>Nieto</b>, <span>Osvaldo Ramón</span></span>
+        <span role="cell" class="f-age tabular">50</span>
+        <span role="cell" class="f-plain">Muñiz</span>
+        <span role="cell" class="f-origin">Referido</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="firme">Env. supervisor</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>En revisión de supervisor</span></span>
+        <span role="cell" class="f-time tabular">1 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Ver</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0014"><span class="folio-n">0014</span></span>
+        <span role="cell" class="f-dni tabular">34.288.716</span>
+        <span role="cell" class="f-name"><b>Ibarra</b>, <span>Lucía Belén</span></span>
+        <span role="cell" class="f-age tabular">35</span>
+        <span role="cell" class="f-plain">Grand Bourg</span>
+        <span role="cell" class="f-origin">Campaña</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">Pend. firma</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-alert"/></svg><span>Enviada a firma hace 9 días</span></span>
+        <span role="cell" class="f-time tabular" data-cold>9 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Reenviar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0015"><span class="folio-n">0015</span></span>
+        <span role="cell" class="f-dni tabular">23.907.554</span>
+        <span role="cell" class="f-name"><b>Zalazar</b>, <span>Mirta Elena</span></span>
+        <span role="cell" class="f-age tabular">63</span>
+        <span role="cell" class="f-plain">Bella Vista</span>
+        <span role="cell" class="f-origin">Referido</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="venta">Firmada</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13" aria-hidden="true"><use href="#i-check"/></svg><span>Nada pendiente</span></span>
+        <span role="cell" class="f-time tabular">3 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Ver</button></span>
+      </div>
+
+      <!-- ── Etapa: descartado ────────────────────────────────────────── -->
+      </div>
+      <div role="rowgroup" aria-label="Etapa: Descartado">
+      <div aria-hidden="true" class="stage">
+        <h2>Descartado</h2>
+        <span class="n tabular">209</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0016"><span class="folio-n">0016</span></span>
+        <span role="cell" class="f-dni tabular">38.114.902</span>
+        <span role="cell" class="f-name"><b>Romero</b>, <span>Federico</span></span>
+        <span role="cell" class="f-age tabular">29</span>
+        <span role="cell" class="f-plain">Zárate</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="caido">Fuera zona</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>Sin cartilla en el partido</span></span>
+        <span role="cell" class="f-time tabular">12 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Reciclar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0017"><span class="folio-n">0017</span></span>
+        <span role="cell" class="f-dni tabular">18.442.309</span>
+        <span role="cell" class="f-name"><b>Domínguez</b>, <span>Raúl</span></span>
+        <span role="cell" class="f-age tabular">72</span>
+        <span role="cell" class="f-plain">Munro</span>
+        <span role="cell" class="f-origin">Campaña</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="caido">Fuera edad</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-lock"/></svg><span>Supera edad de ingreso</span></span>
+        <span role="cell" class="f-time tabular">18 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Ley 19032</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar asiento 0018"><span class="folio-n">0018</span></span>
+        <span role="cell" class="f-dni tabular">36.500.128</span>
+        <span role="cell" class="f-name"><b>Aguirre</b>, <span>Paula</span></span>
+        <span role="cell" class="f-age tabular">33</span>
+        <span role="cell" class="f-plain">Pacheco</span>
+        <span role="cell" class="f-origin">Web</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="caido">Preexistencia</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13" aria-hidden="true"><use href="#i-alert"/></svg><span>Declaró patología excluyente</span></span>
+        <span role="cell" class="f-time tabular">21 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button">Ver</button></span>
+      </div>
+      </div>
+    </div>
+
+    <!-- ─── Barra de selección ─────────────────────────────────────────── -->
+    <div class="marked" data-marked hidden>
+      <b><span class="tabular" data-marked-count>0</span> asientos marcados</b>
+      <span class="sep"></span>
+      <button class="btn btn-quiet btn-sm" type="button" data-mark-clear>Desmarcar</button>
+      <div class="push">
+        <button class="btn btn-sm" type="button">Reasignar</button>
+        <button class="btn btn-sm" type="button">Exportar</button>
+        <button class="btn btn-sm btn-primary" type="button" data-open="m-cotizacion">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-send"/></svg>
+          Enviar cotización
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ Modal: registrar contacto ═══════════════════════════════════════ -->
+<dialog class="modal" id="m-contacto" aria-labelledby="m-contacto-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-contacto-t">Registrar contacto</h2>
+        <p class="sub" style="margin:2px 0 0">Sosa Bravo, Julieta · DNI 35.612.788</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="grid-2">
+        <label class="lbl">
+          <span>Vía</span>
+          <select class="inp">
+            <option>Llamada telefónica</option>
+            <option>WhatsApp</option>
+            <option>Correo</option>
+          </select>
+        </label>
+        <label class="lbl">
+          <span>Nuevo estado</span>
+          <select class="inp">
+            <option>1º Contacto</option>
+            <option>Conversación iniciada por WhatsApp</option>
+            <option>No contesta</option>
+            <option>Calificado Cotización</option>
+            <option>No le interesa (económico)</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="lbl">
+        <span>Comentario</span>
+        <textarea class="inp" placeholder="Qué se habló, qué quedó pendiente y para cuándo."></textarea>
+        <span class="hint">Queda en el historial del prospecto. No se imprime en la póliza.</span>
+      </label>
+
+      <label class="lbl">
+        <span>Próximo contacto</span>
+        <input class="inp" type="datetime-local" value="2026-09-04T10:00">
+      </label>
+    </div>
+
+    <div class="modal-foot">
+      <span class="hint">Se registra a nombre de M. Fernández.</span>
+      <div class="push">
+        <button class="btn" type="button" data-close>Cancelar</button>
+        <button class="btn btn-primary" type="submit">Guardar contacto</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- ═══ Modal: enviar cotización (con error y estado deshabilitado) ═════ -->
+<dialog class="modal wide" id="m-cotizacion" aria-labelledby="m-cotizacion-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-cotizacion-t">Enviar cotización</h2>
+        <p class="sub" style="margin:2px 0 0">Maidana, Ricardo Omar · DNI 30.221.904 · 45 años</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="notice">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-alert"/></svg>
+        <span>
+          <b>Falta el correo del prospecto.</b>
+          Sin correo la cotización sólo puede salir por WhatsApp. Cargalo abajo para habilitar el envío por mail.
+        </span>
+      </p>
+
+      <div class="grid-2">
+        <label class="lbl">
+          <span>Plan</span>
+          <select class="inp">
+            <option>Cober 210</option>
+            <option>Cober 310</option>
+            <option>Cober 410</option>
+          </select>
+        </label>
+        <label class="lbl">
+          <span>Integrantes del grupo</span>
+          <input class="inp tabular" type="number" value="2" min="1">
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label class="lbl">
+          <span>Correo</span>
+          <input class="inp" type="email" placeholder="nombre@correo.com" aria-invalid="true" aria-describedby="err-mail">
+          <span class="err" id="err-mail">Requerido para enviar por mail.</span>
+        </label>
+        <label class="lbl">
+          <span>Teléfono</span>
+          <input class="inp tabular" type="tel" value="+54 9 11 5512-8840">
+        </label>
+      </div>
+
+      <label class="lbl">
+        <span>Promoción aplicada</span>
+        <select class="inp">
+          <option>Ninguna</option>
+          <option>2 meses 50% — vence 05/09</option>
+          <option>Bonificación grupo familiar</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="modal-foot">
+      <span class="hint">La cotización no compromete precio final.</span>
+      <div class="push">
+        <button class="btn" type="button" data-close>Cancelar</button>
+        <button class="btn" type="button" disabled title="Cargá el correo para habilitar">Enviar por mail</button>
+        <button class="btn btn-primary" type="submit">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-chat"/></svg>
+          Enviar por WhatsApp
+        </button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- ═══ Modal: nuevo asiento ════════════════════════════════════════════ -->
+<dialog class="modal" id="m-nuevo" aria-labelledby="m-nuevo-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-nuevo-t">Nuevo asiento</h2>
+        <p class="sub" style="margin:2px 0 0">Se agrega a tu cartera con estado Lead</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="grid-2">
+        <label class="lbl"><span>Apellido</span><input class="inp" type="text"></label>
+        <label class="lbl"><span>Nombre</span><input class="inp" type="text"></label>
+      </div>
+      <div class="grid-2">
+        <label class="lbl"><span>Documento</span><input class="inp tabular" type="text" inputmode="numeric" placeholder="00.000.000"></label>
+        <label class="lbl"><span>Edad</span><input class="inp tabular" type="number" min="0" max="120"></label>
+      </div>
+      <div class="grid-2">
+        <label class="lbl"><span>Teléfono</span><input class="inp tabular" type="tel" placeholder="+54 9 11 0000-0000"></label>
+        <label class="lbl"><span>Localidad</span><input class="inp" type="text"></label>
+      </div>
+      <label class="lbl">
+        <span>Origen</span>
+        <select class="inp"><option>Web</option><option>Referido</option><option>Campaña</option><option>Carga manual</option></select>
+      </label>
+    </div>
+
+    <div class="modal-foot">
+      <div class="push">
+        <button class="btn" type="button" data-close>Cancelar</button>
+        <button class="btn btn-primary" type="submit">Crear asiento</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<a class="ribbon" href="index.html">← Índice del set</a>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

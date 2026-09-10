@@ -139,7 +139,7 @@ export function ValidacionConversacionModal({ open, onOpenChange, prospectoId, n
                         "flex items-center justify-end gap-1 mt-1",
                         saliente ? "text-primary-foreground/70" : "text-muted-foreground"
                       )}>
-                        <span className="text-[10px]">
+                        <span className="text-[10.5px]">
                           {m.created_at ? new Date(m.created_at).toLocaleString("es-AR", {
                             day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
                           }) : ""}

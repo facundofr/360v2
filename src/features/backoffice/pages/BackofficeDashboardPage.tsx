@@ -76,7 +76,7 @@ function SidebarNavContent({ menuItems, vista, setVista }: { menuItems: MenuItem
         const items = menuItems.filter(m => m.group === group)
         return (
           <SidebarGroup key={group}>
-            <SidebarGroupLabel className="text-[10px] uppercase tracking-widest text-muted-foreground/60 px-3">
+            <SidebarGroupLabel className="text-[10.5px] uppercase tracking-widest text-muted-foreground/60 px-3">
               {group}
             </SidebarGroupLabel>
             <SidebarMenu>
@@ -248,7 +248,7 @@ export default function BackofficeDashboardPage() {
               </div>
 
               {/* Filtros de periodo */}
-              <div className="flex flex-wrap gap-2 items-center p-3 bg-muted/50 rounded-xl border">
+              <div className="flex flex-wrap gap-2 items-center p-3 bg-paper-sunk rounded-lg border">
                 <Filter className="size-4 text-muted-foreground shrink-0" aria-hidden="true" />
                 <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Periodo:</span>
                 <Select value={periodType} onValueChange={setPeriodType}>
@@ -280,7 +280,7 @@ export default function BackofficeDashboardPage() {
               {/* Stats cards */}
               {loading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}
+                  {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-lg" />)}
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -325,7 +325,7 @@ export default function BackofficeDashboardPage() {
                   {ingresosMes !== undefined && (
                     <Card>
                       <CardContent className="p-4 flex items-center gap-3">
-                        <div className="rounded-xl bg-muted p-3">
+                        <div className="rounded-lg bg-muted p-3">
                           <DollarSign className="size-5 text-muted-foreground" />
                         </div>
                         <div>
@@ -340,7 +340,7 @@ export default function BackofficeDashboardPage() {
                   {conversionRate !== undefined && (
                     <Card>
                       <CardContent className="p-4 flex items-center gap-3">
-                        <div className="rounded-xl bg-muted p-3">
+                        <div className="rounded-lg bg-muted p-3">
                           <Percent className="size-5 text-muted-foreground" />
                         </div>
                         <div>

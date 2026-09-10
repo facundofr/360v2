@@ -660,7 +660,7 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
 
               <p className="text-sm text-muted-foreground">{prospectosFiltrados.length} prospectos</p>
 
-              {loading ? <Skeleton className="h-64 w-full rounded-xl" /> : (
+              {loading ? <Skeleton className="h-64 w-full rounded-lg" /> : (
                 <DataTable columns={columnsProspectos} data={prospectosFiltrados} emptyMessage="Sin prospectos" />
               )}
             </>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BackOffice · Cober360</title>
+<meta name="description" content="Concepto de rediseño — panel de backoffice.">
+<link rel="stylesheet" href="assets/cober.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></symbol>
+  <symbol id="i-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4.5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L9 2Z"/><path d="M9 2v3.5h3.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5.5" r="2.5"/><path d="M1.5 13.5c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/><path d="M11 3.2a2.5 2.5 0 0 1 0 4.6M12.5 13.5c0-1.4-.5-2.6-1.4-3.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 13.5h11M5 11V6.5M8 11V3.5M11 11V8.5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3.5 3.5L13 5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5 14.5 13.5H1.5L8 2.5Z"/><path d="M8 6.5v3M8 11.5h.01"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1M12.9 3.1l-1 1M4.1 11.9l-1 1M12.9 12.9l-1-1M4.1 4.1l-1-1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></symbol>
+</svg>
+
+<div class="frame">
+  <nav class="rail" aria-label="Secciones">
+    <div class="rail-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <rect width="18" height="18" rx="3" fill="#660E80"/>
+        <path d="M12.2 6.4a3.6 3.6 0 1 0 0 5.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <div><b>Cober360</b><br><span>BackOffice</span></div>
+    </div>
+    <div class="rail-nav">
+      <p class="rail-group">Auditoría</p>
+      <a class="rail-link" href="backoffice.html" aria-current="page"><svg width="14" height="14"><use href="#i-file"/></svg>Pólizas <span class="rail-count tabular">27</span></a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-list"/></svg>Prospectos</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-users"/></svg>Supervisores <span class="rail-count tabular">6</span></a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-users"/></svg>Vendedores</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-chart"/></svg>Métricas</a>
+      <p class="rail-group">Otros paneles</p>
+      <a class="rail-link" href="prospectos.html"><svg width="14" height="14"><use href="#i-list"/></svg>Vendedor</a>
+      <a class="rail-link" href="supervisor.html"><svg width="14" height="14"><use href="#i-chart"/></svg>Supervisor</a>
+      <a class="rail-link" href="admin.html"><svg width="14" height="14"><use href="#i-chart"/></svg>Admin</a>
+    </div>
+    <div class="rail-foot">
+      <button class="btn btn-quiet btn-sm" data-theme-toggle type="button" aria-label="Cambiar tema"><svg width="14" height="14"><use href="#i-sun"/></svg></button>
+      <div class="who"><b>P. Sandoval</b><span>BackOffice</span></div>
+    </div>
+  </nav>
+
+  <main class="sheet">
+    <header class="folio">
+      <h1>Pólizas en auditoría</h1>
+      <p class="folio-count"><b class="tabular">27</b><span>asientos</span></p>
+      <p class="folio-range">Mostrando <b class="tabular">1–8</b> · filtro <b>con observación</b> · orden <b>antigüedad</b> <span class="keys">· <kbd>J</kbd><kbd>K</kbd> recorrer</span></p>
+      <div class="folio-tools">
+        <label class="field">
+          <svg width="14" height="14"><use href="#i-search"/></svg>
+          <span class="sr">Buscar por documento o número de póliza</span>
+          <input type="search" data-search placeholder="Documento o nº de póliza…">
+          <kbd>/</kbd>
+        </label>
+        <button class="btn" type="button">Filtros</button>
+        <button class="btn btn-primary" type="button">Exportar lote</button>
+      </div>
+    </header>
+
+    <div class="reg reg--bo" role="table" aria-label="Pólizas en auditoría">
+      <div role="rowgroup">
+      <div role="row" class="reg-row reg-head">
+        <span role="columnheader" class="num"><input class="chk" type="checkbox" data-mark-all aria-label="Marcar todos"></span>
+        <span role="columnheader">Documento</span>
+        <span role="columnheader">Titular</span>
+        <span role="columnheader">Nº póliza</span>
+        <span role="columnheader">Vendedor</span>
+        <span role="columnheader">Estado</span>
+        <span role="columnheader">Trabado en</span>
+        <span role="columnheader" style="text-align:right">Antigüedad</span>
+        <span role="columnheader"></span>
+      </div>
+      </div>
+
+      <div role="rowgroup" aria-label="Etapa: Con observación">
+      <div aria-hidden="true" class="stage" data-active>
+        <h2>Con observación</h2>
+        <span class="n tabular">11</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar póliza P-24881"><span class="folio-n">0001</span></span>
+        <span role="cell" class="f-dni tabular">31.775.208</span>
+        <span role="cell" class="f-name"><b>Cabrera</b>, <span>Marina</span></span>
+        <span role="cell" class="f-plain tabular">P-24881</span>
+        <span role="cell" class="f-plain">M. Fernández</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">Doc. incompleta</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13"><use href="#i-lock"/></svg><span>Falta DDJJ del cónyuge</span></span>
+        <span role="cell" class="f-time tabular">4 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-auditar">Auditar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar póliza P-24790"><span class="folio-n">0002</span></span>
+        <span role="cell" class="f-dni tabular">34.288.716</span>
+        <span role="cell" class="f-name"><b>Ibarra</b>, <span>Lucía Belén</span></span>
+        <span role="cell" class="f-plain tabular">P-24790</span>
+        <span role="cell" class="f-plain">V. Recalde</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="curso">Pend. firma</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13"><use href="#i-alert"/></svg><span>Cotización caduca en 6 días</span></span>
+        <span role="cell" class="f-time tabular" data-cold>9 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-auditar">Auditar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar póliza P-24655"><span class="folio-n">0003</span></span>
+        <span role="cell" class="f-dni tabular">36.500.128</span>
+        <span role="cell" class="f-name"><b>Aguirre</b>, <span>Paula</span></span>
+        <span role="cell" class="f-plain tabular">P-24655</span>
+        <span role="cell" class="f-plain">L. Paz</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="caido">Preexistencia</span></span>
+        <span role="cell" class="blocked"><svg width="13" height="13"><use href="#i-alert"/></svg><span>Patología declarada excluyente</span></span>
+        <span role="cell" class="f-time tabular" data-cold>14 d</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-auditar">Auditar</button></span>
+      </div>
+
+      </div>
+      <div role="rowgroup" aria-label="Etapa: Listas para alta">
+      <div aria-hidden="true" class="stage">
+        <h2>Listas para alta</h2>
+        <span class="n tabular">16</span>
+        <span class="axis"></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar póliza P-24902"><span class="folio-n">0004</span></span>
+        <span role="cell" class="f-dni tabular">23.907.554</span>
+        <span role="cell" class="f-name"><b>Zalazar</b>, <span>Mirta Elena</span></span>
+        <span role="cell" class="f-plain tabular">P-24902</span>
+        <span role="cell" class="f-plain">M. Fernández</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="venta">Firmada</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13"><use href="#i-check"/></svg><span>Nada pendiente</span></span>
+        <span role="cell" class="f-time tabular">3 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-auditar">Auditar</button></span>
+      </div>
+
+      <div role="row" class="reg-row entry">
+        <span role="cell" class="f-num tabular"><input class="chk" type="checkbox" data-mark aria-label="Marcar póliza P-24898"><span class="folio-n">0005</span></span>
+        <span role="cell" class="f-dni tabular">29.336.470</span>
+        <span role="cell" class="f-name"><b>Ferreyra</b>, <span>Gustavo</span></span>
+        <span role="cell" class="f-plain tabular">P-24898</span>
+        <span role="cell" class="f-plain">V. Recalde</span>
+        <span role="cell" class="stamp-cell"><span class="stamp" data-load="venta">Firmada</span></span>
+        <span role="cell" class="blocked" data-none><svg width="13" height="13"><use href="#i-check"/></svg><span>Nada pendiente</span></span>
+        <span role="cell" class="f-time tabular">6 h</span>
+        <span role="cell" class="f-act"><button class="btn btn-sm" type="button" data-open="m-auditar">Auditar</button></span>
+      </div>
+      </div>
+    </div>
+
+    <div class="marked" data-marked hidden>
+      <b><span class="tabular" data-marked-count>0</span> pólizas marcadas</b>
+      <span class="sep"></span>
+      <button class="btn btn-quiet btn-sm" type="button" data-mark-clear>Desmarcar</button>
+      <div class="push">
+        <button class="btn btn-sm" type="button">Descargar PDFs</button>
+        <button class="btn btn-sm btn-primary" type="button" data-open="m-alta-lote">Dar de alta en Gecros</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══ Modal: auditar póliza ══════════════════════════════════════════ -->
+<dialog class="modal wide" id="m-auditar" aria-labelledby="m-auditar-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-auditar-t">Auditar póliza P-24881</h2>
+        <p class="sub" style="margin:2px 0 0">Cabrera, Marina · DNI 31.775.208 · Vendedor: M. Fernández</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    </div>
+
+    <div class="modal-body">
+      <table class="plain" style="border:1px solid var(--rule);border-radius:var(--radius)">
+        <tbody>
+          <tr><td style="color:var(--muted);width:190px">Plan y grupo</td><td><b>Cober 310</b> · titular + cónyuge</td></tr>
+          <tr><td style="color:var(--muted)">Vigencia solicitada</td><td class="tabular">01/10/2026</td></tr>
+          <tr><td style="color:var(--muted)">DDJJ titular</td><td><span class="stamp" data-load="venta">Completa</span></td></tr>
+          <tr><td style="color:var(--muted)">DDJJ cónyuge</td><td><span class="stamp" data-load="caido">Ausente</span></td></tr>
+          <tr><td style="color:var(--muted)">CBU</td><td><span class="stamp" data-load="venta">Validado</span></td></tr>
+          <tr><td style="color:var(--muted)">Firma digital</td><td><span class="stamp" data-load="inerte">No enviada</span></td></tr>
+        </tbody>
+      </table>
+
+      <p class="notice">
+        <svg width="14" height="14"><use href="#i-alert"/></svg>
+        <span>
+          <b>La póliza no puede darse de alta sin la DDJJ del cónyuge.</b>
+          Es parte del documento que el afiliado firma: si falta, la declaración jurada sale incompleta.
+        </span>
+      </p>
+
+      <label class="lbl">
+        <span>Observación</span>
+        <textarea class="inp" placeholder="Qué falta y a quién se le devuelve."></textarea>
+      </label>
+    </div>
+
+    <div class="modal-foot">
+      <span class="hint">Devolver no borra lo ya cargado.</span>
+      <div class="push">
+        <button class="btn" type="button" data-close>Devolver al vendedor</button>
+        <button class="btn btn-primary" type="button" disabled title="Falta la DDJJ del cónyuge">Dar de alta</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- ═══ Modal: confirmación destructiva ════════════════════════════════ -->
+<dialog class="modal" id="m-alta-lote" aria-labelledby="m-lote-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-lote-t">Dar de alta en Gecros</h2>
+        <p class="sub" style="margin:2px 0 0">Acción irreversible sobre el sistema externo</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="margin:0;font-size:13px;line-height:1.6">
+        Vas a dar de alta <b>2 pólizas</b> en Gecros. Una vez enviadas no se pueden retirar
+        desde Cober360: cualquier corrección posterior se hace en Gecros.
+      </p>
+      <label class="lbl">
+        <span>Escribí ALTA para confirmar</span>
+        <input class="inp" type="text" placeholder="ALTA" data-confirm-word="ALTA" aria-describedby="alta-hint">
+        <span class="hint" id="alta-hint">El botón se habilita cuando el texto coincide.</span>
+      </label>
+    </div>
+    <div class="modal-foot">
+      <div class="push">
+        <button class="btn" type="button" data-close>Cancelar</button>
+        <button class="btn btn-primary" type="submit" data-confirm-submit disabled>Dar de alta 2 pólizas</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<a class="ribbon" href="index.html">← Índice del set</a>
+<script src="assets/app.js"></script>
+</body>
+</html>

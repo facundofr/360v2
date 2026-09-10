@@ -290,7 +290,7 @@ export default function PrestadoresAdmin() {
       </div>
 
       {/* Tabla */}
-      {loading ? <Skeleton className="h-64 w-full rounded-xl" /> : (
+      {loading ? <Skeleton className="h-64 w-full rounded-lg" /> : (
         <DataTable columns={columns} data={filtrados} emptyMessage="Sin prestadores" />
       )}
 

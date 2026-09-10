@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import axios from "axios"
-import { HelpCircle, X, BookOpen, Send, Loader2 } from "lucide-react"
+import { HelpCircle, X, BookOpen, Send, Loader2, Lightbulb } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -146,7 +146,7 @@ export function ManualWidget() {
             {/* Sugerencias rápidas por rol */}
             {sugerencias && (
               <div className="shrink-0 space-y-1">
-                <p className="text-[11px] text-muted-foreground">💡 Sugerencias rápidas:</p>
+                <p className="flex items-center gap-1 text-[11px] text-muted-foreground"><Lightbulb className="size-3" aria-hidden="true" />Sugerencias rápidas:</p>
                 <div className="flex flex-wrap gap-1">
                   {sugerencias.map((s) => (
                     <button

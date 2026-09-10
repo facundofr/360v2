@@ -125,7 +125,7 @@ export default function ModalExportacion({ open, onOpenChange, userRole = "vende
           {loadingStats ? (
             <Skeleton className="h-16 w-full" />
           ) : estadisticas && (
-            <div className="flex gap-3 flex-wrap bg-muted/50 rounded-lg p-3">
+            <div className="flex gap-3 flex-wrap bg-paper-sunk rounded-lg p-3">
               <div className="flex items-center gap-1.5 text-sm">
                 <BarChart2 className="size-4 text-primary" />
                 <Badge variant="secondary">{estadisticas.total_prospectos ?? 0}</Badge>

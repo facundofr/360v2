@@ -921,7 +921,7 @@ export function PolizaForm({ cotizacion, prospecto, open, onClose, onPolizaCread
             <p className="text-xs text-muted-foreground">
               IMC: <strong>{imcTitular}</strong>
               {imcTitular > 30 && (
-                <Badge variant="destructive" className="ml-2 text-[10px]">Requiere auditoría médica</Badge>
+                <Badge variant="destructive" className="ml-2 text-[10.5px]">Requiere auditoría médica</Badge>
               )}
             </p>
           )}
@@ -1020,7 +1020,7 @@ export function PolizaForm({ cotizacion, prospecto, open, onClose, onPolizaCread
               {imc !== null && (
                 <p className="text-xs text-muted-foreground">
                   IMC: <strong>{imc}</strong>
-                  {imc > 30 && <Badge variant="destructive" className="ml-2 text-[10px]">Requiere auditoría médica</Badge>}
+                  {imc > 30 && <Badge variant="destructive" className="ml-2 text-[10.5px]">Requiere auditoría médica</Badge>}
                 </p>
               )}
               <div className="grid gap-3 sm:grid-cols-3">

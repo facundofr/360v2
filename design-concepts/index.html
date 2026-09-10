@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Padrón · Concepto Cober360</title>
+<meta name="description" content="Set de concepto de rediseño para Cober360.">
+<link rel="stylesheet" href="assets/cober.css">
+</head>
+<body>
+
+<div class="index-wrap">
+
+  <h1>El Padrón</h1>
+  <p class="lede">
+    Set de concepto de rediseño para Cober360. La cola de prospectos es un registro nominal, no
+    una grilla de tarjetas: una fila por persona, el documento como eje, el estado estampado en
+    columna fija. Sin tarjeta, sin sombra, sin pill flotante.
+  </p>
+  <p class="meta">
+    Autónomo — no importa nada de <code>src/</code>. Tipografía Montserrat y violeta
+    <code>#660E80</code> del design system de Cober.
+  </p>
+
+  <nav class="index-list">
+    <a class="index-item" href="prospectos.html">
+      <span class="n tabular">01</span>
+      <span>
+        <h2>Registro de prospectos · Vendedor</h2>
+        <p>La superficie que prueba el mundo. Agrupada por etapa del embudo, con la etapa activa marcada, estado graduado por carga y una columna que dice contra qué está trabado cada asiento. Incluye tres modales, barra de selección y navegación por teclado.</p>
+      </span>
+      <span class="go">Ver</span>
+    </a>
+
+    <a class="index-item" href="supervisor.html">
+      <span class="n tabular">02</span>
+      <span>
+        <h2>Resumen del equipo · Supervisor</h2>
+        <p>Lecturas en una regla horizontal en lugar de seis tarjetas. Equipo como registro, barras de proporción que son dato, un estado vacío real y el modal de revisión de póliza.</p>
+      </span>
+      <span class="go">Ver</span>
+    </a>
+
+    <a class="index-item" href="admin.html">
+      <span class="n tabular">03</span>
+      <span>
+        <h2>Métricas generales · Admin</h2>
+        <p>Métricas globales, usuarios, altas por equipo y origen de cartera. Incluye el estado de carga con la forma de la fila en vez de un spinner, y el alta de usuario.</p>
+      </span>
+      <span class="go">Ver</span>
+    </a>
+
+    <a class="index-item" href="backoffice.html">
+      <span class="n tabular">04</span>
+      <span>
+        <h2>Pólizas en auditoría · BackOffice</h2>
+        <p>La misma gramática del padrón aplicada a pólizas. Modal de auditoría con acción primaria deshabilitada y su razón, y una confirmación destructiva con tipeo obligatorio.</p>
+      </span>
+      <span class="go">Ver</span>
+    </a>
+
+    <a class="index-item" href="login.html">
+      <span class="n tabular">05</span>
+      <span>
+        <h2>Ingreso</h2>
+        <p>El violeta de marca gastado entero en un solo plano. Con estado de error de credenciales y aviso de intentos restantes.</p>
+      </span>
+      <span class="go">Ver</span>
+    </a>
+  </nav>
+
+  <div class="rows" style="margin-top:44px">
+    <section class="slab">
+      <header><h2>Qué es real y qué no</h2></header>
+      <div class="body" style="display:grid;gap:12px;font-size:12.5px;line-height:1.65;color:var(--ink-2)">
+        <p style="margin:0">
+          <b style="color:var(--ink)">Real, tomado del código:</b> los 26 estados de prospecto salen de
+          <code>src/utils/estadosHelper.tsx</code>. Los campos de cada fila son los del tipo
+          <code>Prospecto</code> de <code>src/pages/prospectos-dashboard.tsx</code>: documento, edad,
+          localidad, origen, estado, último contacto. Los cuatro roles y sus límites son los de
+          producción — BackOffice es rol 4 puro.
+        </p>
+        <p style="margin:0">
+          <b style="color:var(--ink)">Sintético, para poder mirar la pantalla:</b> todos los nombres,
+          documentos, teléfonos, localidades, montos, porcentajes y nombres de plan son inventados.
+          Ningún dato de esta pantalla corresponde a una persona ni a una póliza real, y los precios
+          no son precios de Cober.
+        </p>
+        <p style="margin:0">
+          <b style="color:var(--ink)">Sin decidir todavía:</b> el traslado al código real de
+          <code>frontend-v2</code> es una fase posterior. Este set no toca la app en migración.
+        </p>
+      </div>
+    </section>
+
+    <section class="slab">
+      <header><h2>Las cuatro elevaciones</h2></header>
+      <div class="body" style="display:grid;gap:10px;font-size:12.5px;line-height:1.6;color:var(--ink-2)">
+        <p style="margin:0">
+          El dado asignó el padrón sobre otras seis direcciones. Las cuatro que perdieron no se
+          descartaron: cada una donó la disciplina que al padrón le faltaba.
+        </p>
+        <div class="meter" style="gap:9px">
+          <p style="margin:0"><b style="color:var(--ink)">Una sola retícula.</b> Rótulos, contadores y controles snapean a la misma grilla que los datos.</p>
+          <p style="margin:0"><b style="color:var(--ink)">Todo lleva rótulo.</b> Ningún estado se comunica solo por color; la escala de los rótulos es constante.</p>
+          <p style="margin:0"><b style="color:var(--ink)">Estados graduados por carga.</b> Cinco grados, no pills intercambiables, y cada fila expone contra qué está trabada.</p>
+          <p style="margin:0"><b style="color:var(--ink)">Un solo eje.</b> La posición en la lista codifica la posición en el embudo, con la etapa activa marcada.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

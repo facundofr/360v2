@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supervisor · Cober360</title>
+<meta name="description" content="Concepto de rediseño — panel de supervisor.">
+<link rel="stylesheet" href="assets/cober.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-list" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01"/></symbol>
+  <symbol id="i-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4.5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L9 2Z"/><path d="M9 2v3.5h3.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 13.5h11M5 11V6.5M8 11V3.5M11 11V8.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5.5" r="2.5"/><path d="M1.5 13.5c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/><path d="M11 3.2a2.5 2.5 0 0 1 0 4.6M12.5 13.5c0-1.4-.5-2.6-1.4-3.5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1M12.9 3.1l-1 1M4.1 11.9l-1 1M12.9 12.9l-1-1M4.1 4.1l-1-1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5 14.5 13.5H1.5L8 2.5Z"/><path d="M8 6.5v3M8 11.5h.01"/></symbol>
+</svg>
+
+<div class="frame">
+  <nav class="rail" aria-label="Secciones">
+    <div class="rail-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <rect width="18" height="18" rx="3" fill="#660E80"/>
+        <path d="M12.2 6.4a3.6 3.6 0 1 0 0 5.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <div><b>Cober360</b><br><span>Supervisión</span></div>
+    </div>
+    <div class="rail-nav">
+      <p class="rail-group">Equipo Norte</p>
+      <a class="rail-link" href="supervisor.html" aria-current="page"><svg width="14" height="14"><use href="#i-chart"/></svg>Resumen</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-users"/></svg>Vendedores <span class="rail-count tabular">9</span></a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-file"/></svg>Pólizas <span class="rail-count tabular">14</span></a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-list"/></svg>Cotizaciones</a>
+      <p class="rail-group">Otros paneles</p>
+      <a class="rail-link" href="prospectos.html"><svg width="14" height="14"><use href="#i-list"/></svg>Vendedor</a>
+      <a class="rail-link" href="admin.html"><svg width="14" height="14"><use href="#i-chart"/></svg>Admin</a>
+      <a class="rail-link" href="backoffice.html"><svg width="14" height="14"><use href="#i-file"/></svg>BackOffice</a>
+    </div>
+    <div class="rail-foot">
+      <button class="btn btn-quiet btn-sm" data-theme-toggle type="button" aria-label="Cambiar tema"><svg width="14" height="14"><use href="#i-sun"/></svg></button>
+      <div class="who"><b>R. Aguilera</b><span>Supervisor · Norte</span></div>
+    </div>
+  </nav>
+
+  <main class="sheet">
+    <header class="folio">
+      <h1>Resumen del equipo</h1>
+      <p class="folio-count"><b class="tabular">9</b><span>vendedores</span></p>
+      <p class="folio-range">Período <b>1–3 sep 2026</b> · comparado con <b>agosto</b></p>
+      <div class="folio-tools">
+        <button class="btn" type="button">Período</button>
+        <button class="btn btn-primary" type="button" data-open="m-revisar">Revisar pendientes (14)</button>
+      </div>
+    </header>
+
+    <div class="pad rows">
+
+      <!-- Lecturas: una regla horizontal, no seis tarjetas. -->
+      <dl class="readout">
+        <div>
+          <dt>Altas del mes</dt>
+          <dd><b class="tabular">38</b><span class="trend up">+12%</span></dd>
+        </div>
+        <div>
+          <dt>En curso</dt>
+          <dd><b class="tabular">61</b><span class="trend flat">=</span></dd>
+        </div>
+        <div>
+          <dt>Pendientes de firma</dt>
+          <dd><b class="tabular">14</b><span class="trend down">+5 vencidas</span></dd>
+        </div>
+        <div>
+          <dt>Conversión</dt>
+          <dd><b class="tabular">9,2%</b><span class="trend up">+0,8</span></dd>
+        </div>
+        <div>
+          <dt>Prospectos sin trabajar</dt>
+          <dd><b class="tabular">312</b><span class="trend down">+48</span></dd>
+        </div>
+      </dl>
+
+      <p class="notice">
+        <svg width="14" height="14"><use href="#i-alert"/></svg>
+        <span>
+          <b>5 pólizas llevan más de 7 días esperando firma.</b>
+          Pasado el día 15 la cotización caduca y hay que rehacer la declaración jurada.
+        </span>
+      </p>
+
+      <!-- El equipo, como registro. Misma gramática que el padrón. -->
+      <section class="slab">
+        <header>
+          <h2>Vendedores</h2>
+          <div class="push"><button class="btn btn-sm" type="button">Exportar</button></div>
+        </header>
+        <table class="plain">
+          <thead>
+            <tr>
+              <th>Vendedor</th>
+              <th class="num">Cartera</th>
+              <th class="num">Sin trabajar</th>
+              <th class="num">Altas</th>
+              <th class="num">Conversión</th>
+              <th>Estado del turno</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Fernández, Mariela</b></td>
+              <td class="num tabular">412</td>
+              <td class="num tabular">96</td>
+              <td class="num tabular">9</td>
+              <td class="num tabular">10,4%</td>
+              <td><span class="stamp" data-load="venta">En línea</span></td>
+            </tr>
+            <tr>
+              <td><b>Paz, Leandro</b></td>
+              <td class="num tabular">388</td>
+              <td class="num tabular">142</td>
+              <td class="num tabular">7</td>
+              <td class="num tabular">8,1%</td>
+              <td><span class="stamp" data-load="venta">En línea</span></td>
+            </tr>
+            <tr>
+              <td><b>Recalde, Vanina</b></td>
+              <td class="num tabular">401</td>
+              <td class="num tabular">74</td>
+              <td class="num tabular">11</td>
+              <td class="num tabular">12,9%</td>
+              <td><span class="stamp" data-load="venta">En línea</span></td>
+            </tr>
+            <tr>
+              <td><b>Ojeda, Cristian</b></td>
+              <td class="num tabular">355</td>
+              <td class="num tabular">203</td>
+              <td class="num tabular">3</td>
+              <td class="num tabular">4,2%</td>
+              <td><span class="stamp" data-load="curso">Inactivo 2 h</span></td>
+            </tr>
+            <tr>
+              <td><b>Sánchez, Gabriela</b></td>
+              <td class="num tabular">377</td>
+              <td class="num tabular">88</td>
+              <td class="num tabular">8</td>
+              <td class="num tabular">9,6%</td>
+              <td><span class="stamp" data-load="inerte">Franco</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div class="grid-2">
+        <!-- Proporciones: barras que son dato, no adorno. -->
+        <section class="slab">
+          <header><h2>Dónde se traba el embudo</h2></header>
+          <div class="body meter">
+            <div class="meter-row"><span>Sin primer contacto</span><span class="track"><span class="fill" style="width:74%"></span></span><b class="tabular">312</b></div>
+            <div class="meter-row"><span>Espera cotización</span><span class="track"><span class="fill" style="width:31%"></span></span><b class="tabular">129</b></div>
+            <div class="meter-row"><span>Espera firma</span><span class="track"><span class="fill" style="width:9%"></span></span><b class="tabular">38</b></div>
+            <div class="meter-row"><span>Revisión supervisor</span><span class="track"><span class="fill" style="width:4%"></span></span><b class="tabular">14</b></div>
+            <div class="meter-row"><span>Documentación incompleta</span><span class="track"><span class="fill" data-tone="muted" style="width:2%"></span></span><b class="tabular">8</b></div>
+          </div>
+        </section>
+
+        <!-- Estado vacío: real, no un placeholder. -->
+        <section class="slab">
+          <header><h2>Reclamos abiertos</h2></header>
+          <div class="empty">
+            <h3>Sin reclamos</h3>
+            <p>Ningún afiliado del equipo tiene un reclamo abierto en los últimos 30 días.</p>
+            <button class="btn btn-sm" type="button">Ver historial</button>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ═══ Modal: revisar póliza ══════════════════════════════════════════ -->
+<dialog class="modal wide" id="m-revisar" aria-labelledby="m-revisar-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-revisar-t">Revisar póliza</h2>
+        <p class="sub" style="margin:2px 0 0">Nieto, Osvaldo Ramón · DNI 27.610.983 · Vendedor: C. Ojeda</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    </div>
+
+    <div class="modal-body">
+      <table class="plain" style="border:1px solid var(--rule);border-radius:var(--radius)">
+        <tbody>
+          <tr><td style="color:var(--muted);width:170px">Plan</td><td><b>Cober 310</b> · grupo de 2</td></tr>
+          <tr><td style="color:var(--muted)">Vigencia</td><td class="tabular">01/10/2026</td></tr>
+          <tr><td style="color:var(--muted)">Forma de pago</td><td>Débito automático · CBU validado</td></tr>
+          <tr><td style="color:var(--muted)">Declaración jurada</td><td><span class="stamp" data-load="venta">Completa</span></td></tr>
+          <tr><td style="color:var(--muted)">Documentación</td><td><span class="stamp" data-load="curso">Falta recibo de sueldo</span></td></tr>
+        </tbody>
+      </table>
+
+      <label class="lbl">
+        <span>Observación para el vendedor</span>
+        <textarea class="inp" placeholder="Qué falta y qué hay que hacer para destrabarlo."></textarea>
+      </label>
+    </div>
+
+    <div class="modal-foot">
+      <span class="hint">Rechazar devuelve la póliza al vendedor sin borrar lo cargado.</span>
+      <div class="push">
+        <button class="btn" type="button" data-close>Rechazar</button>
+        <button class="btn btn-primary" type="submit">Aprobar y enviar a firma</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<a class="ribbon" href="index.html">← Índice del set</a>
+<script src="assets/app.js"></script>
+</body>
+</html>

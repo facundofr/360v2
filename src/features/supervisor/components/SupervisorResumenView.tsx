@@ -135,22 +135,20 @@ export function SupervisorResumenView() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <dl className="readout">
         {kpis.map(k => {
           const Icon = k.icon
           return (
-            <Card key={k.label}>
-              <CardContent className="p-3 text-center">
-                <Icon className={`size-4 mx-auto mb-1 ${k.color}`} />
-                <p className="text-2xl font-bold">
-                  {loading ? <Skeleton className="h-7 w-12 mx-auto" /> : <CountUp end={k.valor} />}
-                </p>
-                <p className="text-xs text-muted-foreground">{k.label}</p>
-              </CardContent>
-            </Card>
+            <div key={k.label}>
+              <dt className="flex items-center gap-1.5">
+                <Icon className={`size-3.5 shrink-0 ${k.color}`} aria-hidden="true" />
+                {k.label}
+              </dt>
+              <dd>{loading ? <Skeleton className="h-5 w-12" /> : <CountUp end={k.valor} />}</dd>
+            </div>
           )
         })}
-      </div>
+      </dl>
 
       {/* Distribución por estado */}
       <Card>

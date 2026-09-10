@@ -141,7 +141,7 @@ export function ChatVendedor() {
 
       {/* Ventana de chat */}
       {open && (
-        <div className="fixed bottom-36 right-4 z-50 w-80 sm:w-96 rounded-2xl border bg-background shadow-2xl flex flex-col overflow-hidden"
+        <div className="fixed bottom-36 right-4 z-50 w-80 sm:w-96 rounded-lg border bg-background shadow-2xl flex flex-col overflow-hidden"
           style={{ maxHeight: "min(480px, calc(100vh - 160px))" }}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
@@ -242,7 +242,7 @@ export function ChatVendedor() {
             {messages.map((msg, i) => (
               <div key={i} className={`group flex items-end gap-1 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`rounded-2xl px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap ${
+                  className={`rounded-lg px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap ${
                     msg.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-foreground"
@@ -265,11 +265,11 @@ export function ChatVendedor() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-muted rounded-2xl px-3 py-2">
+                <div className="bg-muted rounded-lg px-3 py-2">
                   <div className="flex gap-1 items-center h-4">
-                    <span className="size-1.5 rounded-full bg-muted-foreground animate-bounce [animation-delay:0ms]" />
-                    <span className="size-1.5 rounded-full bg-muted-foreground animate-bounce [animation-delay:150ms]" />
-                    <span className="size-1.5 rounded-full bg-muted-foreground animate-bounce [animation-delay:300ms]" />
+                    <span className="size-1.5 rounded-full bg-muted-foreground animate-tecleando [animation-delay:0ms]" />
+                    <span className="size-1.5 rounded-full bg-muted-foreground animate-tecleando [animation-delay:150ms]" />
+                    <span className="size-1.5 rounded-full bg-muted-foreground animate-tecleando [animation-delay:300ms]" />
                   </div>
                 </div>
               </div>

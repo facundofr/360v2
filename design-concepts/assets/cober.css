@@ -1,0 +1,791 @@
+/* Montserrat self-hosted. Con @import desde Google Fonts, una apertura sin red
+   caía en system-ui — la sans de la plataforma como voz de display, que el
+   craft floor rechaza. Fuente variable: dos archivos cubren 400 a 800.        */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("fonts/montserrat-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("fonts/montserrat-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COBER360 · EL PADRÓN
+   Mundo visual: registro nominal argentino. Una fila por persona, el documento
+   como eje, el estado estampado en columna fija. Sin tarjeta, sin sombra.
+
+   Tokens tomados del design system de Cober (design-sistem-cober.vercel.app,
+   marca `cober`). Dos traducciones deliberadas, ambas obligadas:
+
+   1. Los semánticos del sistema (success 142 71% 45%, warning 48 96% 53%,
+      destructive 0 84% 60%) son colores de RELLENO. Como texto sobre blanco
+      dan 2.3:1, 1.6:1 y 3.8:1 — reprueban WCAG AA. Se conservan como relleno
+      y sello, y se derivan variantes de texto en la misma familia de tono.
+   2. --radius: .5rem del sistema se honra en contenedores reales (botón,
+      campo, modal). El registro es reglado, no encajado: ahí el radio no
+      aplica porque no hay caja.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* — Superficie y tinta — */
+  --paper:        #FFFFFF;
+  --paper-sunk:   #FAFAFA;
+  --paper-mark:   #F4F1F6;
+  --ink:          #121212;
+  --ink-2:        #3D3D3D;
+  --muted:        #737373;
+  --rule:         #E5E5E5;
+  --rule-firm:    #C9C9C9;
+  --rule-heavy:   #121212;
+
+  /* — Marca — */
+  --violet:       #660E80;
+  --violet-deep:  #4E0A62;
+  --violet-wash:  #F4EDF7;
+  --on-violet:    #FFFFFF;
+
+  /* — Semánticos: relleno del sistema / texto derivado — */
+  --ok-fill:      #22C55E;
+  --ok:           #15803D;
+  --warn-fill:    #FACC15;
+  --warn:         #854D0E;
+  --risk-fill:    #EF4444;
+  --risk:         #B91C1C;
+
+  --radius:       .5rem;
+  --row:          38px;
+
+  --sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --paper:        #121212;
+  --paper-sunk:   #1A1A1A;
+  --paper-mark:   #241A28;
+  --ink:          #FAFAFA;
+  --ink-2:        #D4D4D4;
+  --muted:        #A6A6A6;
+  --rule:         #333333;
+  --rule-firm:    #4D4D4D;
+  --rule-heavy:   #FAFAFA;
+
+  --violet:       #C77DDB;
+  --violet-deep:  #E0B3EE;
+  --violet-wash:  #2A1832;
+  --on-violet:    #1A0620;
+
+  --ok:           #4ADE80;
+  --warn:         #FBBF24;
+  --risk:         #F87171;
+
+  color-scheme: dark;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* display:flex de una clase le gana al atributo hidden. Sin esto la barra de
+   selección se muestra con cero marcados.                                     */
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Superficies del navegador: parte del sistema, no defaults heredados. */
+::selection { background: var(--violet); color: var(--on-violet); }
+:where(input, textarea) { caret-color: var(--violet); }
+
+* { scrollbar-width: thin; scrollbar-color: var(--rule-firm) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: var(--rule-firm); border: 3px solid var(--paper); border-radius: 99px; }
+*::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* Cifras que se comparan en vertical se alinean en vertical. */
+.tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+/* ─── Retícula: una sola gobierna rótulos, datos y controles ─────────────── */
+/* Elevación donada por la dirección ASCII declinada: ninguna barra flota en su
+   propio sistema de coordenadas. Columnas declaradas una vez, usadas por el
+   encabezado de folio, los encabezados de columna y cada fila del registro.   */
+
+/* Prospectos: nº · documento · nombre · edad · localidad · origen · estado ·
+   trabado · contacto · acción                                                */
+.reg {
+  --cols: 78px 104px minmax(150px, 1.3fr) 46px minmax(90px, .8fr) 76px 160px minmax(150px, 1.9fr) 84px 40px;
+  width: 100%;
+}
+
+/* BackOffice: nº · documento · titular · nº póliza · vendedor · estado ·
+   trabado · antigüedad · acción. Va como clase y no inline para que los
+   media queries puedan alcanzarlo.                                           */
+.reg--bo {
+  --cols: 78px 104px minmax(150px, 1.3fr) 84px minmax(90px, .8fr) 156px minmax(150px, 1.9fr) 84px 40px;
+}
+
+.reg-row {
+  display: grid;
+  grid-template-columns: var(--cols);
+  align-items: center;
+  gap: 0 14px;
+  padding: 0 20px;
+  min-height: var(--row);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Los hijos de grid arrancan en min-width:auto y por eso la fila desborda en
+   vez de elidir. Sin esto, el sello y el tiempo se van fuera de pantalla.     */
+.reg-row > * { min-width: 0; }
+
+/* ─── Marco de página ────────────────────────────────────────────────────── */
+
+.frame { display: grid; grid-template-columns: 208px 1fr; min-height: 100vh; }
+/* Misma regla que en la fila: sin esto el riel empuja la columna más ancha
+   que la pantalla y el registro se corta a la derecha en móvil.              */
+.frame > * { min-width: 0; }
+
+.rail {
+  border-right: 1px solid var(--rule);
+  background: var(--paper-sunk);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.rail-mark {
+  display: flex; align-items: center; gap: 9px;
+  height: 56px; padding: 0 20px;
+  border-bottom: 1px solid var(--rule);
+  flex: none;
+}
+.rail-mark svg { display: block; }
+.rail-mark b { font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
+.rail-mark span { font-size: 10px; font-weight: 600; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+
+.rail-nav { padding: 14px 0; overflow-y: auto; flex: 1; }
+
+.rail-group {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); padding: 14px 20px 6px;
+}
+.rail-group:first-child { padding-top: 0; }
+
+.rail-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 20px; height: 32px;
+  color: var(--ink-2); text-decoration: none;
+  font-size: 12.5px; font-weight: 500;
+}
+.rail-link svg { flex: none; opacity: .62; }
+.rail-link:hover { background: var(--paper-mark); color: var(--ink); }
+/* Sin filete de color al filo: el craft floor lo rechaza por encima de 1px, y
+   el peso más el fondo ya marcan la página actual. El violeta queda para la
+   acción primaria y la banda de etapa activa, nada más.                      */
+.rail-link[aria-current="page"] {
+  color: var(--ink); font-weight: 700;
+  background: var(--paper-mark);
+}
+.rail-link[aria-current="page"] svg { opacity: 1; }
+.rail-count { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+.rail-foot { border-top: 1px solid var(--rule); padding: 10px 20px; flex: none; display: flex; align-items: center; gap: 9px; }
+.rail-foot { min-width: 0; }
+.rail-foot .who { min-width: 0; flex: 1 1 auto; }
+.rail-foot .who b { display: block; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rail-foot .who span { font-size: 10.5px; color: var(--muted); }
+
+.sheet { min-width: 0; display: flex; flex-direction: column; }
+
+/* ─── Barra de folio ─────────────────────────────────────────────────────── */
+/* El folio: cuántos hay, cuáles ves, y contra qué filtro. Siempre visible.   */
+
+.folio {
+  min-height: 56px; flex: none;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px 20px;
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--rule-firm);
+  background: var(--paper);
+  position: sticky; top: 0; z-index: 20;
+}
+
+.folio h1 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; }
+
+.folio-count {
+  display: flex; align-items: baseline; gap: 7px;
+  padding-left: 20px; border-left: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.folio-count b { font-size: 21px; font-weight: 700; letter-spacing: -.025em; }
+.folio-count span { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+.folio-range {
+  font-size: 11.5px; color: var(--muted); white-space: nowrap;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto;
+}
+.folio-range b { color: var(--ink-2); font-weight: 600; }
+/* Los atajos se anuncian en pantalla, no solo en el codigo. */
+.folio-range kbd {
+  font: inherit; font-size: 10px; font-weight: 700;
+  color: var(--ink-2); border: 1px solid var(--rule-firm);
+  border-radius: 3px; padding: 1px 4px; margin-right: 2px;
+}
+
+.folio-tools { margin-left: auto; display: flex; align-items: center; gap: 8px; min-width: 0; }
+
+/* ─── Controles ──────────────────────────────────────────────────────────── */
+
+.field {
+  height: 30px; flex: 0 1 210px; min-width: 130px;
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 10px;
+  border: 1px solid var(--rule-firm);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--muted);
+}
+.field:focus-within { border-color: var(--violet); box-shadow: 0 0 0 3px var(--violet-wash); }
+.field input {
+  border: 0; outline: 0; background: none; padding: 0;
+  font: inherit; font-size: 12.5px; color: var(--ink); width: 100%;
+}
+.field input::placeholder { color: var(--muted); }
+.field kbd {
+  font: inherit; font-size: 10px; font-weight: 600;
+  color: var(--muted); border: 1px solid var(--rule);
+  border-radius: 3px; padding: 1px 4px; flex: none;
+}
+
+.btn {
+  height: 30px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 0 12px; border-radius: var(--radius);
+  border: 1px solid var(--rule-firm); background: var(--paper); color: var(--ink);
+  font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  white-space: nowrap;
+  transition: background .12s ease, border-color .12s ease;
+}
+.btn:hover { background: var(--paper-mark); border-color: var(--muted); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn:disabled:hover { background: var(--paper); border-color: var(--rule-firm); }
+
+/* El violeta aparece una vez por pantalla: la acción primaria. */
+.btn-primary { background: var(--violet); border-color: var(--violet); color: var(--on-violet); }
+.btn-primary:hover { background: var(--violet-deep); border-color: var(--violet-deep); }
+
+.btn-quiet { border-color: transparent; background: none; color: var(--ink-2); padding: 0 8px; }
+.btn-quiet:hover { background: var(--paper-mark); border-color: transparent; color: var(--ink); }
+
+.btn-sm { height: 26px; padding: 0 9px; font-size: 12px; }
+
+/* ─── Encabezados de columna ─────────────────────────────────────────────── */
+
+.reg-head {
+  position: sticky; top: 56px; z-index: 15;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule-firm);
+  min-height: 30px;
+}
+.reg-head > * {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted);
+}
+.reg-head .num { text-align: right; }
+
+/* ─── Sección de etapa ───────────────────────────────────────────────────── */
+/* Elevación donada por la dirección mesofótica declinada: un solo eje rige
+   todas las filas, y la banda activa está marcada. La posición en la lista
+   codifica la posición en el embudo.                                         */
+
+.stage {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 20px; height: 30px;
+  background: var(--paper-sunk);
+  border-bottom: 1px solid var(--rule);
+  border-top: 1px solid var(--rule);
+  position: sticky; top: 86px; z-index: 10;
+}
+.stage h2 {
+  margin: 0; font-size: 10.5px; font-weight: 700;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--ink-2);
+}
+.stage .n { font-size: 10.5px; font-weight: 600; color: var(--muted); }
+.stage .axis { flex: 1; height: 1px; background: var(--rule); }
+
+.stage[data-active] {
+  background: var(--violet-wash);
+  border-top: 2px solid var(--violet);
+  border-bottom-color: var(--violet);
+}
+.stage[data-active] h2 { color: var(--violet); }
+.stage[data-active] .n { color: var(--violet); }
+.stage[data-active] .axis { background: color-mix(in srgb, var(--violet) 28%, transparent); }
+
+/* ─── El registro ────────────────────────────────────────────────────────── */
+
+.reg-row.entry { cursor: default; }
+.reg-row.entry:hover { background: var(--paper-sunk); }
+.reg-row.entry[aria-selected="true"] { background: var(--violet-wash); }
+.reg-row.entry:focus-within { background: var(--violet-wash); }
+
+/* Folio: la marca más característica del padrón. Cada asiento lleva su número
+   impreso, no sólo en el ARIA.                                               */
+.f-num { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+.f-num .folio-n { font-weight: 600; letter-spacing: .02em; }
+
+/* El documento es el eje, y en un padrón el eje es una línea visible: la
+   columna lleva su filete y corre por todo el registro.                      */
+.f-dni { font-size: 13.5px; font-weight: 600; letter-spacing: .01em; color: var(--ink); }
+
+.reg .reg-row > *:nth-child(2),
+.reg--bo .reg-row > *:nth-child(2) {
+  align-self: stretch; display: flex; align-items: center;
+  border-right: 1px solid var(--rule);
+  margin-right: -7px; padding-right: 7px;
+}
+
+.f-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.f-name b { font-weight: 600; }
+.f-name span { color: var(--muted); }
+
+.f-age { text-align: right; font-size: 12.5px; }
+
+.f-plain { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.f-origin { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+.f-time { text-align: right; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.f-time[data-cold] { color: var(--risk); font-weight: 600; }
+
+.f-act { display: flex; justify-content: flex-end; }
+.f-act .btn { opacity: 0; }
+.reg-row.entry:hover .f-act .btn,
+.reg-row.entry:focus-within .f-act .btn,
+.reg-row.entry[aria-selected="true"] .f-act .btn { opacity: 1; }
+
+/* ─── El sello de estado ─────────────────────────────────────────────────── */
+/* Elevación donada por la dirección tensegridad declinada: los estados están
+   graduados por carga, no son pills intercambiables. Cuatro grados:
+   inerte · en curso · comprometido · caído. Y por Busytown: todo lleva su
+   rótulo impreso, a escala constante — el color nunca comunica solo.         */
+
+.stamp {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 22px; padding: 0 6px;
+  border: 1px solid var(--rule-firm);
+  border-radius: 2px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .015em; text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis;
+}
+
+/* El grado es ORDINAL, no un color: cuatro segmentos que se llenan. Se lee sin
+   aprender la paleta, y el color sólo confirma lo que el conteo ya dijo.      */
+.stamp::before {
+  content: ""; flex: none;
+  width: 16px; height: 8px;
+  border: 1px solid currentColor;
+  background-image: linear-gradient(currentColor 0 0);
+  background-repeat: no-repeat;
+  background-size: calc(var(--grade, 0) / 4 * 100%) 100%;
+}
+
+/* 1/4 · inerte — el asiento existe y nada lo mueve */
+.stamp[data-load="inerte"] { --grade: 1; color: var(--muted); border-color: var(--rule); }
+
+/* 2/4 · en curso — hay trabajo encima */
+.stamp[data-load="curso"]  { --grade: 2; color: var(--warn); border-color: color-mix(in srgb, var(--warn) 42%, var(--rule)); background: color-mix(in srgb, var(--warn-fill) 9%, transparent); }
+
+/* 3/4 · comprometido — el embudo avanzó y hay obligación. En tinta, no en
+   violeta: el violeta pertenece a la acción primaria.                        */
+.stamp[data-load="firme"]  { --grade: 3; color: var(--ink); border-color: var(--ink); }
+
+/* 4/4 · cerrado bien */
+.stamp[data-load="venta"]  { --grade: 4; color: var(--ok); border-color: color-mix(in srgb, var(--ok) 42%, var(--rule)); background: color-mix(in srgb, var(--ok-fill) 11%, transparent); }
+
+/* 0/4 · caído — la carga se soltó. Medidor vacío y de trazo cortado. */
+.stamp[data-load="caido"]  { --grade: 0; color: var(--risk); border-color: color-mix(in srgb, var(--risk) 34%, var(--rule)); }
+.stamp[data-load="caido"]::before { border-style: dashed; }
+
+/* ─── Trabado en ─────────────────────────────────────────────────────────── */
+/* Segunda mitad de la elevación tensegridad: cada fila expone contra qué está
+   trabada, para poder rastrear un registro estancado hasta su bloqueo.        */
+
+.blocked { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.blocked svg { flex: none; color: var(--muted); }
+.blocked span {
+  font-size: 11.5px; color: var(--ink-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 0; /* sin esto la elipsis nunca se activa y la fila desborda */
+}
+.blocked[data-none] span { color: var(--muted); }
+
+/* ─── Barra de selección ─────────────────────────────────────────────────── */
+
+.marked {
+  position: sticky; bottom: 0; z-index: 25;
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 20px; height: 46px;
+  border-top: 1px solid var(--rule-heavy);
+  background: var(--paper);
+}
+.marked b { font-size: 12.5px; font-weight: 700; }
+.marked .sep { width: 1px; height: 18px; background: var(--rule); }
+.marked .push { margin-left: auto; display: flex; gap: 8px; }
+
+/* ─── Estados de la superficie ───────────────────────────────────────────── */
+
+.empty { padding: 64px 20px; text-align: center; }
+.empty h3 { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+.empty p { margin: 0 auto 16px; font-size: 12.5px; color: var(--muted); max-width: 46ch; }
+
+.loading .bar {
+  height: 9px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--rule) 0%, var(--paper-sunk) 50%, var(--rule) 100%);
+  background-size: 200% 100%;
+  animation: sweep 1.4s ease-in-out infinite;
+}
+@keyframes sweep { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.notice {
+  display: flex; align-items: flex-start; gap: 9px;
+  margin: 0; padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--risk) 34%, var(--rule));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--risk-fill) 7%, transparent);
+  font-size: 12.5px; color: var(--ink);
+}
+.notice svg { flex: none; color: var(--risk); margin-top: 1px; }
+.notice b { display: block; color: var(--risk); }
+
+/* ─── Modal ──────────────────────────────────────────────────────────────── */
+/* Contenedor real: acá el --radius: .5rem del sistema sí aplica.             */
+
+dialog.modal {
+  padding: 0; border: 1px solid var(--rule-firm); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink);
+  width: min(560px, calc(100vw - 32px));
+  box-shadow: 0 12px 32px -8px rgb(0 0 0 / .22), 0 2px 6px -2px rgb(0 0 0 / .12);
+}
+dialog.modal.wide { width: min(760px, calc(100vw - 32px)); }
+dialog.modal::backdrop { background: rgb(18 18 18 / .38); }
+
+dialog.modal[open] { animation: rise .18s cubic-bezier(.16,1,.3,1); }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.modal-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; border-bottom: 1px solid var(--rule);
+}
+.modal-head h2 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+.modal-head .sub { font-size: 11.5px; color: var(--muted); }
+.modal-head .x { margin-left: auto; }
+
+.modal-body { padding: 18px; display: grid; gap: 14px; max-height: 62vh; overflow-y: auto; }
+.modal-foot {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 18px; border-top: 1px solid var(--rule);
+  background: var(--paper-sunk);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.modal-foot .push { margin-left: auto; display: flex; gap: 8px; }
+
+label.lbl { display: grid; gap: 5px; }
+label.lbl > span {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted);
+}
+/* El error y la ayuda son prosa, no rótulos. Sin esto la regla de arriba les
+   gana en especificidad y el error sale gris y en mayúsculas.                */
+label.lbl > span.err,
+label.lbl > span.hint {
+  font-size: 11.5px; letter-spacing: normal; text-transform: none;
+}
+label.lbl > span.err { color: var(--risk); font-weight: 600; }
+label.lbl > span.hint { color: var(--muted); font-weight: 400; }
+.inp {
+  height: 32px; width: 100%; padding: 0 10px;
+  border: 1px solid var(--rule-firm); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); font: inherit; font-size: 13px;
+}
+textarea.inp { height: auto; padding: 8px 10px; resize: vertical; min-height: 68px; line-height: 1.5; }
+.inp:focus { outline: 0; border-color: var(--violet); box-shadow: 0 0 0 3px var(--violet-wash); }
+.inp[aria-invalid="true"] { border-color: var(--risk); }
+.inp:disabled { background: var(--paper-sunk); color: var(--muted); cursor: not-allowed; }
+.err { font-size: 11.5px; color: var(--risk); font-weight: 600; }
+.hint { font-size: 11.5px; color: var(--muted); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ─── Datos de página ────────────────────────────────────────────────────── */
+
+.pad { padding: 20px; }
+.rows { display: grid; gap: 14px; }
+
+/* Secciones regladas, no paneles encajados: la misma gramatica que el
+   registro, para que los cuatro paneles sean un solo mundo.                  */
+.slab { border: 0; border-top: 2px solid var(--rule-heavy); background: none; }
+.slab > header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--rule-firm);
+  min-height: 34px;
+}
+.slab > header h2 {
+  margin: 0; font-size: 10.5px; font-weight: 700;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--ink-2);
+}
+.slab > header .push { margin-left: auto; }
+.slab > .body { padding: 12px 0; }
+.slab table.plain th:first-child,
+.slab table.plain td:first-child { padding-left: 0; }
+.slab table.plain th:last-child,
+.slab table.plain td:last-child { padding-right: 0; }
+
+/* Cifras de folio: una regla horizontal de lecturas, no seis tarjetas. */
+/* La regla de lecturas: una banda reglada, no seis tarjetas. */
+.readout {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  border-top: 2px solid var(--rule-heavy);
+  border-bottom: 1px solid var(--rule-firm);
+  background: none;
+}
+.readout > div { padding: 12px 16px 12px 0; border-right: 1px solid var(--rule); min-width: 0; }
+.readout > div:last-child { border-right: 0; }
+.readout > div + div { padding-left: 16px; }
+.readout dt {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 5px;
+}
+.readout dd { margin: 0; display: flex; align-items: baseline; gap: 7px; }
+.readout dd b { font-size: 21px; font-weight: 700; letter-spacing: -.025em; }
+.readout .trend { font-size: 11px; font-weight: 600; }
+.readout .up { color: var(--ok); }
+.readout .down { color: var(--risk); }
+.readout .flat { color: var(--muted); }
+
+/* Barras de proporción: dato, no adorno. */
+.meter { display: grid; gap: 7px; }
+.meter-row { display: grid; grid-template-columns: minmax(96px, 150px) 1fr 46px; align-items: center; gap: 11px; }
+.meter-row span { font-size: 12px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* track y fill son <span>: sin display:block el alto y el ancho no aplican y
+   la barra sale vacía.                                                       */
+.meter-row .track { display: block; height: 8px; background: var(--paper-sunk); border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+/* El dato se dice con tinta. El violeta queda reservado a la acción primaria,
+   una sola vez por pantalla, como manda el contrato de dirección.            */
+.meter-row .fill { display: block; height: 100%; background: var(--ink); }
+.meter-row .fill[data-tone="muted"] { background: var(--rule-firm); }
+.meter-row b { text-align: right; font-size: 12px; font-weight: 600; }
+
+table.plain { width: 100%; border-collapse: collapse; }
+table.plain th {
+  text-align: left; padding: 7px 14px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--rule); white-space: nowrap;
+}
+table.plain td { padding: 8px 14px; border-bottom: 1px solid var(--rule); font-size: 12.5px; }
+table.plain tr:last-child td { border-bottom: 0; }
+table.plain tbody tr:hover { background: var(--paper-sunk); }
+table.plain .num { text-align: right; }
+
+/* ─── Índice del set ─────────────────────────────────────────────────────── */
+
+.index-wrap { max-width: 940px; margin: 0 auto; padding: 56px 24px 80px; }
+.index-wrap > h1 { margin: 0 0 6px; font-size: 27px; font-weight: 800; letter-spacing: -.03em; }
+.index-wrap > .lede { margin: 0 0 8px; font-size: 14px; color: var(--ink-2); max-width: 68ch; line-height: 1.6; }
+.index-wrap > .meta { margin: 0 0 40px; font-size: 12px; color: var(--muted); }
+
+.index-list { border-top: 1px solid var(--rule-heavy); }
+.index-item {
+  display: grid; grid-template-columns: 40px 1fr auto; align-items: baseline; gap: 18px;
+  padding: 17px 4px; border-bottom: 1px solid var(--rule);
+  text-decoration: none; color: inherit;
+}
+.index-item:hover { background: var(--paper-sunk); }
+.index-item .n { font-size: 11px; color: var(--muted); }
+.index-item h2 { margin: 0 0 3px; font-size: 14.5px; font-weight: 700; }
+.index-item p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.index-item .go { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--violet); }
+
+/* ─── Login ──────────────────────────────────────────────────────────────── */
+
+.gate { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+
+.gate-mark {
+  background: var(--violet); color: var(--on-violet);
+  padding: 44px; display: flex; flex-direction: column; justify-content: space-between;
+}
+.gate-mark .top { display: flex; align-items: center; gap: 11px; }
+.gate-mark .top b { font-size: 14px; font-weight: 700; }
+.gate-mark blockquote { margin: 0; max-width: 30ch; }
+.gate-mark blockquote p { margin: 0 0 14px; font-size: 27px; font-weight: 700; line-height: 1.24; letter-spacing: -.025em; }
+.gate-mark blockquote cite { font-style: normal; font-size: 12.5px; opacity: .82; line-height: 1.6; display: block; }
+.gate-mark .foot { font-size: 11px; opacity: .72; }
+
+.gate-form { display: flex; align-items: center; justify-content: center; padding: 44px 24px; }
+.gate-form > div { width: 100%; max-width: 336px; }
+.gate-form h1 { margin: 0 0 5px; font-size: 21px; font-weight: 700; letter-spacing: -.02em; }
+.gate-form .lede { margin: 0 0 26px; font-size: 12.5px; color: var(--muted); }
+.gate-form form { display: grid; gap: 14px; }
+.gate-form .row { display: flex; align-items: center; justify-content: space-between; }
+.gate-form .row a { font-size: 11.5px; color: var(--violet); font-weight: 600; }
+.gate-form .btn-primary { width: 100%; justify-content: center; height: 36px; }
+.gate-form .alt { margin: 22px 0 0; font-size: 12px; color: var(--muted); text-align: center; }
+.gate-form .alt a { color: var(--violet); font-weight: 600; }
+
+/* ─── Utilidades ─────────────────────────────────────────────────────────── */
+
+.sr {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.chk { width: 14px; height: 14px; accent-color: var(--violet); cursor: pointer; }
+
+/* Cinta de retorno al índice del set. No es parte del producto. */
+.ribbon {
+  position: fixed; right: 14px; bottom: 14px; z-index: 60;
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 30px; padding: 0 12px;
+  border: 1px solid var(--rule-heavy); border-radius: 99px;
+  background: var(--paper); color: var(--ink);
+  font-size: 11.5px; font-weight: 600; text-decoration: none;
+  box-shadow: 0 4px 14px -4px rgb(0 0 0 / .2);
+}
+.ribbon:hover { background: var(--ink); color: var(--paper); }
+
+/* ─── Adaptación ─────────────────────────────────────────────────────────── */
+
+/* El registro degrada por columnas, no por scroll horizontal: a cada paso
+   cae la columna menos decisiva para saber a quién llamar. El documento, el
+   nombre, el estado y el tiempo no caen nunca.                               */
+
+@media (max-width: 1380px) {
+  /* Caen las dos columnas que menos deciden a quién llamar:
+     prospectos pierde origen y edad; backoffice pierde vendedor.            */
+  .reg     { --cols: 72px 100px minmax(150px, 1.3fr) minmax(88px, .8fr) 152px minmax(140px, 1.9fr) 86px 38px; }
+  .reg--bo { --cols: 72px 100px minmax(150px, 1.3fr) 84px 152px minmax(140px, 1.9fr) 86px 38px; }
+  .reg-row { gap: 0 12px; padding: 0 16px; }
+  .reg     .reg-row > *:nth-child(4),
+  .reg     .reg-row > *:nth-child(6) { display: none; }
+  .reg--bo .reg-row > *:nth-child(5) { display: none; }
+}
+
+@media (max-width: 1180px) {
+  /* Cae localidad (prospectos) / nº de póliza (backoffice).
+     Quedan documento · nombre · estado · trabado · tiempo.                  */
+  .reg     { --cols: 68px 94px minmax(126px, 1.3fr) 142px minmax(118px, 1.9fr) 76px 34px; }
+  .reg--bo { --cols: 68px 94px minmax(126px, 1.3fr) 142px minmax(118px, 1.9fr) 76px 34px; }
+  .reg-row { gap: 0 10px; padding: 0 14px; }
+  .reg     .reg-row > *:nth-child(5) { display: none; }
+  .reg--bo .reg-row > *:nth-child(4) { display: none; }
+}
+
+@media (max-width: 1024px) {
+  .frame { grid-template-columns: 1fr; }
+  .rail { position: static; height: auto; flex-direction: row; align-items: center; border-right: 0; border-bottom: 1px solid var(--rule); overflow-x: auto; }
+  .rail-mark { border-bottom: 0; border-right: 1px solid var(--rule); }
+  .rail-nav { display: flex; padding: 0; align-items: center; }
+  .rail-group, .rail-foot, .rail-count { display: none; }
+  .keys { display: none; }
+  .rail-link { border-bottom: 2px solid transparent; height: 56px; white-space: nowrap; }
+  .rail-link[aria-current="page"] { border-bottom-color: var(--ink); background: none; }
+  .gate { grid-template-columns: 1fr; }
+  .gate-mark { display: none; }
+}
+
+@media (max-width: 720px) {
+  /* Tres líneas por asiento, con áreas nombradas: quién · qué estado ·
+     contra qué está trabado. Las columnas administrativas se van.            */
+  .reg-head { display: none; }
+
+  .reg-row.entry {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "mark name  stamp"
+      "mark dni   time"
+      "mark block act";
+    gap: 4px 10px;
+    padding: 11px 16px 12px;
+    min-height: 0;
+    align-items: start;
+  }
+  .f-age, .f-plain, .f-origin { display: none; }
+  .f-num         { grid-area: mark; align-self: center; }
+  .f-num .folio-n{ display: none; }
+  .f-name        { grid-area: name; white-space: normal; }
+  .f-dni         { grid-area: dni; font-size: 12px; font-weight: 500; color: var(--muted); }
+  .stamp-cell    { grid-area: stamp; justify-self: end; max-width: 46vw; }
+  .f-time        { grid-area: time; text-align: right; align-self: center; }
+  .blocked       { grid-area: block; margin-top: 3px; align-self: center; }
+  /* La accion primaria vuelve al alcance del pulgar y ya no depende de hover. */
+  .f-act         { grid-area: act; justify-self: end; align-self: center; }
+  .f-act .btn    { opacity: 1; min-height: 32px; }
+  /* El filete de la espina no aplica cuando la fila se apila. */
+  .reg .reg-row > *:nth-child(2),
+  .reg--bo .reg-row > *:nth-child(2) {
+    border-right: 0; margin-right: 0; padding-right: 0;
+    align-self: auto; display: block;
+  }
+  .chk { width: 17px; height: 17px; }
+
+  .stage { top: 0; }
+  .folio { flex-wrap: wrap; height: auto; padding: 11px 16px; gap: 8px 12px; }
+  .folio-count { padding-left: 0; border-left: 0; }
+  .folio-count b { font-size: 14px; }
+  .folio-range { width: 100%; margin: 0; }
+  .folio-tools { width: 100%; flex-wrap: wrap; }
+  .folio-tools .field { flex: 1 1 100%; }
+  .folio-tools .btn { flex: 1 1 0; justify-content: center; }
+
+  .marked { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 8px 12px; }
+  .marked .sep { display: none; }
+  .marked .push { margin-left: 0; width: 100%; }
+  .marked .push .btn { flex: 1 1 0; justify-content: center; }
+
+  .grid-2 { grid-template-columns: 1fr; }
+  .pad { padding: 14px; }
+  .readout > div { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .readout > div:last-child { border-bottom: 0; }
+  .ribbon { position: static; margin: 14px 16px 20px; box-shadow: none; }
+  .index-wrap { padding: 36px 18px 60px; }
+  .index-item { grid-template-columns: 1fr; gap: 5px; }
+  .index-item .n { display: none; }
+  .meter-row { grid-template-columns: minmax(80px, 1fr) 1.2fr 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

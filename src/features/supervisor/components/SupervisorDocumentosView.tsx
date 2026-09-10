@@ -26,36 +26,36 @@ const tiposDocumentos = {
 export function SupervisorDocumentosView({ onIrAPolizas }: SupervisorDocumentosViewProps) {
   return (
     <div className="flex flex-col gap-5 w-full">
-      {/* Header card */}
-      <Card className="overflow-hidden border-0 bg-gradient-to-r from-violet-600 to-purple-700 text-white shadow-md">
-        <CardContent className="p-5 flex items-center gap-4">
-          <div className="rounded-xl bg-white/20 p-3 shrink-0">
-            <Upload className="size-6" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold leading-tight">Gestión de Documentos</h2>
-            <p className="text-sm text-white/80 mt-0.5">Carga múltiple de documentos para pólizas</p>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Encabezado reglado. Antes era una tarjeta con degradado violeta→púrpura,
+          baldosa de vidrio e ícono grande: el look por defecto que la calibración
+          del sistema existe para atrapar. Un encabezado de sección se dibuja con
+          una regla, no con un banner de color. */}
+      <header className="flex items-start gap-3 border-b border-rule-firm pb-4">
+        <Upload className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+        <div>
+          <h2 className="text-[14px] leading-snug font-bold tracking-[-0.01em]">Gestión de documentos</h2>
+          <p className="mt-0.5 text-[12.5px] text-muted-foreground">
+            Carga múltiple de documentos para pólizas
+          </p>
+        </div>
+      </header>
 
       {/* CTA */}
       <Card>
         <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
-          <div className="rounded-full bg-muted p-5">
-            <FileText className="size-10 text-muted-foreground/60" />
-          </div>
+          <FileText className="size-8 text-muted-foreground/50" aria-hidden="true" />
           <div>
-            <p className="font-medium text-sm">Selecciona una póliza para cargar documentos</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Utilizá la vista de pólizas para seleccionar una póliza específica y cargar documentos.
+            <p className="text-[13px] font-semibold">Seleccioná una póliza para cargar documentos</p>
+            <p className="mt-1 text-[12.5px] text-muted-foreground">
+              Usá la vista de pólizas para elegir una póliza específica y cargar sus documentos.
             </p>
           </div>
-          <Button className="gap-2 mt-1" onClick={onIrAPolizas}>
+          <Button className="mt-1 gap-2" onClick={onIrAPolizas}>
             <FileText className="size-4" />
             Ir a Pólizas
             <ChevronRight className="size-4" />
           </Button>
+
         </CardContent>
       </Card>
 

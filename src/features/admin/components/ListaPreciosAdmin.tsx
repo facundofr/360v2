@@ -405,7 +405,7 @@ export default function ListaPreciosAdmin() {
       </div>
 
       {/* Tabla */}
-      {loading ? <Skeleton className="h-64 w-full rounded-xl" /> : (
+      {loading ? <Skeleton className="h-64 w-full rounded-lg" /> : (
         <DataTable columns={columns} data={filtrados} emptyMessage="Sin registros" />
       )}
 
@@ -522,7 +522,7 @@ export default function ListaPreciosAdmin() {
           <DialogHeader><DialogTitle>Editar precio</DialogTitle></DialogHeader>
           {editItem && (
             <div className="space-y-3">
-              <div className="rounded-lg bg-muted/50 p-3 text-sm">
+              <div className="rounded-lg bg-paper-sunk p-3 text-sm">
                 <p><span className="text-muted-foreground">Plan:</span> {editItem.plan}</p>
                 {editItem.categoria_edad && <p><span className="text-muted-foreground">Categoría:</span> {editItem.categoria_edad}</p>}
                 {editItem.tipo_familia && <p><span className="text-muted-foreground">Tipo familia:</span> {editItem.tipo_familia}</p>}

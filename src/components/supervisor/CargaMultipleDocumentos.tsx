@@ -14,13 +14,17 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Upload, FileText, X, CheckCircle, Eye, Loader2 } from "lucide-react"
+import {
+  Upload, FileText, X, CheckCircle, Eye, Loader2,
+  ClipboardList, FileSignature, ClipboardCheck, BadgeCheck, CreditCard, Stethoscope,
+  type LucideIcon,
+} from "lucide-react"
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface TipoDocumento {
   key: string
   label: string
-  icon: string
+  icon: LucideIcon
   maxFiles: number
   description: string
 }
@@ -54,42 +58,42 @@ const TIPOS: TipoDocumento[] = [
   {
     key: "codem",
     label: "CODEM",
-    icon: "📋",
+    icon: ClipboardList,
     maxFiles: 1,
     description: "Certificado de Discapacidad y/o Enfermedad Médica",
   },
   {
     key: "formulario_f152",
     label: "Formulario F152",
-    icon: "📝",
+    icon: FileSignature,
     maxFiles: 1,
     description: "Formulario de solicitud de afiliación",
   },
   {
     key: "formulario_f184",
     label: "Formulario F184",
-    icon: "📋",
+    icon: ClipboardCheck,
     maxFiles: 1,
     description: "Formulario de opción de cambio",
   },
   {
     key: "constancia_inscripcion",
     label: "Constancia de Inscripción",
-    icon: "✅",
+    icon: BadgeCheck,
     maxFiles: 1,
     description: "Constancia de inscripción en AFIP",
   },
   {
     key: "comprobante_pago_cuota",
     label: "Comprobantes de Pago",
-    icon: "💳",
+    icon: CreditCard,
     maxFiles: 12,
     description: "Comprobantes de pago de cuotas (máx. 12)",
   },
   {
     key: "estudios_medicos",
     label: "Estudios Médicos",
-    icon: "🏥",
+    icon: Stethoscope,
     maxFiles: 20,
     description: "Estudios, análisis y/o informes médicos (máx. 20)",
   },
@@ -332,7 +336,7 @@ export default function CargaMultipleDocumentos({
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium">
-                          {tipo.icon} {tipo.label}
+                          <tipo.icon className="mr-1.5 inline size-3.5 align-[-2px] text-muted-foreground" aria-hidden="true" />{tipo.label}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {tipo.description}

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Cober360</title>
+<meta name="description" content="Concepto de rediseño — panel de administración.">
+<link rel="stylesheet" href="assets/cober.css">
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-list" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.01M2.5 8h.01M2.5 12h.01"/></symbol>
+  <symbol id="i-file" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4.5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V5.5L9 2Z"/><path d="M9 2v3.5h3.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2.5 13.5h11M5 11V6.5M8 11V3.5M11 11V8.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5.5" r="2.5"/><path d="M1.5 13.5c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/><path d="M11 3.2a2.5 2.5 0 0 1 0 4.6M12.5 13.5c0-1.4-.5-2.6-1.4-3.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.8 13 3.6v4.2c0 3-2.1 5.6-5 6.4-2.9-.8-5-3.4-5-6.4V3.6L8 1.8Z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.2V3a.5.5 0 0 1 .5-.5h5.2a1 1 0 0 1 .7.3l4.3 4.3a1 1 0 0 1 0 1.4l-4.9 4.9a1 1 0 0 1-1.4 0L2.8 9.1a1 1 0 0 1-.3-.9Z"/><path d="M5.5 5.5h.01"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1M12.9 3.1l-1 1M4.1 11.9l-1 1M12.9 12.9l-1-1M4.1 4.1l-1-1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></symbol>
+</svg>
+
+<div class="frame">
+  <nav class="rail" aria-label="Secciones">
+    <div class="rail-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <rect width="18" height="18" rx="3" fill="#660E80"/>
+        <path d="M12.2 6.4a3.6 3.6 0 1 0 0 5.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <div><b>Cober360</b><br><span>Administración</span></div>
+    </div>
+    <div class="rail-nav">
+      <p class="rail-group">Operación</p>
+      <a class="rail-link" href="admin.html" aria-current="page"><svg width="14" height="14"><use href="#i-chart"/></svg>Métricas</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-users"/></svg>Usuarios <span class="rail-count tabular">64</span></a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-list"/></svg>Prospectos</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-file"/></svg>Pólizas</a>
+      <p class="rail-group">Catálogo</p>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-tag"/></svg>Lista de precios</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-list"/></svg>Prestadores</a>
+      <a class="rail-link" href="#"><svg width="14" height="14"><use href="#i-shield"/></svg>Seguridad</a>
+      <p class="rail-group">Otros paneles</p>
+      <a class="rail-link" href="prospectos.html"><svg width="14" height="14"><use href="#i-list"/></svg>Vendedor</a>
+      <a class="rail-link" href="supervisor.html"><svg width="14" height="14"><use href="#i-chart"/></svg>Supervisor</a>
+      <a class="rail-link" href="backoffice.html"><svg width="14" height="14"><use href="#i-file"/></svg>BackOffice</a>
+    </div>
+    <div class="rail-foot">
+      <button class="btn btn-quiet btn-sm" data-theme-toggle type="button" aria-label="Cambiar tema"><svg width="14" height="14"><use href="#i-sun"/></svg></button>
+      <div class="who"><b>D. Cáceres</b><span>Admin</span></div>
+    </div>
+  </nav>
+
+  <main class="sheet">
+    <header class="folio">
+      <h1>Métricas generales</h1>
+      <p class="folio-count"><b class="tabular">64</b><span>usuarios activos</span></p>
+      <p class="folio-range">Período <b>septiembre 2026</b> · 4 equipos · 6 supervisores</p>
+      <div class="folio-tools">
+        <button class="btn" type="button">Período</button>
+        <button class="btn btn-primary" type="button" data-open="m-usuario">Nuevo usuario</button>
+      </div>
+    </header>
+
+    <div class="pad rows">
+
+      <dl class="readout">
+        <div><dt>Altas del mes</dt><dd><b class="tabular">147</b><span class="trend up">+9%</span></dd></div>
+        <div><dt>Cartera total</dt><dd><b class="tabular">6.284</b><span class="trend up">+412</span></dd></div>
+        <div><dt>Conversión global</dt><dd><b class="tabular">8,6%</b><span class="trend down">−0,4</span></dd></div>
+        <div><dt>Ticket promedio</dt><dd><b class="tabular">$142.900</b><span class="trend up">+6%</span></dd></div>
+        <div><dt>Sesiones activas</dt><dd><b class="tabular">41</b><span class="trend flat">=</span></dd></div>
+      </dl>
+
+      <div class="grid-2">
+        <section class="slab">
+          <header><h2>Altas por equipo</h2></header>
+          <div class="body meter">
+            <div class="meter-row"><span>Norte</span><span class="track"><span class="fill" style="width:88%"></span></span><b class="tabular">38</b></div>
+            <div class="meter-row"><span>Sur</span><span class="track"><span class="fill" style="width:79%"></span></span><b class="tabular">34</b></div>
+            <div class="meter-row"><span>Oeste</span><span class="track"><span class="fill" style="width:72%"></span></span><b class="tabular">31</b></div>
+            <div class="meter-row"><span>CABA</span><span class="track"><span class="fill" style="width:56%"></span></span><b class="tabular">24</b></div>
+            <div class="meter-row"><span>Interior</span><span class="track"><span class="fill" data-tone="muted" style="width:46%"></span></span><b class="tabular">20</b></div>
+          </div>
+        </section>
+
+        <section class="slab">
+          <header><h2>Origen de la cartera</h2></header>
+          <div class="body meter">
+            <div class="meter-row"><span>Campaña paga</span><span class="track"><span class="fill" style="width:52%"></span></span><b class="tabular">52%</b></div>
+            <div class="meter-row"><span>Web orgánico</span><span class="track"><span class="fill" style="width:24%"></span></span><b class="tabular">24%</b></div>
+            <div class="meter-row"><span>Referidos</span><span class="track"><span class="fill" style="width:15%"></span></span><b class="tabular">15%</b></div>
+            <div class="meter-row"><span>Refritos</span><span class="track"><span class="fill" data-tone="muted" style="width:9%"></span></span><b class="tabular">9%</b></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="slab">
+        <header>
+          <h2>Usuarios</h2>
+          <div class="push">
+            <label class="field" style="height:26px;min-width:180px">
+              <span class="sr">Buscar usuario</span>
+              <input type="search" data-search placeholder="Nombre o legajo…">
+            </label>
+          </div>
+        </header>
+        <table class="plain">
+          <thead>
+            <tr><th>Usuario</th><th>Rol</th><th>Equipo</th><th class="num">Legajo</th><th>Último ingreso</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Aguilera, Rodrigo</b></td><td>Supervisor</td><td>Norte</td><td class="num tabular">10442</td><td class="tabular">hoy 08:12</td><td><span class="stamp" data-load="venta">Activo</span></td></tr>
+            <tr><td><b>Fernández, Mariela</b></td><td>Vendedor</td><td>Norte</td><td class="num tabular">10871</td><td class="tabular">hoy 08:03</td><td><span class="stamp" data-load="venta">Activo</span></td></tr>
+            <tr><td><b>Ojeda, Cristian</b></td><td>Vendedor</td><td>Norte</td><td class="num tabular">11002</td><td class="tabular">hoy 06:41</td><td><span class="stamp" data-load="curso">Inactivo 2 h</span></td></tr>
+            <tr><td><b>Sandoval, Priscila</b></td><td>BackOffice</td><td>—</td><td class="num tabular">10233</td><td class="tabular">ayer 17:55</td><td><span class="stamp" data-load="venta">Activo</span></td></tr>
+            <tr><td><b>Ríos, Marcelo</b></td><td>Vendedor</td><td>Sur</td><td class="num tabular">10996</td><td class="tabular">12/08 09:20</td><td><span class="stamp" data-load="caido">Suspendido</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Estado de carga: la forma de la fila, no un spinner. -->
+      <section class="slab loading" aria-busy="true" aria-live="polite">
+        <header><h2>Mapa de prospectos por partido</h2></header>
+        <div class="body" style="display:grid;gap:9px">
+          <span class="sr">Cargando el mapa de prospectos…</span>
+          <span class="bar" style="width:100%"></span>
+          <span class="bar" style="width:82%"></span>
+          <span class="bar" style="width:91%"></span>
+          <span class="bar" style="width:64%"></span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ═══ Modal: nuevo usuario ═══════════════════════════════════════════ -->
+<dialog class="modal" id="m-usuario" aria-labelledby="m-usuario-t">
+  <form method="dialog">
+    <div class="modal-head">
+      <div>
+        <h2 id="m-usuario-t">Nuevo usuario</h2>
+        <p class="sub" style="margin:2px 0 0">Recibe un correo para fijar su contraseña</p>
+      </div>
+      <button class="btn btn-quiet btn-sm x" type="button" data-close aria-label="Cerrar"><svg width="14" height="14"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <label class="lbl"><span>Apellido</span><input class="inp" type="text"></label>
+        <label class="lbl"><span>Nombre</span><input class="inp" type="text"></label>
+      </div>
+      <div class="grid-2">
+        <label class="lbl"><span>Legajo</span><input class="inp tabular" type="text" inputmode="numeric"></label>
+        <label class="lbl"><span>Correo</span><input class="inp" type="email"></label>
+      </div>
+      <div class="grid-2">
+        <label class="lbl">
+          <span>Rol</span>
+          <select class="inp"><option>Vendedor</option><option>Supervisor</option><option>Admin</option><option>BackOffice</option></select>
+        </label>
+        <label class="lbl">
+          <span>Equipo</span>
+          <select class="inp"><option>Norte</option><option>Sur</option><option>Oeste</option><option>CABA</option><option>Interior</option></select>
+        </label>
+      </div>
+      <p class="hint">BackOffice no pertenece a un equipo: ve todas las carteras y no puede operar como vendedor.</p>
+    </div>
+    <div class="modal-foot">
+      <div class="push">
+        <button class="btn" type="button" data-close>Cancelar</button>
+        <button class="btn btn-primary" type="submit">Crear usuario</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<a class="ribbon" href="index.html">← Índice del set</a>
+<script src="assets/app.js"></script>
+</body>
+</html>

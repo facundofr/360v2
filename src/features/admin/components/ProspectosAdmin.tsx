@@ -462,7 +462,7 @@ export default function ProspectosAdmin() {
       </div>
 
       {loading ? (
-        <Skeleton className="h-64 w-full rounded-xl" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       ) : (
         <>
           {/* ---- VISTA TABLA ---- */}
@@ -474,7 +474,7 @@ export default function ProspectosAdmin() {
           {vista === "cards" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {paginaActual.map(p => (
-                <div key={p.id} className="rounded-lg border bg-card p-4 space-y-3 hover:shadow-md transition-shadow">
+                <div key={p.id} className="rounded-lg border bg-card p-4 space-y-3 hover:bg-paper-sunk transition-shadow">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="font-semibold text-sm truncate">{p.nombre} {p.apellido}</p>
@@ -655,7 +655,7 @@ export default function ProspectosAdmin() {
           ) : (
             <div className="space-y-2">
               {historial.map((h, i) => (
-                <div key={h.id ?? i} className="text-xs bg-muted/50 rounded-lg p-3 space-y-1">
+                <div key={h.id ?? i} className="text-xs bg-paper-sunk rounded-lg p-3 space-y-1">
                   <p className="font-semibold text-sm">{h.accion ?? h.descripcion ?? "Accion"}</p>
                   {h.descripcion && h.accion && <p className="text-muted-foreground">{h.descripcion}</p>}
                   <p className="text-muted-foreground">

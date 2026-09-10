@@ -1,0 +1,20 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "montserrat",
+        "createdAt": "2026-09-04T16:31:16.650Z",
+        "reason": "user confirmed: supplied design-sistem-cober.vercel.app as binding and said the cober brand is the one to implement; Montserrat is that system's face, recorded in PRODUCT.md Brand Commitments. Finish reviewer confirmed the override."
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "99px",
+        "createdAt": "2026-09-04T16:31:16.804Z",
+        "reason": "my call, not the user's: the 99px pill is .ribbon, the concept-set return chip. The CSS marks it 'no es parte del producto' and the documenter deliberately declined to canonize it, so it is navigation scaffolding outside the system rather than a shape rule."
+      }
+    ]
+  }
+}

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { toast } from "sonner"
-import { Tag, Check } from "lucide-react"
+import { Tag, Check, TrendingUp, CalendarDays } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { API_URL } from "@/lib/config"
@@ -119,51 +118,81 @@ export function PromocionesModal({ prospectoId, open, onClose, onPromocionAplica
         )}
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
-          </div>
-        ) : promociones.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">No hay promociones disponibles</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {promociones.map(p => (
-              <Card
-                key={p.id}
-                className={`cursor-pointer transition-all hover:shadow-md ${
-                  selected?.id === p.id
-                    ? "border-primary border-2 bg-primary/5 shadow-md"
-                    : "hover:border-muted-foreground/30"
-                }`}
-                onClick={() => setSelected(prev => prev?.id === p.id ? null : p)}
-              >
-                <CardHeader className="pb-2 relative">
-                  {selected?.id === p.id && (
-                    <div className="absolute top-3 right-3 bg-primary text-primary-foreground rounded-full p-0.5">
-                      <Check className="size-3" />
-                    </div>
-                  )}
-                  <CardTitle className={`text-sm ${selected?.id === p.id ? "text-primary" : ""}`}>
-                    {getNombre(p)}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0 space-y-1">
-                  {p.descripcion && <p className="text-xs text-muted-foreground">{p.descripcion}</p>}
-                  <Badge variant={p.tipo === "incremento" ? "risk" : "ok"}>
-                    {p.tipo === "incremento" ? "📈 Incremento" : "🎯 Descuento"}: {p.tipo === "incremento" ? "+" : "-"}{getDescuento(p)}%
-                  </Badge>
-                  {getVencimiento(p) && (
-                    <p className="text-xs text-muted-foreground">
-                      📅 Válido hasta: {new Date(getVencimiento(p)!).toLocaleDateString("es-AR")}
-                    </p>
-                  )}
-                  {selected?.id === p.id && (
-                    <p className="text-xs font-semibold text-state-ok-text">✅ Seleccionada</p>
-                  )}
-                </CardContent>
-              </Card>
+          <div className="border-t-2 border-rule-heavy" aria-busy="true" aria-live="polite">
+            <span className="sr-only">Cargando promociones…</span>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 border-b border-rule px-4 py-3">
+                <Skeleton className="size-4 shrink-0 rounded-stamp" />
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <Skeleton className="h-3.5 w-40 rounded-xs" />
+                  <Skeleton className="h-3 w-56 rounded-xs" />
+                </div>
+                <Skeleton className="h-[22px] w-28 shrink-0 rounded-stamp" />
+              </div>
             ))}
           </div>
+        ) : promociones.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">No hay promociones disponibles</p>
+        ) : (
+          /* Lista reglada, no grilla de tarjetas: elegir una promoción es
+             recorrer un registro, y la selección se marca con superficie y
+             filete en vez de levantar una tarjeta. */
+          <div role="radiogroup" aria-label="Promociones disponibles" className="border-t-2 border-rule-heavy">
+            {promociones.map(p => {
+              const activa = selected?.id === p.id
+              const vence = getVencimiento(p)
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={activa}
+                  onClick={() => setSelected(prev => prev?.id === p.id ? null : p)}
+                  className={`flex w-full items-center gap-3 border-b border-rule px-4 py-3 text-left transition-colors ${
+                    activa ? "bg-primary/5" : "hover:bg-paper-sunk"
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`flex size-4 shrink-0 items-center justify-center rounded-stamp border ${
+                      activa
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-rule-firm"
+                    }`}
+                  >
+                    {activa && <Check className="size-3" />}
+                  </span>
+
+                  <span className="min-w-0 flex-1">
+                    <span className={`block truncate text-[13px] font-semibold ${activa ? "text-primary" : ""}`}>
+                      {getNombre(p)}
+                    </span>
+                    {p.descripcion && (
+                      <span className="block truncate text-[11.5px] text-muted-foreground">{p.descripcion}</span>
+                    )}
+                  </span>
+
+                  {vence && (
+                    <span className="hidden shrink-0 items-center gap-1 text-[11.5px] tabular-nums text-muted-foreground sm:flex">
+                      <CalendarDays className="size-3" aria-hidden="true" />
+                      Hasta {new Date(vence).toLocaleDateString("es-AR")}
+                    </span>
+                  )}
+
+                  <Badge
+                    variant={p.tipo === "incremento" ? "risk" : "ok"}
+                    size="sm"
+                    className="pointer-events-none shrink-0"
+                  >
+                    {p.tipo === "incremento" ? <TrendingUp aria-hidden="true" /> : <Tag aria-hidden="true" />}
+                    {p.tipo === "incremento" ? "+" : "−"}{getDescuento(p)}%
+                  </Badge>
+                </button>
+              )
+            })}
+          </div>
         )}
+
         
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancelar</Button>

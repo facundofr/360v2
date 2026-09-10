@@ -28,7 +28,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { API_URL } from "@/lib/config"
 import PolizaDetalleSupervisor from "@/components/supervisor/PolizaDetalleSupervisor"
@@ -733,82 +732,95 @@ export function SupervisorPolizasView() {
                 <p className="text-sm">No se encontraron pólizas</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="reg reg--sup-pol border-t-2 border-rule-heavy">
+                <div className="reg-row reg-head" role="presentation">
+                  <span>Titular</span>
+                  <span>Plan</span>
+                  <span className="text-right">Total</span>
+                  <span>Vendedor</span>
+                  <span>Fecha</span>
+                  <span>Estado</span>
+                  <span />
+                </div>
+
                 {polizas.map(pol => (
-                  <Card key={pol.id}>
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <p className="font-semibold text-sm">{pol.prospecto_nombre} {pol.prospecto_apellido}</p>
-                          <p className="text-xs text-muted-foreground">{pol.numero_poliza_oficial ?? pol.numero_poliza}</p>
-                        </div>
-                        <div className="flex flex-col items-end gap-1">
-                          {getBadgePolizaEstado(pol.estado)}
-                          <BadgeEstadoFirma poliza={pol} />
-                        </div>
-                      </div>
-                      <Separator />
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                        <span className="text-muted-foreground">Plan</span>
-                        <span className="font-medium">{pol.plan_nombre ?? "—"}</span>
-                        <span className="text-muted-foreground">Total</span>
-                        <span className="font-medium">{fmtPeso(pol.total_final)}</span>
-                        <span className="text-muted-foreground">Fecha</span>
-                        <span>{fmtFecha(pol.created_at)}</span>
-                        <span className="text-muted-foreground">Vendedor</span>
-                        <span>{pol.vendedor?.nombre ?? pol.vendedor_nombre ?? "—"}</span>
-                      </div>
-                <div className="flex gap-1 pt-1">
-                        <Button variant="outline" size="sm" className="flex-1 h-7 text-xs"
-                          onClick={() => abrirCambioEstado(pol)}>
-                          <AlertCircle className="size-3 mr-1" />Estado
+                  <div key={pol.id} className="reg-row reg-entry">
+                    {/* 1 · titular y número — el eje */}
+                    <span className="min-w-0">
+                      <span className="block truncate text-[13px] font-semibold">
+                        {pol.prospecto_apellido}<span className="font-normal text-muted-foreground">, {pol.prospecto_nombre}</span>
+                      </span>
+                      <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">
+                        {pol.numero_poliza_oficial ?? pol.numero_poliza}
+                      </span>
+                    </span>
+
+                    {/* 2 · plan */}
+                    <span className="truncate text-[12.5px] text-muted-foreground">{pol.plan_nombre ?? "—"}</span>
+
+                    {/* 3 · total */}
+                    <span className="text-right text-[13px] font-semibold tabular-nums">{fmtPeso(pol.total_final)}</span>
+
+                    {/* 4 · vendedor */}
+                    <span className="truncate text-[12.5px] text-muted-foreground">
+                      {pol.vendedor?.nombre ?? pol.vendedor_nombre ?? "—"}
+                    </span>
+
+                    {/* 5 · fecha */}
+                    <span className="truncate text-[12px] tabular-nums text-muted-foreground">{fmtFecha(pol.created_at)}</span>
+
+                    {/* 6 · estado y firma */}
+                    <span className="flex min-w-0 flex-wrap items-center gap-1">
+                      {getBadgePolizaEstado(pol.estado)}
+                      <BadgeEstadoFirma poliza={pol} />
+                    </span>
+
+                    {/* 7 · acciones */}
+                    <span className="reg-actions">
+                      <Button size="icon" variant="ghost" className="size-7" title="Cambiar estado"
+                        onClick={() => abrirCambioEstado(pol)}>
+                        <AlertCircle className="size-3.5" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="size-7" title="Documentos"
+                        disabled={isBtnLoad(pol.id, "documentos")}
+                        onClick={() => abrirDocumentos(pol)}>
+                        {isBtnLoad(pol.id, "documentos") ? <Loader2 className="size-3.5 animate-spin" /> : <FolderOpen className="size-3.5" />}
+                      </Button>
+                      <Button size="icon" variant="ghost" className="size-7" title="Historial"
+                        disabled={isBtnLoad(pol.id, "historial")}
+                        onClick={() => abrirHistorial(pol)}>
+                        {isBtnLoad(pol.id, "historial") ? <Loader2 className="size-3.5 animate-spin" /> : <History className="size-3.5" />}
+                      </Button>
+                      <Button size="icon" variant="ghost" className="size-7" title="Editar póliza"
+                        onClick={() => setEditarPolizaId(pol.id)}>
+                        <Pencil className="size-3.5" />
+                      </Button>
+                      {pol.pdf_hash && (
+                        <Button size="icon" variant="ghost" className="size-7" title="Descargar PDF"
+                          onClick={() => descargarPDF(pol)}>
+                          <ExternalLink className="size-3.5" />
                         </Button>
-                        <Button size="icon" className="size-8 bg-muted hover:bg-muted/80 text-foreground border"
-                          disabled={isBtnLoad(pol.id, "documentos")}
-                          onClick={() => abrirDocumentos(pol)}>
-                          {isBtnLoad(pol.id, "documentos") ? <Loader2 className="size-3.5 animate-spin" /> : <FolderOpen className="size-3.5" />}
+                      )}
+                      <BotonEnviarFirma poliza={pol} userRole="supervisor" onExito={fetchPolizas} />
+                      {pol.estado_firma === "signed" && (
+                        <Button size="icon" variant="ghost" className="size-7" title="Cargar póliza firmada"
+                          onClick={() => setCargarFirmada({ open: true, poliza: pol })}>
+                          <Upload className="size-3.5" />
                         </Button>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
-                          disabled={isBtnLoad(pol.id, "historial")}
-                          onClick={() => abrirHistorial(pol)}>
-                          {isBtnLoad(pol.id, "historial") ? <Loader2 className="size-3.5 animate-spin" /> : <History className="size-3.5" />}
-                        </Button>
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
-                          title="Editar póliza"
-                          onClick={() => setEditarPolizaId(pol.id)}>
-                          <Pencil className="size-3.5" />
-                        </Button>
-                        {pol.pdf_hash && (
-                          <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0"
-                            onClick={() => descargarPDF(pol)}>
-                            <ExternalLink className="size-3.5" />
-                          </Button>
-                        )}
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        <BotonEnviarFirma poliza={pol} userRole="supervisor" onExito={fetchPolizas} />
-                        {pol.estado_firma === "signed" && (
-                          <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
-                            title="Cargar póliza firmada"
-                            onClick={() => setCargarFirmada({ open: true, poliza: pol })}>
-                            <Upload className="size-3.5" />
-                          </Button>
-                        )}
-                        <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
-                          title="Subir documentos"
-                          onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}>
-                          <FilePlus className="size-3.5" />
-                        </Button>
-                        <BotonEliminarPoliza
-                          poliza={pol}
-                          onEliminada={fetchPolizas}
-                          size="icon"
-                          showLabel={false}
-                          endpointBase={`${API_URL}/supervisor/polizas`}
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
+                      )}
+                      <Button size="icon" variant="ghost" className="size-7" title="Subir documentos"
+                        onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}>
+                        <FilePlus className="size-3.5" />
+                      </Button>
+                      <BotonEliminarPoliza
+                        poliza={pol}
+                        onEliminada={fetchPolizas}
+                        size="icon"
+                        showLabel={false}
+                        endpointBase={`${API_URL}/supervisor/polizas`}
+                      />
+                    </span>
+                  </div>
                 ))}
               </div>
             )}
@@ -925,7 +937,7 @@ export function SupervisorPolizasView() {
               <p className="text-sm text-muted-foreground text-center py-8">Sin mensajes registrados</p>
             ) : mensajesWA.map((m, i) => (
               <div key={i} className={`flex ${m.tipo === "saliente" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] rounded-xl px-3 py-2 text-sm ${
+                <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
                   m.tipo === "saliente" ? "bg-primary text-primary-foreground" : "bg-muted"
                 }`}>
                   <p>{m.contenido as string}</p>

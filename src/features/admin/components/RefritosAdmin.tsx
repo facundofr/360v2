@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react"
 import axios from "axios"
 import { toast } from "sonner"
-import { Upload, BarChart3, History, Download, CheckCircle, AlertCircle, Users, Ban } from "lucide-react"
+import { Upload, BarChart3, History, Download, CheckCircle, AlertCircle, Users, Ban, Paperclip, Check } from "lucide-react"
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from "recharts"
 import type { ColumnDef } from "@tanstack/react-table"
 import { refritosService } from "@/services/refritosService"
@@ -105,7 +105,7 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
           disabled={cargando}
           className="block w-full text-sm text-muted-foreground file:mr-3 file:px-3 file:py-1.5 file:rounded file:border-0 file:bg-primary file:text-white file:text-sm file:cursor-pointer cursor-pointer border rounded-lg p-1"
         />
-        {archivo && <p className="text-xs text-muted-foreground">📁 {archivo.name}</p>}
+        {archivo && <p className="flex items-center gap-1 text-xs text-muted-foreground"><Paperclip className="size-3 shrink-0" aria-hidden="true" />{archivo.name}</p>}
       </div>
 
       {cargando && progreso > 0 && (
@@ -130,7 +130,7 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
             {Object.entries((resultado.resumen ?? {}) as Record<string, number>).map(([k, v]) => (
-              <div key={k} className="bg-muted/50 rounded p-2">
+              <div key={k} className="bg-paper-sunk rounded p-2">
                 <p className="text-xs text-muted-foreground capitalize">{k.replace(/_/g, " ")}</p>
                 <p className="font-bold">{String(v)}</p>
               </div>
@@ -206,20 +206,20 @@ function EstadisticasRefritos({ refreshTrigger }: { refreshTrigger: number }) {
     .map(item => ({
       estado: item.estado,
       total: item.total,
-      label: item.visible_refrito === 1 ? `${item.estado} ✓` : `${item.estado} (cola)`,
+      label: item.visible_refrito === 1 ? `${item.estado} (visible)` : `${item.estado} (cola)`,
       color: item.visible_refrito === 1 ? (COLOR_DESGLOSE[item.estado] ?? "var(--chart-2)") : "var(--muted-foreground)",
     }))
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <dl className="readout">
         {tarjetas.map(t => (
-          <Card key={t.label}><CardContent className="p-3 text-center">
-            <p className="text-2xl font-bold text-foreground">{t.value}</p>
-            <p className="text-xs text-muted-foreground">{t.label}</p>
-          </CardContent></Card>
+          <div key={t.label}>
+            <dt>{t.label}</dt>
+            <dd>{t.value}</dd>
+          </div>
         ))}
-      </div>
+      </dl>
 
       {desglose.length > 0 && (
         <Card>
@@ -411,7 +411,7 @@ function ReporteVendedoresRefritos({ refreshTrigger }: { refreshTrigger: number 
     return () => { cancelado = true }
   }, [refreshTrigger])
 
-  if (loading) return <Skeleton className="h-64 w-full rounded-xl" />
+  if (loading) return <Skeleton className="h-64 w-full rounded-lg" />
 
   if (filas.length === 0) {
     return (
@@ -501,7 +501,7 @@ function ReporteVendedoresRefritos({ refreshTrigger }: { refreshTrigger: number 
         const pct = ((trabajados + noContesta) / total) * 100
         return (
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">{pct.toFixed(1)}%{Math.round(pct) === 100 && " ✅"}</p>
+            <p className="text-xs text-muted-foreground">{pct.toFixed(1)}%{Math.round(pct) === 100 && <Check className="ml-1 inline size-3 align-[-1px] text-state-ok-text" aria-hidden="true" />}</p>
             <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
               <div className={`h-full rounded-full ${pct >= 60 ? "bg-state-ok" : pct >= 20 ? "bg-state-warn" : "bg-state-risk"}`} style={{ width: `${Math.min(pct, 100)}%` }} />
             </div>

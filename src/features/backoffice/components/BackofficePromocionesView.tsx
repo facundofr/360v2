@@ -231,7 +231,7 @@ export function BackofficePromocionesView() {
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-muted"><Tag className="size-5 text-muted-foreground" aria-hidden="true" /></div>
+              <div className="rounded-lg p-2.5 bg-muted"><Tag className="size-5 text-muted-foreground" aria-hidden="true" /></div>
               <div>
                 <p className="text-2xl font-bold tabular-nums leading-none">{promociones.length}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Total</p>
@@ -242,7 +242,7 @@ export function BackofficePromocionesView() {
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-state-ok-soft"><CheckCircle2 className="size-5 text-state-ok-text" aria-hidden="true" /></div>
+              <div className="rounded-lg p-2.5 bg-state-ok-soft"><CheckCircle2 className="size-5 text-state-ok-text" aria-hidden="true" /></div>
               <div>
                 <p className="text-2xl font-bold tabular-nums leading-none text-state-ok-text">{promociones.filter(p => p.activa).length}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Activas</p>
@@ -253,7 +253,7 @@ export function BackofficePromocionesView() {
         <Card className="overflow-hidden">
           <CardContent className="p-0">
             <div className="flex items-center gap-3 p-4">
-              <div className="rounded-xl p-2.5 bg-gray-50"><XCircle className="size-5 text-gray-500" aria-hidden="true" /></div>
+              <div className="rounded-lg p-2.5 bg-gray-50"><XCircle className="size-5 text-gray-500" aria-hidden="true" /></div>
               <div>
                 <p className="text-2xl font-bold tabular-nums leading-none text-muted-foreground">{promociones.filter(p => !p.activa).length}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Inactivas</p>
