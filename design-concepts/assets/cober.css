@@ -48,6 +48,11 @@
   --rule-heavy:   #121212;
 
   /* — Marca — */
+  /* Superficie de marca: fija en ambos temas. Un plano de marca no se invierte. */
+  --violet-plane:    #660E80;
+  --on-violet-plane: #FFFFFF;
+
+  /* Acento interactivo: se aclara en oscuro para conservar contraste. */
   --violet:       #660E80;
   --violet-deep:  #4E0A62;
   --violet-wash:  #F4EDF7;
@@ -69,7 +74,46 @@
   color-scheme: light;
 }
 
-[data-theme="dark"] {
+/* ─── Modo oscuro ─────────────────────────────────────────────────────────────
+   Llega por dos caminos y los dos tienen que funcionar:
+
+     1. La preferencia del sistema, cuando el visitante nunca eligió nada.
+     2. La elección explícita del botón, que gana en AMBAS direcciones — también
+        para forzar claro sobre un sistema en oscuro.
+
+   Por eso el bloque de medios excluye [data-theme="light"] y hay una regla
+   aparte para [data-theme="dark"]: sin las dos, el botón sólo funcionaría en
+   una dirección.
+
+   `color-scheme` va en cada rama para que las superficies que no dibujamos
+   —barras de scroll, controles de formulario, autocompletado— acompañen.     */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:        #121212;
+    --paper-sunk:   #1A1A1A;
+    --paper-mark:   #241A28;
+    --ink:          #FAFAFA;
+    --ink-2:        #D4D4D4;
+    --muted:        #A6A6A6;
+    --rule:         #333333;
+    --rule-firm:    #4D4D4D;
+    --rule-heavy:   #FAFAFA;
+
+    --violet:       #C77DDB;
+    --violet-deep:  #E0B3EE;
+    --violet-wash:  #2A1832;
+    --on-violet:    #1A0620;
+
+    --ok:           #4ADE80;
+    --warn:         #FBBF24;
+    --risk:         #F87171;
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
   --paper:        #121212;
   --paper-sunk:   #1A1A1A;
   --paper-mark:   #241A28;
@@ -190,7 +234,7 @@ a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; 
   border-bottom: 1px solid var(--rule);
   flex: none;
 }
-.rail-mark svg { display: block; }
+.rail-mark svg, .rail-mark img { display: block; flex: none; }
 .rail-mark b { font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
 .rail-mark span { font-size: 10px; font-weight: 600; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
 
@@ -641,29 +685,51 @@ table.plain .num { text-align: right; }
 
 /* ─── Login ──────────────────────────────────────────────────────────────── */
 
-.gate { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+/* ─── Ingreso ─────────────────────────────────────────────────────────────────
+   Columna única centrada, igual que el login que corre hoy. Antes era una
+   pantalla partida con un plano violeta a la izquierda: bonito de mirar, pero
+   no es la estructura del producto, y en una superficie Operate la puerta de
+   entrada no necesita persuadir a nadie — el usuario ya decidió entrar.       */
 
-.gate-mark {
-  background: var(--violet); color: var(--on-violet);
-  padding: 44px; display: flex; flex-direction: column; justify-content: space-between;
+.gate {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 40px 24px;
+  position: relative;
 }
-.gate-mark .top { display: flex; align-items: center; gap: 11px; }
-.gate-mark .top b { font-size: 14px; font-weight: 700; }
-.gate-mark blockquote { margin: 0; max-width: 30ch; }
-.gate-mark blockquote p { margin: 0 0 14px; font-size: 27px; font-weight: 700; line-height: 1.24; letter-spacing: -.025em; }
-.gate-mark blockquote cite { font-style: normal; font-size: 12.5px; opacity: .82; line-height: 1.6; display: block; }
-.gate-mark .foot { font-size: 11px; opacity: .72; }
+.gate > [data-theme-toggle] { position: absolute; top: 20px; right: 20px; }
 
-.gate-form { display: flex; align-items: center; justify-content: center; padding: 44px 24px; }
-.gate-form > div { width: 100%; max-width: 336px; }
-.gate-form h1 { margin: 0 0 5px; font-size: 21px; font-weight: 700; letter-spacing: -.02em; }
-.gate-form .lede { margin: 0 0 26px; font-size: 12.5px; color: var(--muted); }
-.gate-form form { display: grid; gap: 14px; }
-.gate-form .row { display: flex; align-items: center; justify-content: space-between; }
-.gate-form .row a { font-size: 11.5px; color: var(--violet); font-weight: 600; }
-.gate-form .btn-primary { width: 100%; justify-content: center; height: 36px; }
-.gate-form .alt { margin: 22px 0 0; font-size: 12px; color: var(--muted); text-align: center; }
-.gate-form .alt a { color: var(--violet); font-weight: 600; }
+.gate-panel { width: 100%; max-width: 336px; }
+
+.gate-logo { display: block; margin: 0 auto 18px; width: 64px; height: 64px; }
+
+.gate-panel h1 {
+  margin: 0 0 22px;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  text-align: center;
+}
+
+.gate-panel .notice { margin-bottom: 18px; }
+
+.gate-panel form { display: grid; gap: 14px; }
+
+/* La etiqueta y el enlace de recuperación comparten renglón, como hoy. */
+.lbl-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.lbl-row a {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--violet);
+}
+
+.gate-submit { width: 100%; justify-content: center; height: 36px; }
+
+.gate-panel .alt { margin: 22px 0 0; font-size: 12px; color: var(--muted); text-align: center; }
+.gate-panel .alt a { color: var(--violet); font-weight: 600; }
 
 /* ─── Utilidades ─────────────────────────────────────────────────────────── */
 
@@ -722,8 +788,6 @@ table.plain .num { text-align: right; }
   .keys { display: none; }
   .rail-link { border-bottom: 2px solid transparent; height: 56px; white-space: nowrap; }
   .rail-link[aria-current="page"] { border-bottom-color: var(--ink); background: none; }
-  .gate { grid-template-columns: 1fr; }
-  .gate-mark { display: none; }
 }
 
 @media (max-width: 720px) {
@@ -788,4 +852,29 @@ table.plain .num { text-align: right; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* ─── Botón de tema en las páginas sin riel ───────────────────────────────── */
+/* El índice y el ingreso no tienen riel, así que el toggle vive suelto. Sin
+   esto, la puerta de entrada al set no tenía forma de cambiar el tema.        */
+
+.index-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.index-head h1 { margin: 0; }
+
+
+/* En el ingreso va sobre el panel del formulario, no sobre el plano violeta:
+   ahí competiría con la marca. */
+
+/* Botón cuadrado de sólo ícono, para la barra de folio. Comparte la altura de
+   30px del resto de los controles de esa fila para no romper su ritmo. */
+.btn-icon {
+  width: 30px;
+  padding: 0;
+  justify-content: center;
+  flex: none;
 }

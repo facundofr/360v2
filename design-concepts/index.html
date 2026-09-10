@@ -6,12 +6,22 @@
 <title>El Padrón · Concepto Cober360</title>
 <meta name="description" content="Set de concepto de rediseño para Cober360.">
 <link rel="stylesheet" href="assets/cober.css">
+<script>
+  /* Tema antes del primer pintado: sin esto hay destello. */
+  try {
+    var t = localStorage.getItem("cober-concept-theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  } catch (e) { /* modo privado */ }
+</script>
 </head>
 <body>
 
 <div class="index-wrap">
 
-  <h1>El Padrón</h1>
+  <div class="index-head">
+    <h1>El Padrón</h1>
+    <button class="btn btn-quiet btn-icon" data-theme-toggle type="button"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1M12.9 3.1l-1 1M4.1 11.9l-1 1M12.9 12.9l-1-1M4.1 4.1l-1-1"/></svg></button>
+  </div>
   <p class="lede">
     Set de concepto de rediseño para Cober360. La cola de prospectos es un registro nominal, no
     una grilla de tarjetas: una fila por persona, el documento como eje, el estado estampado en
@@ -63,7 +73,7 @@
       <span class="n tabular">05</span>
       <span>
         <h2>Ingreso</h2>
-        <p>El violeta de marca gastado entero en un solo plano. Con estado de error de credenciales y aviso de intentos restantes.</p>
+        <p>Columna única centrada, con la estructura del login que corre hoy. Isotipo real de Cober, etiquetas y textos tomados del formulario en producción. Con estado de error y aviso de intentos restantes.</p>
       </span>
       <span class="go">Ver</span>
     </a>

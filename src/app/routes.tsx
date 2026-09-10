@@ -12,6 +12,8 @@ import GuestRoute from "@/components/common/GuestRoute"
 import ErrorBoundary from "@/components/common/ErrorBoundary"
 
 const ProspectosDashboardPage = lazy(() => import("@/features/vendedor/pages/ProspectosDashboardPage"))
+/* Galería del sistema de diseño. Pesa, y sólo la mira quien construye: va lazy. */
+const DesignSystemPage = lazy(() => import("@/pages/design-system"))
 const ProspectoDetallePage = lazy(() => import("@/features/vendedor/pages/ProspectoDetallePage"))
 const SupervisorDashboardPage = lazy(() => import("@/features/supervisor/pages/SupervisorDashboardPage"))
 const AdminDashboardPage = lazy(() => import("@/features/admin/pages/AdminDashboardPage"))
@@ -46,6 +48,9 @@ export default function AppRoutes() {
       <Route path="/access-denied" element={<UnauthorizedPage />} />
       <Route path="/unknown-role" element={<UnauthorizedPage />} />
       <Route path="/lead" element={<FormularioLeadPage />} />
+      {/* Referencia del sistema de diseño. No lleva datos ni queda en la
+          navegación: existe para quien construye, no para el usuario final. */}
+      <Route path="/design" element={<Lazy><DesignSystemPage /></Lazy>} />
       <Route path="/formulario-lead" element={<FormularioLeadPage />} />
 
       {/* -- VENDEDOR (roles 1, 2, 3) -- */}

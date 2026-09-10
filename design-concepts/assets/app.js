@@ -130,18 +130,42 @@
   });
 
   /* ── Tema ────────────────────────────────────────────────────────────── */
+  /* El tema ya se aplicó en el <head>, antes de pintar. Acá sólo vive el
+     botón. Lee el tema EFECTIVO, no el atributo: si nadie eligió nada y el
+     sistema está en oscuro, el atributo está vacío y el primer click no hacía
+     nada visible. */
 
-  var toggle = document.querySelector("[data-theme-toggle]");
-  if (toggle) {
-    toggle.addEventListener("click", function () {
-      var root = document.documentElement;
-      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem("cober-concept-theme", next); } catch (err) { /* modo privado */ }
+  function temaEfectivo() {
+    var explicito = document.documentElement.getAttribute("data-theme");
+    if (explicito === "dark" || explicito === "light") return explicito;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+
+  function rotularToggle(btn, tema) {
+    btn.setAttribute("aria-pressed", tema === "dark" ? "true" : "false");
+    btn.setAttribute("title", tema === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+    btn.setAttribute("aria-label", tema === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+  }
+
+  var toggles = document.querySelectorAll("[data-theme-toggle]");
+  Array.prototype.forEach.call(toggles, function (btn) {
+    rotularToggle(btn, temaEfectivo());
+    btn.addEventListener("click", function () {
+      var siguiente = temaEfectivo() === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", siguiente);
+      try { localStorage.setItem("cober-concept-theme", siguiente); } catch (err) { /* modo privado */ }
+      Array.prototype.forEach.call(toggles, function (b) { rotularToggle(b, siguiente); });
+    });
+  });
+
+  /* Si el visitante nunca eligió, seguimos al sistema cuando cambia en vivo. */
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+      var eligio = false;
+      try { eligio = !!localStorage.getItem("cober-concept-theme"); } catch (err) { /* modo privado */ }
+      if (!eligio) Array.prototype.forEach.call(toggles, function (b) { rotularToggle(b, temaEfectivo()); });
     });
   }
-  try {
-    var saved = localStorage.getItem("cober-concept-theme");
-    if (saved) document.documentElement.setAttribute("data-theme", saved);
-  } catch (err) { /* modo privado: se queda en claro */ }
 })();

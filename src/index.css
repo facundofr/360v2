@@ -746,3 +746,40 @@
     .reg--bo-pol .reg-row.reg-entry > *:nth-child(8) { grid-area: actions; justify-content: flex-start; }
   }
 }
+
+@layer components {
+  /* Registro de la galería del sistema: documento · nombre · estado · acciones. */
+  .reg--demo {
+    --cols: 112px minmax(150px, 1.4fr) 168px 112px;
+  }
+  @media (max-width: 720px) {
+    .reg--demo { --cols: minmax(130px, 1fr) 150px; }
+    .reg--demo .reg-row > *:nth-child(1),
+    .reg--demo .reg-row > *:nth-child(4) { display: none; }
+  }
+
+  /* Muestrario: el ejemplo y su rótulo, sin tarjeta de por medio. */
+  .muestra {
+    display: grid;
+    grid-template-columns: 168px minmax(0, 1fr);
+    gap: 0 24px;
+    align-items: start;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .muestra:last-child { border-bottom: 0; }
+  .muestra > dt {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    padding-top: 6px;
+  }
+  .muestra > dd { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .muestra > dd > p { margin: 0; width: 100%; font-size: 12.5px; color: var(--muted-foreground); }
+  @media (max-width: 780px) {
+    .muestra { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .muestra > dt { padding-top: 0; }
+  }
+}

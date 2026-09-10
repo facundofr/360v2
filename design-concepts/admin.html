@@ -6,6 +6,13 @@
 <title>Admin · Cober360</title>
 <meta name="description" content="Concepto de rediseño — panel de administración.">
 <link rel="stylesheet" href="assets/cober.css">
+<script>
+  /* Tema antes del primer pintado: sin esto hay destello. */
+  try {
+    var t = localStorage.getItem("cober-concept-theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  } catch (e) { /* modo privado */ }
+</script>
 </head>
 <body>
 
@@ -23,10 +30,7 @@
 <div class="frame">
   <nav class="rail" aria-label="Secciones">
     <div class="rail-mark">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-        <rect width="18" height="18" rx="3" fill="#660E80"/>
-        <path d="M12.2 6.4a3.6 3.6 0 1 0 0 5.2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
-      </svg>
+      <img src="assets/logo-cober.png" alt="" width="20" height="20" aria-hidden="true">
       <div><b>Cober360</b><br><span>Administración</span></div>
     </div>
     <div class="rail-nav">
@@ -45,7 +49,6 @@
       <a class="rail-link" href="backoffice.html"><svg width="14" height="14"><use href="#i-file"/></svg>BackOffice</a>
     </div>
     <div class="rail-foot">
-      <button class="btn btn-quiet btn-sm" data-theme-toggle type="button" aria-label="Cambiar tema"><svg width="14" height="14"><use href="#i-sun"/></svg></button>
       <div class="who"><b>D. Cáceres</b><span>Admin</span></div>
     </div>
   </nav>
@@ -56,6 +59,7 @@
       <p class="folio-count"><b class="tabular">64</b><span>usuarios activos</span></p>
       <p class="folio-range">Período <b>septiembre 2026</b> · 4 equipos · 6 supervisores</p>
       <div class="folio-tools">
+        <button class="btn btn-quiet btn-icon" data-theme-toggle type="button"><svg width="14" height="14" aria-hidden="true"><use href="#i-sun"/></svg></button>
         <button class="btn" type="button">Período</button>
         <button class="btn btn-primary" type="button" data-open="m-usuario">Nuevo usuario</button>
       </div>
