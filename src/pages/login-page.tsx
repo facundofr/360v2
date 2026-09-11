@@ -4,8 +4,7 @@ import { toast } from "sonner"
 import axios from "axios"
 
 import { LoginForm } from "@/features/auth/components/login-form"
-import ThemeToggle from "@/components/common/theme-toggle"
-import Logo from "@/components/ui/logo"
+import { Compuerta } from "@/features/auth/components/Compuerta"
 import { useAuth, type Role } from "@/contexts/AuthContext"
 import type { LoginValues } from "@/features/auth/schemas"
 
@@ -69,23 +68,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col">
-      {/* El cambio de tema queda fuera del camino del formulario */}
-      <div className="flex justify-end p-4">
-        <ThemeToggle />
-      </div>
-
-      {/*
-        Login centrado en una sola columna.
-        El `pb-16` sube un poco el bloque respecto del centro exacto: el centro
-        óptico queda por encima del geométrico y así no se ve "caído".
-      */}
-      <main className="flex flex-1 items-center justify-center px-6 pb-16">
-        <div className="flex w-full max-w-sm flex-col gap-8">
-          <Logo className="mx-auto h-16" />
-          <LoginForm onSubmit={handleSubmit} submitting={loading} errors={errors} />
-        </div>
-      </main>
-    </div>
+    <Compuerta>
+      <LoginForm onSubmit={handleSubmit} submitting={loading} errors={errors} />
+    </Compuerta>
   )
 }

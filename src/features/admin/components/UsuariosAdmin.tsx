@@ -221,20 +221,20 @@ export default function UsuariosAdmin() {
         const u = row.original
         return (
           <div className="flex gap-1">
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => setDetalleModal({ open: true, user: u })} title="Ver detalle">
+            <Button size="icon" variant="outline" className="size-8" onClick={() => setDetalleModal({ open: true, user: u })} title="Ver detalle">
               <Eye className="size-3.5" />
             </Button>
-            <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(u)} title="Editar">
+            <Button size="icon" className="size-8" onClick={() => abrirEditar(u)} title="Editar">
               <Edit2 className="size-3.5" />
             </Button>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(u)} title={u.is_enabled !== 0 ? "Deshabilitar" : "Habilitar"}>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => toggleEstado(u)} title={u.is_enabled !== 0 ? "Deshabilitar" : "Habilitar"}>
               {u.is_enabled !== 0 ? <ShieldOff className="size-3.5" /> : <ShieldCheck className="size-3.5" />}
             </Button>
             {/* Reenviar verificación: sólo si el email sigue sin verificar. */}
             {u.verified === 0 && (
               <Button
                 size="icon"
-                className="size-8 bg-muted text-foreground border hover:bg-accent"
+                variant="outline" className="size-8"
                 onClick={() => reenviarVerificacion(u)}
                 disabled={reenviando === u.id}
                 title="Reenviar email de verificación"
@@ -337,7 +337,7 @@ export default function UsuariosAdmin() {
           <Button
             variant={viewMode === "lista" ? "default" : "ghost"}
             size="icon"
-            className={`h-9 w-9 rounded-none border-0 ${viewMode === "lista" ? "bg-primary hover:bg-primary/90 text-white" : ""}`}
+            className="h-9 w-9 rounded-none border-0"
             onClick={() => setViewMode("lista")}
             title="Vista lista"
           >
@@ -346,14 +346,14 @@ export default function UsuariosAdmin() {
           <Button
             variant={viewMode === "tarjetas" ? "default" : "ghost"}
             size="icon"
-            className={`h-9 w-9 rounded-none border-0 ${viewMode === "tarjetas" ? "bg-primary hover:bg-primary/90 text-white" : ""}`}
+            className="h-9 w-9 rounded-none border-0"
             onClick={() => setViewMode("tarjetas")}
             title="Vista tarjetas"
           >
             <LayoutGrid className="size-4" />
           </Button>
         </div>
-        <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={abrirCrear}>
+        <Button size="sm" onClick={abrirCrear}>
           <UserPlus className="size-4 mr-1" />Nuevo
         </Button>
       </div>
@@ -570,7 +570,7 @@ export default function UsuariosAdmin() {
                 <Button
                   type="submit"
                   disabled={guardando}
-                  className="bg-primary hover:bg-primary/90 gap-1.5"
+                  className="gap-1.5"
                 >
                   <UserPlus className="size-4" />
                   {guardando ? "Guardando..." : modal.user ? "Guardar cambios" : "Crear Usuario"}

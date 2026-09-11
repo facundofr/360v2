@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from "react"
+import { Fragment, useState, useEffect, useMemo } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 import {
-  AreaChart, Area, PieChart, Pie, Cell,
+  AreaChart, Area,
   CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
 } from "recharts"
 import {
@@ -11,6 +11,8 @@ import {
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Medidor, MedidorFila } from "@/components/common/Medidor"
+import { EstadoVacio } from "@/components/common/EstadoVacio"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { StatCard } from "@/components/common/StatCard"
@@ -22,8 +24,6 @@ import MapaCoropleta from "./MapaCoropleta"
 import MapaProspectosBuenosAires from "./MapaProspectosBuenosAires"
 
 // ── Colores del embudo ─────────────────────────────────────────────────────
-const FUNNEL_COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
-const PIE_COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82ca9d"]
 
 // ── Tipos ──────────────────────────────────────────────────────────────────
 interface KPIs {
@@ -151,7 +151,7 @@ export default function DashboardMetricasAdmin() {
       accessorKey: "estado",
       header: "Estado",
       cell: ({ row }) => (
-        <Badge className={`text-[10.5px] font-bold uppercase ${ESTADO_BADGE[row.original.estado] ?? "bg-gray-400 hover:bg-gray-400 text-white"}`}>
+        <Badge className={`text-[10.5px] font-bold uppercase ${ESTADO_BADGE[row.original.estado] ?? "bg-muted-foreground text-background"}`}>
           {row.original.estado}
         </Badge>
       ),
@@ -172,7 +172,7 @@ export default function DashboardMetricasAdmin() {
           <p className="text-sm text-muted-foreground mt-0.5">Métricas y análisis en tiempo real</p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge className="bg-primary hover:bg-primary text-white px-3 py-1.5 text-xs font-semibold uppercase">
+          <Badge className="px-3 py-1.5 text-[10.5px] font-bold tracking-[0.09em] uppercase">
             {getMesActual()}
           </Badge>
           <Button variant="ghost" size="icon" className="size-8" onClick={fetchData} disabled={loading}>
@@ -189,7 +189,6 @@ export default function DashboardMetricasAdmin() {
             size="sm"
             variant={periodo === p.value ? "default" : "outline"}
             onClick={() => setPeriodo(p.value)}
-            className={periodo === p.value ? "bg-primary hover:bg-primary/90 text-white" : ""}
           >
             {p.label}
           </Button>
@@ -292,12 +291,12 @@ export default function DashboardMetricasAdmin() {
                     <AreaChart data={prospectosPorDia} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                       <defs>
                         <linearGradient id="gProspectos" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#0088FE" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#0088FE" stopOpacity={0} />
+                          <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.28} />
+                          <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0} />
                         </linearGradient>
                         <linearGradient id="gConvertidos" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#00C49F" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#00C49F" stopOpacity={0} />
+                          <stop offset="5%" stopColor="var(--color-state-ok)" stopOpacity={0.28} />
+                          <stop offset="95%" stopColor="var(--color-state-ok)" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted/50" />
@@ -305,8 +304,8 @@ export default function DashboardMetricasAdmin() {
                       <YAxis tick={{ fontSize: 11 }} />
                       <Tooltip />
                       <Legend />
-                      <Area type="monotone" dataKey="prospectos" stroke="#0088FE" fill="url(#gProspectos)" name="Prospectos" />
-                      <Area type="monotone" dataKey="convertidos" stroke="#00C49F" fill="url(#gConvertidos)" name="Convertidos" />
+                      <Area type="monotone" dataKey="prospectos" stroke="var(--color-primary)" fill="url(#gProspectos)" name="Prospectos" />
+                      <Area type="monotone" dataKey="convertidos" stroke="var(--color-state-ok)" fill="url(#gConvertidos)" name="Convertidos" />
                     </AreaChart>
                   </ResponsiveContainer>
                 )}
@@ -319,38 +318,34 @@ export default function DashboardMetricasAdmin() {
                 <CardTitle className="text-sm font-semibold">Embudo de Ventas</CardTitle>
                 <p className="text-xs text-muted-foreground">Pipeline actual de prospectos</p>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {funnelData.map((stage, i) => (
-                  <div key={stage.etapa}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex size-5 items-center justify-center rounded-full text-[10.5px] font-bold text-white"
-                          style={{ backgroundColor: FUNNEL_COLORS[i % FUNNEL_COLORS.length] }}>
-                          {i + 1}
-                        </span>
-                        <span className="text-sm font-medium">{stage.etapa}</span>
-                      </div>
-                      <div className="text-sm text-right">
-                        <span className="font-bold">{stage.cantidad}</span>
-                        <span className="text-muted-foreground ml-1 text-xs">({stage.porcentaje}%)</span>
-                      </div>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{ width: `${stage.porcentaje}%`, backgroundColor: FUNNEL_COLORS[i % FUNNEL_COLORS.length] }}
-                      />
-                    </div>
-                    {i < funnelData.length - 1 && stage.cantidad > 0 && (
-                      <p className="text-[10.5px] text-muted-foreground text-right mt-0.5">
-                        {Math.round((funnelData[i + 1].cantidad / stage.cantidad) * 100)}% pasan a la siguiente etapa
-                      </p>
-                    )}
-                    {i < funnelData.length - 1 && stage.cantidad === 0 && (
-                      <p className="text-[10.5px] text-muted-foreground text-right mt-0.5">NaN% pasan a la siguiente etapa</p>
-                    )}
-                  </div>
-                ))}
+              <CardContent>
+                <Medidor>
+                  {funnelData.map((stage, i) => {
+                    const siguiente = funnelData[i + 1]
+                    /* La conversión sólo existe si hay algo de donde convertir.
+                       Antes se renderizaba "NaN%" al usuario cuando la etapa
+                       estaba vacía. */
+                    const pasan = siguiente && stage.cantidad > 0
+                      ? Math.round((siguiente.cantidad / stage.cantidad) * 100)
+                      : null
+
+                    return (
+                      <Fragment key={stage.etapa}>
+                        <MedidorFila
+                          rotulo={stage.etapa}
+                          cifra={stage.cantidad}
+                          porcentaje={stage.porcentaje}
+                          descripcion={`${stage.etapa}: ${stage.cantidad} prospectos, ${stage.porcentaje}% del total`}
+                        />
+                        {pasan !== null && (
+                          <p className="pl-[101px] text-[11.5px] text-muted-foreground">
+                            {pasan}% pasan a {siguiente.etapa.toLowerCase()}
+                          </p>
+                        )}
+                      </Fragment>
+                    )
+                  })}
+                </Medidor>
               </CardContent>
             </Card>
           </div>
@@ -365,34 +360,27 @@ export default function DashboardMetricasAdmin() {
               </CardHeader>
               <CardContent>
                 {prospectosPorCanal.length === 0 ? (
-                  <div className="h-40 flex items-center justify-center text-sm text-muted-foreground">Sin datos</div>
+                  <EstadoVacio
+                    compacto
+                    icono={Globe}
+                    titulo="Sin datos de origen"
+                    descripcion="Todavía no hay prospectos con canal registrado en este período."
+                  />
                 ) : (
-                  <>
-                    <ResponsiveContainer width="100%" height={180}>
-                      <PieChart>
-                        <Pie data={prospectosPorCanal} dataKey="cantidad" nameKey="canal" cx="50%" cy="50%" outerRadius={70}>
-                          {prospectosPorCanal.map((_, i) => (
-                            <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="mt-3 space-y-2">
-                      {prospectosPorCanal.map((item, i) => (
-                        <div key={item.canal} className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Globe className="size-3.5" style={{ color: PIE_COLORS[i % PIE_COLORS.length] }} />
-                            <span className="text-xs">{item.canal}</span>
-                          </div>
-                          <div className="text-xs">
-                            <span className="font-bold">{item.cantidad}</span>
-                            <span className="text-muted-foreground ml-1">({item.porcentaje}%)</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
+                  /* Antes era una torta MÁS una lista con el mismo dato debajo.
+                     El medidor hace los dos trabajos en uno, y de paso se lleva
+                     la paleta de ejemplo de recharts que traía la torta. */
+                  <Medidor>
+                    {prospectosPorCanal.map(item => (
+                      <MedidorFila
+                        key={item.canal}
+                        rotulo={item.canal}
+                        cifra={item.cantidad}
+                        porcentaje={item.porcentaje}
+                        descripcion={`${item.canal}: ${item.cantidad} prospectos, ${item.porcentaje}% del total`}
+                      />
+                    ))}
+                  </Medidor>
                 )}
               </CardContent>
             </Card>

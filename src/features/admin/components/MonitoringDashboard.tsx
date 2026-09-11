@@ -11,7 +11,8 @@ import {
   Server, Database, Cpu, HardDrive, Network,
   CheckCircle, AlertTriangle, RefreshCw, Loader2, Clock, Users, Eye,
 } from "lucide-react"
-import { getUmbralEstado, ESTADO_BG_SOLID } from "@/utils/getUmbralEstado"
+import { getUmbralEstado } from "@/utils/getUmbralEstado"
+import { Pista } from "@/components/common/Medidor"
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 interface SystemMetrics {
@@ -45,10 +46,6 @@ function formatUptime(s: number): string {
   if (d > 0) return `${d}d ${h}h ${m}m`
   if (h > 0) return `${h}h ${m}m`
   return `${m}m`
-}
-
-function progressColor(pct: number) {
-  return ESTADO_BG_SOLID[getUmbralEstado(pct)]
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -143,10 +140,7 @@ export default function MonitoringDashboard() {
                     <span>{metrics.cpu.cores} cores</span>
                     <span>{metrics.cpu.usage.toFixed(1)}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-muted overflow-hidden">
-                    <div className={`h-full rounded-full transition-all ${progressColor(metrics.cpu.usage)}`}
-                      style={{ width: `${Math.min(metrics.cpu.usage, 100)}%` }} />
-                  </div>
+                  <Pista porcentaje={metrics.cpu.usage} tono={getUmbralEstado(metrics.cpu.usage)} />
                 </CardContent>
               </Card>
             )}
@@ -164,10 +158,7 @@ export default function MonitoringDashboard() {
                     <span>{formatBytes(metrics.memory.used)} / {formatBytes(metrics.memory.total)}</span>
                     <span>{metrics.memory.percent.toFixed(1)}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-muted overflow-hidden">
-                    <div className={`h-full rounded-full transition-all ${progressColor(metrics.memory.percent)}`}
-                      style={{ width: `${Math.min(metrics.memory.percent, 100)}%` }} />
-                  </div>
+                  <Pista porcentaje={metrics.memory.percent} tono={getUmbralEstado(metrics.memory.percent)} />
                 </CardContent>
               </Card>
             )}
@@ -185,10 +176,7 @@ export default function MonitoringDashboard() {
                     <span>{formatBytes(metrics.disk.used)} / {formatBytes(metrics.disk.total)}</span>
                     <span>{metrics.disk.percent.toFixed(1)}%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-muted overflow-hidden">
-                    <div className={`h-full rounded-full transition-all ${progressColor(metrics.disk.percent)}`}
-                      style={{ width: `${Math.min(metrics.disk.percent, 100)}%` }} />
-                  </div>
+                  <Pista porcentaje={metrics.disk.percent} tono={getUmbralEstado(metrics.disk.percent)} />
                 </CardContent>
               </Card>
             )}

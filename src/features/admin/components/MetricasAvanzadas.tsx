@@ -52,7 +52,19 @@ interface MetricasData {
   }
 }
 
-const PIE_COLORS = ["#8B7EC8", "#4CAF50", "#FF9800", "#2196F3"]
+/**
+ * Rampa categórica: tinta en cuatro pesos, sin matiz.
+ *
+ * Eran cuatro colores sueltos —lila, verde, naranja, azul— que no ordenaban
+ * nada y obligaban a leer la leyenda. Con una rampa monótona en luminosidad
+ * el orden de la torta se lee en el propio dibujo.
+ */
+const RAMPA = [
+  "var(--foreground)",
+  "color-mix(in oklch, var(--foreground) 66%, var(--background))",
+  "color-mix(in oklch, var(--foreground) 42%, var(--background))",
+  "color-mix(in oklch, var(--foreground) 22%, var(--background))",
+]
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 export default function MetricasAvanzadas() {
@@ -190,7 +202,7 @@ export default function MetricasAvanzadas() {
                     <XAxis dataKey="hora" tickFormatter={(h) => `${h}:00`} />
                     <YAxis />
                     <Tooltip formatter={(v) => [v, "Leads"]} labelFormatter={(h) => `${h}:00 hs`} />
-                    <Bar dataKey="total_leads" fill="#8B7EC8" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="total_leads" fill="var(--foreground)" radius={[3, 3, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -208,7 +220,7 @@ export default function MetricasAvanzadas() {
                     <XAxis dataKey="fecha" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="total_leads" stroke="#8B7EC8" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="total_leads" stroke="var(--foreground)" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -227,7 +239,7 @@ export default function MetricasAvanzadas() {
                       <XAxis type="number" />
                       <YAxis type="category" dataKey="rango_edad" width={80} />
                       <Tooltip />
-                      <Bar dataKey="total_leads" fill="#4CAF50" radius={[0, 3, 3, 0]} />
+                      <Bar dataKey="total_leads" fill="var(--foreground)" radius={[0, 3, 3, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -240,7 +252,7 @@ export default function MetricasAvanzadas() {
                   <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
                       <Pie data={leadsPorSexo} dataKey="total" nameKey="sexo" cx="50%" cy="50%" outerRadius={70} label={({ sexo, percent }) => `${sexo} ${(percent * 100).toFixed(0)}%`}>
-                        {leadsPorSexo.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                        {leadsPorSexo.map((_, i) => <Cell key={i} fill={RAMPA[i % RAMPA.length]} />)}
                       </Pie>
                       <Legend />
                       <Tooltip />

@@ -6,7 +6,8 @@ import { Eye, EyeOff, Check, X, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Pista } from "@/components/common/Medidor"
+import { Compuerta } from "@/features/auth/components/Compuerta"
 import { ENDPOINTS } from "@/lib/config"
 
 function getPasswordRequirements(password: string) {
@@ -19,13 +20,16 @@ function getPasswordRequirements(password: string) {
   }
 }
 
-function getStrength(password: string): { level: number; text: string; color: string } {
+type Tono = "muted" | "ok" | "warn" | "risk"
+
+/** Devuelve el tono del sistema, no una clase de fondo suelta. */
+function getStrength(password: string): { level: number; text: string; tono: Tono } {
   const met = Object.values(getPasswordRequirements(password)).filter(Boolean).length
-  if (met === 0) return { level: 0, text: "", color: "" }
-  if (met <= 2) return { level: 1, text: "Débil", color: "bg-state-risk" }
-  if (met <= 3) return { level: 2, text: "Regular", color: "bg-state-warn" }
-  if (met <= 4) return { level: 3, text: "Buena", color: "bg-state-ok" }
-  return { level: 4, text: "Muy fuerte", color: "bg-state-ok" }
+  if (met === 0) return { level: 0, text: "", tono: "muted" }
+  if (met <= 2) return { level: 1, text: "Débil", tono: "risk" }
+  if (met <= 3) return { level: 2, text: "Regular", tono: "warn" }
+  if (met <= 4) return { level: 3, text: "Buena", tono: "ok" }
+  return { level: 4, text: "Muy fuerte", tono: "ok" }
 }
 
 export default function ResetPasswordPage() {
@@ -68,109 +72,101 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="bg-primary text-primary-foreground rounded-t-lg text-center space-y-2 p-6">
-          <div className="flex justify-center">
-            <Lock className="size-10 opacity-90" />
+    <Compuerta icono={Lock} titulo="Nueva contraseña" descripcion="Elegí una contraseña y confirmala.">
+      <form onSubmit={handleSubmit} className="grid gap-3.5">
+        <div className="grid gap-1.5">
+          <Label htmlFor="password">Nueva contraseña</Label>
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="pr-10"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
           </div>
-          <CardTitle className="text-xl">Nueva Contraseña</CardTitle>
-          <CardDescription className="text-primary-foreground/80">
-            Ingresa y confirma tu nueva contraseña
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1">
-              <Label htmlFor="password">Nueva contraseña</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
-            </div>
+        </div>
 
-            {formData.password && (
-              <div className="space-y-2 text-sm">
-                {/* Barra de fortaleza */}
-                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className={`h-full transition-all ${strength.color}`}
-                    style={{ width: `${(strength.level / 4) * 100}%` }}
-                  />
-                </div>
-                {strength.text && (
-                  <p className="text-muted-foreground text-xs">Fortaleza: <strong>{strength.text}</strong></p>
-                )}
-                <div className="grid grid-cols-2 gap-1">
-                  {[
-                    { met: reqs.length, text: "8-128 caracteres" },
-                    { met: reqs.lowercase, text: "Minúscula" },
-                    { met: reqs.uppercase, text: "Mayúscula" },
-                    { met: reqs.number, text: "Número" },
-                    { met: reqs.special, text: "Carácter especial" },
-                  ].map(({ met, text }) => (
-                    <div key={text} className="flex items-center gap-1">
-                      {met ? (
-                        <Check className="size-3 text-state-ok-text" />
-                      ) : (
-                        <X className="size-3 text-muted-foreground" />
-                      )}
-                      <span className={met ? "text-state-ok-text" : "text-muted-foreground"}>{text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {formData.password && (
+          <div className="grid gap-2">
+            {/* La pista del sistema: se anima con `transform: scaleX`, no con
+                `width`, que fuerza relayout en cada tecla. */}
+            <Pista porcentaje={(strength.level / 4) * 100} tono={strength.tono} />
+            {strength.text && (
+              <p className="text-[11.5px] text-muted-foreground">
+                Fortaleza: <b className="font-semibold text-foreground">{strength.text}</b>
+              </p>
             )}
+            <ul className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11.5px]">
+              {[
+                { met: reqs.length, text: "8-128 caracteres" },
+                { met: reqs.lowercase, text: "Minúscula" },
+                { met: reqs.uppercase, text: "Mayúscula" },
+                { met: reqs.number, text: "Número" },
+                { met: reqs.special, text: "Carácter especial" },
+              ].map(({ met, text }) => (
+                <li key={text} className="flex items-center gap-1">
+                  {met
+                    ? <Check className="size-3 shrink-0 text-state-ok-text" aria-hidden="true" />
+                    : <X className="size-3 shrink-0 text-muted-foreground" aria-hidden="true" />}
+                  <span className={met ? "text-state-ok-text" : "text-muted-foreground"}>{text}</span>
+                  <span className="sr-only">{met ? " (cumple)" : " (falta)"}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-            <div className="space-y-1">
-              <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showConfirm ? "text" : "password"}
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  className="pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
-              {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                <p className="text-destructive text-xs">Las contraseñas no coinciden</p>
-              )}
-            </div>
-
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Actualizando..." : "Actualizar contraseña"}
-            </Button>
-
-            <p className="text-center text-sm text-muted-foreground">
-              <Link to="/login" className="text-primary hover:underline">
-                Volver al inicio de sesión
-              </Link>
+        <div className="grid gap-1.5">
+          <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
+          <div className="relative">
+            <Input
+              id="confirmPassword"
+              type={showConfirm ? "text" : "password"}
+              autoComplete="new-password"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              className="pr-10"
+              aria-invalid={!!formData.confirmPassword && formData.password !== formData.confirmPassword}
+              aria-describedby="err-confirm"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm(!showConfirm)}
+              aria-label={showConfirm ? "Ocultar contraseña" : "Mostrar contraseña"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            </button>
+          </div>
+          {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+            <p id="err-confirm" className="text-[11.5px] font-semibold text-destructive">
+              Las contraseñas no coinciden
             </p>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          )}
+        </div>
+
+        <Button type="submit" className="h-9 w-full" disabled={loading}>
+          {loading ? "Actualizando…" : "Actualizar contraseña"}
+        </Button>
+
+        <p className="text-center text-[12px] text-muted-foreground">
+          <Link to="/login" className="font-semibold text-primary hover:underline">
+            Volver al inicio de sesión
+          </Link>
+        </p>
+      </form>
+    </Compuerta>
   )
 }

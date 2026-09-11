@@ -1,11 +1,12 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
+import { AlertTriangle, Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import {
   Form,
   FormControl,
@@ -14,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { loginSchema, type LoginValues } from "@/features/auth/schemas"
 
@@ -51,21 +51,29 @@ export function LoginForm({
   return (
     <Form {...form}>
       <form
-        className={cn("flex flex-col gap-6", className)}
+        className={cn("flex flex-col", className)}
         onSubmit={form.handleSubmit(onSubmit)}
         {...props}
       >
-        <FieldGroup>
-          <div className="flex flex-col items-center gap-1 text-center">
-            <h1 className="text-2xl font-bold">Iniciar Sesión</h1>
-          </div>
+        {/* Headline del escalonado: 21px/700/−0.025em. Antes eran 24px, fuera
+            de la escala tipográfica del sistema. */}
+        <h1 className="mb-[22px] text-center text-[21px] font-bold tracking-[-0.025em]">
+          Iniciar sesión
+        </h1>
 
-          {errors.general && (
-            <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {errors.general}
-            </div>
-          )}
+        {/* El error general es un aviso reglado, no un bloque rojo entero: la
+            causa va en la línea guía y la salida, en tinta, se lee normal. */}
+        {errors.general && (
+          <Alert variant="destructive" className="mb-[18px]">
+            <AlertTriangle aria-hidden="true" />
+            <AlertDescription>
+              <b>{errors.general}</b>
+              Si el problema sigue, probá recuperar la contraseña o escribí a soporte.
+            </AlertDescription>
+          </Alert>
+        )}
 
+        <div className="grid gap-3.5">
           <FormField
             control={form.control}
             name="email"
@@ -73,7 +81,7 @@ export function LoginForm({
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="m@example.com" {...field} />
+                  <Input type="email" autoComplete="username" placeholder="m@example.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -85,41 +93,43 @@ export function LoginForm({
             name="password"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center">
+                {/* La etiqueta y el enlace de recuperación comparten renglón y
+                    se alinean por la línea de base, como en el mockup. */}
+                <div className="flex items-baseline justify-between gap-3">
                   <FormLabel>Contraseña</FormLabel>
                   <Link
                     to="/forgot-password"
-                    className="ml-auto text-sm underline-offset-4 hover:underline"
+                    className="text-[11px] font-semibold text-primary hover:underline"
                   >
                     ¿Olvidaste tu contraseña?
                   </Link>
                 </div>
                 <FormControl>
-                  <Input type="password" placeholder="Ingresa tu contraseña" {...field} />
+                  <Input type="password" autoComplete="current-password" placeholder="Ingresa tu contraseña" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" disabled={submitting}>
+          <Button type="submit" className="h-9 w-full" disabled={submitting}>
             {submitting ? (
               <>
-                <Loader2 className="size-4 animate-spin mr-1" />
-                Iniciando...
+                <Loader2 className="size-4 animate-spin" />
+                Iniciando…
               </>
             ) : (
-              "Iniciar Sesión"
+              "Iniciar sesión"
             )}
           </Button>
+        </div>
 
-          <p className="text-center text-sm text-muted-foreground">
-            ¿No tienes una cuenta?{" "}
-            <Link to="/signup" className="underline underline-offset-4">
-              Crear Cuenta
-            </Link>
-          </p>
-        </FieldGroup>
+        <p className="mt-[22px] text-center text-[12px] text-muted-foreground">
+          ¿No tenés una cuenta?{" "}
+          <Link to="/signup" className="font-semibold text-primary hover:underline">
+            Crear cuenta
+          </Link>
+        </p>
       </form>
     </Form>
   )

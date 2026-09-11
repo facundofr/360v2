@@ -92,7 +92,7 @@ function SidebarNavContent({ menuItems, vista, setVista }: { menuItems: MenuItem
                     >
                       <div className={`flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors ${
                         active
-                          ? "bg-primary text-white"
+                          ? "bg-primary text-primary-foreground"
                           : "bg-muted text-muted-foreground group-hover:bg-primary/15 group-hover:text-primary dark:group-hover:bg-primary/20 dark:group-hover:text-purple-300"
                       }`}>
                         <Icon className="size-3.5" />

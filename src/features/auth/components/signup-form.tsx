@@ -44,8 +44,8 @@ export function SignupForm({
       >
         <FieldGroup>
           <div className="flex flex-col items-center gap-1 text-center">
-            <h1 className="text-2xl font-bold">Crear tu cuenta</h1>
-            <p className="text-sm text-balance text-muted-foreground">
+            <h1 className="text-[21px] font-bold tracking-[-0.025em]">Crear tu cuenta</h1>
+            <p className="text-[12.5px] text-balance text-muted-foreground">
               Completa los campos para crear tu cuenta
             </p>
           </div>
@@ -138,9 +138,9 @@ export function SignupForm({
             )}
           />
 
-          <Button type="submit">Registrarse</Button>
+          <Button type="submit" className="h-9 w-full">Registrarse</Button>
 
-          <p className="px-6 text-center text-sm text-muted-foreground">
+          <p className="text-center text-[12px] text-muted-foreground">
             ¿Ya tienes una cuenta? <Link to="/login">Iniciar sesión</Link>
           </p>
         </FieldGroup>

@@ -39,7 +39,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { useAuth } from "@/contexts/AuthContext"
 import { DashboardShell } from "@/components/common/DashboardShell"
 import { StatCard } from "@/components/common/StatCard"
-import { getBadgeEstado, estadosConfig } from "@/utils/estadosHelper"
+import { getBadgeEstado } from "@/utils/estadosHelper"
+import { estadosConfig } from "@/utils/estados"
 import { ENDPOINTS, API_URL } from "@/lib/config"
 import { getAuthToken } from "@/lib/auth"
 
@@ -135,7 +136,7 @@ function SidebarNavContent({
               >
                 <div className={`flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors ${
                   active
-                    ? "bg-primary text-white"
+                    ? "bg-primary text-primary-foreground"
                     : "bg-muted text-muted-foreground group-hover:bg-primary/15 group-hover:text-primary dark:group-hover:bg-primary/20 dark:group-hover:text-purple-300"
                 }`}>
                   <Icon className="size-3.5" />
@@ -371,18 +372,6 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
 
   const hayFiltros = filtros.busqueda || filtros.estado || filtros.vendedor || filtros.nombre || filtros.apellido || filtros.edad
 
-  const getEstadoColor = (estado: string): string => {
-    const pct: Record<string, number> = {
-      "Lead": 10, "1 Contacto": 25, "Calificado Cotizacion": 50,
-      "Calificado Poliza": 75, "Calificado Pago": 90, "Venta": 100
-    }
-    const p = pct[estado] ?? 0
-    if (p === 100) return "#16a34a"
-    if (p > 50)  return "#2563eb"
-    if (p > 0)   return "#d97706"
-    return "#dc2626"
-  }
-
   const columnsProspectos = useMemo<ColumnDef<Prospecto>[]>(() => [
     {
       id: "id",
@@ -435,12 +424,16 @@ export default function SupervisorDashboardPage({ vistaInicial = "dashboard" }: 
       cell: ({ row }) => {
         const p = row.original
         return (
+          /* El sello ya trae la familia semántica y el grado de carga, derivados
+             del estado real. La escala de cuatro colores que había acá era otra
+             tabla de estados, hecha a mano, que además no coincidía con los 26
+             estados que la app usa de verdad. */
           <button
-            className="text-xs font-medium px-2 py-1 rounded border border-current hover:opacity-80 transition-opacity whitespace-nowrap"
-            style={{ color: getEstadoColor(p.asignacion_estado ?? p.estado) }}
+            className="rounded-[var(--radius-stamp)] hover:opacity-75 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            title="Cambiar estado"
             onClick={() => { setModalEstado({ open: true, prospecto: p }); setNuevoEstado(p.asignacion_estado ?? p.estado) }}
           >
-            {p.asignacion_estado ?? p.estado}
+            {getBadgeEstado(p.asignacion_estado ?? p.estado)}
           </button>
         )
       },

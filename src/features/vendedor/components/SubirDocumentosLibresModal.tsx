@@ -3,6 +3,7 @@ import axios from "axios"
 import { toast } from "sonner"
 import { Upload, Plus, Trash2, FileText, CheckCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
@@ -216,7 +217,7 @@ export function SubirDocumentosLibresModal({ open, onOpenChange, poliza, apiCont
 
         <div className="flex flex-col gap-3">
           {items.map((item, index) => (
-            <div key={item.id} className="border rounded-lg p-3 space-y-2" style={{ backgroundColor: item.file ? "#f8fff8" : "transparent" }}>
+            <div key={item.id} className={cn("rounded-lg border p-3 space-y-2", item.file && "border-state-ok bg-state-ok-soft")}>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-muted-foreground">Documento {index + 1}</span>
                 {items.length > 1 && (

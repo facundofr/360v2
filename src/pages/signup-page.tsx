@@ -3,8 +3,7 @@ import { toast } from "sonner"
 import axios from "axios"
 
 import { SignupForm } from "@/features/auth/components/signup-form"
-import ThemeToggle from "@/components/common/theme-toggle"
-import Logo from "@/components/ui/logo"
+import { Compuerta } from "@/features/auth/components/Compuerta"
 import { ENDPOINTS } from "@/lib/config"
 import type { SignupValues } from "@/features/auth/schemas"
 
@@ -49,27 +48,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex w-full items-center justify-center gap-2 md:justify-start">
-          <a href="#" className="flex items-center gap-2 font-medium">
-            <Logo className="h-16" />
-          </a>
-          <ThemeToggle className="ml-auto" />
-        </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <SignupForm onSubmit={handleSubmit} />
-          </div>
-        </div>
-      </div>
-    <div className="relative hidden bg-muted lg:block">
-        <img
-          src={new URL('../assets/C3601.webp', import.meta.url).href}
-          alt="Cober background"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.7] "
-        />
-      </div>
-    </div>
+    <Compuerta>
+      <SignupForm onSubmit={handleSubmit} />
+    </Compuerta>
   )
 }

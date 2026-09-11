@@ -42,17 +42,20 @@ export default function PwaUpdateToast() {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-sm px-4 animate-in slide-in-from-bottom-2">
-      <Alert className="bg-[#2D3047] text-white border-0 shadow-xl">
-        <AlertDescription className="flex items-center justify-between gap-2">
-          <span className="text-sm">Hay una nueva versión disponible</span>
-          <div className="flex gap-1 shrink-0">
-            <Button size="sm" variant="ghost" className="h-7 text-xs text-white/70 hover:text-white hover:bg-white/10" onClick={() => setOpen(false)}>
-              <X className="size-3 mr-1" />Más tarde
+      {/* El aviso del sistema, no un panel azul pizarra con su propio lila:
+          esos dos hex no salían de ningún token y no seguían el tema. */}
+      <Alert className="bg-background shadow-none">
+        <RefreshCw aria-hidden="true" />
+        <AlertDescription className="flex items-center justify-between gap-3">
+          <span>Hay una nueva versión disponible</span>
+          <span className="flex shrink-0 gap-1">
+            <Button size="sm" variant="ghost" className="h-7" onClick={() => setOpen(false)}>
+              <X className="size-3" />Más tarde
             </Button>
-            <Button size="sm" className="h-7 text-xs bg-[#8B7EC8] hover:bg-[#7a6bb9] text-white" onClick={applyUpdate}>
-              <RefreshCw className="size-3 mr-1" />Actualizar
+            <Button size="sm" className="h-7" onClick={applyUpdate}>
+              Actualizar
             </Button>
-          </div>
+          </span>
         </AlertDescription>
       </Alert>
     </div>

@@ -65,15 +65,6 @@ function infoPromocion(valor: number | undefined) {
   }
 }
 
-function colorPlan(nombre?: string) {
-  const n = (nombre ?? "").toLowerCase()
-  if (n.includes("classic")) return "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300"
-  if (n.includes("taylored")) return "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
-  if (n.includes("wagon")) return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-  if (n.includes("cober x")) return "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"
-  return "bg-muted text-foreground"
-}
-
 export function SupervisorCotizacionesPorUsuario() {
   const [cotizaciones, setCotizaciones] = React.useState<Cotizacion[]>([])
   const [loading, setLoading] = React.useState(true)
@@ -151,7 +142,7 @@ export function SupervisorCotizacionesPorUsuario() {
       accessorKey: "plan",
       header: "Plan",
       cell: ({ row }) => (
-        <Badge className={cn("text-xs", colorPlan(row.original.plan ?? row.original.plan_nombre))}>
+        <Badge variant="outline" size="sm">
           {row.original.plan ?? row.original.plan_nombre ?? "Sin plan"}
         </Badge>
       ),
@@ -302,7 +293,7 @@ export function SupervisorCotizacionesPorUsuario() {
             <div className="space-y-4 max-h-[60vh] overflow-y-auto">
               {Object.entries(detalle).map(([plan, items]) => (
                 <div key={plan}>
-                  <Badge className={cn("mb-2", colorPlan(plan))}>{plan}</Badge>
+                  <Badge variant="outline" className="mb-2">{plan}</Badge>
                   <DataTable columns={columnsCotizacionesPlan} data={items} hideColumnToggle />
                 </div>
               ))}

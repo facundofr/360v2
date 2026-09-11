@@ -5,7 +5,7 @@ import {
   Search, Filter, Download, RefreshCw, History, DollarSign,
   MessageCircle, Edit, ArrowLeftRight, Users, Calendar,
   FileText, ShieldCheck, TrendingUp, Phone, Mail, ChevronLeft, ChevronRight,
-  LayoutGrid, List, UserCog
+  ClipboardList, List, UserCog
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 
@@ -22,7 +22,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Checkbox } from "@/components/ui/checkbox"
 import { getBadgeEstado } from "@/utils/estadosHelper"
+import { ETAPAS, etapaDe, trabadoEn } from "@/utils/estados"
+import { Trabado } from "@/components/common/Trabado"
+import { useTecladoRegistro } from "@/hooks/useTecladoRegistro"
 import { API_URL } from "@/lib/config"
 import { getAuthToken } from "@/lib/auth"
 
@@ -107,7 +111,12 @@ export function BackofficeProspectosView() {
   const [nuevoVendedorId, setNuevoVendedorId] = useState("")
   const [savingEstado, setSavingEstado] = useState(false)
   const [savingReasignar, setSavingReasignar] = useState(false)
-  const [tipoVista, setTipoVista] = useState<"tabla" | "tarjetas">("tabla")
+  // El padrón es la vista por defecto: agrupa por etapa y expone la traba.
+  const [tipoVista, setTipoVista] = useState<"tabla" | "tarjetas">("tarjetas")
+
+  // Marcado del registro, por id y no por índice: la página se repagina y
+  // un índice terminaría marcando a otro prospecto.
+  const [marcados, setMarcados] = useState<Set<number>>(new Set())
 
   const getAuth = () => ({ Authorization: `Bearer ${getAuthToken()}` })
 
@@ -241,18 +250,98 @@ export function BackofficeProspectosView() {
     return n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   }
 
-  const getPlanBadgeClass = (plan?: unknown) => {
-    const lp = String(plan ?? "").toLowerCase()
-    if (lp.includes("wagon")) return "bg-orange-100 text-orange-800 border border-orange-200"
-    if (lp.includes("taylored")) return "bg-blue-100 text-blue-800 border border-blue-200"
-    if (lp.includes("cober x")) return "bg-purple-100 text-purple-800 border border-purple-200"
-    if (lp.includes("classic")) return "bg-green-100 text-green-800 border border-green-200"
-    if (lp.includes("premium")) return "bg-rose-100 text-rose-800 border border-rose-200"
-    if (lp.includes("básico") || lp.includes("basico")) return "bg-emerald-100 text-emerald-800 border border-emerald-200"
-    return "bg-muted text-muted-foreground"
-  }
-
   const fmtNum = (n?: number) => Number(n ?? 0).toLocaleString("es-AR")
+
+
+  // ── El registro: bandas de etapa, traba y marcado ──────────────────────
+  // La etapa no es un dato nuevo: se deriva del estado, que sí lo es. Agrupar
+  // la página en bandas es lo que deja ver de un vistazo dónde está la cola.
+  const gruposPorEtapa = useMemo(() => {
+    const grupos = ETAPAS.map(etapa => ({ etapa, filas: [] as Prospecto[] }))
+    for (const p of prospectos) {
+      const grupo = grupos.find(g => g.etapa === etapaDe(p.estado))
+      if (grupo) grupo.filas.push(p)
+    }
+    // El folio es la posición absoluta en el padrón, no la de la página.
+    let folio = (currentPage - 1) * (parseInt(itemsPerPage, 10) || 0)
+    return grupos.filter(g => g.filas.length > 0).map(g => {
+      const desde = folio
+      folio += g.filas.length
+      return { ...g, desde }
+    })
+  }, [prospectos, currentPage, itemsPerPage])
+
+  /** La banda activa es la primera que todavía espera trabajo. */
+  const etapaActiva = gruposPorEtapa.find(g => g.etapa !== "Descartado")?.etapa
+
+  // Al repaginar o refiltrar se sueltan las marcas de lo que ya no está en
+  // pantalla: exportar algo que no se ve sería una sorpresa.
+  useEffect(() => {
+    setMarcados(prev => {
+      if (prev.size === 0) return prev
+      const vivos = new Set(prospectos.map(p => p.id))
+      const next = new Set([...prev].filter(id => vivos.has(id)))
+      return next.size === prev.size ? prev : next
+    })
+  }, [prospectos])
+
+  const marcarUno = (id: number, marcado: boolean) => setMarcados(prev => {
+    const next = new Set(prev)
+    if (marcado) next.add(id)
+    else next.delete(id)
+    return next
+  })
+  const marcarTodos = (marcado: boolean) =>
+    setMarcados(marcado ? new Set(prospectos.map(p => p.id)) : new Set())
+
+  const prospectosMarcados = prospectos.filter(p => marcados.has(p.id))
+  const todosMarcados = prospectos.length > 0 && marcados.size === prospectos.length
+
+  /* El turno completo se trabaja sin mouse: `/` al buscador, J/K por asiento. */
+  useTecladoRegistro(tipoVista === "tarjetas")
+
+  /**
+   * Exportar la selección.
+   *
+   * `exportar()` pega contra `/backoffice/prospectos/exportar`, que filtra del
+   * lado del servidor y no admite una lista de ids. Para la selección se arma
+   * el CSV en el cliente con lo que ya está en memoria: mismo resultado, sin
+   * endpoint nuevo.
+   */
+  const exportarSeleccion = (seleccion: Prospecto[]) => {
+    if (seleccion.length === 0) return
+    const columnas: [string, (p: Prospecto) => unknown][] = [
+      ["ID",          p => p.id],
+      ["Apellido",    p => p.apellido],
+      ["Nombre",      p => p.nombre],
+      ["Edad",        p => p.edad ?? ""],
+      ["Localidad",   p => p.localidad ?? ""],
+      ["Teléfono",    p => p.numero_contacto ?? ""],
+      ["Email",       p => p.correo ?? ""],
+      ["Estado",      p => p.estado],
+      ["Etapa",       p => etapaDe(p.estado)],
+      ["Trabado en",  p => trabadoEn(p.estado).texto],
+      ["Vendedor",    p => `${p.vendedor_nombre ?? ""} ${p.vendedor_apellido ?? ""}`.trim()],
+      ["Supervisor",  p => `${p.supervisor_nombre ?? ""} ${p.supervisor_apellido ?? ""}`.trim()],
+      ["Cotizaciones", p => p.cotizaciones_count ?? 0],
+      ["Pólizas",     p => p.polizas_count ?? 0],
+      ["Registro",    p => p.fecha_registro ?? ""],
+    ]
+    // Comillas dobles escapadas + BOM para que Excel abra bien los acentos.
+    const escape = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`
+    const csv = [
+      columnas.map(([h]) => escape(h)).join(","),
+      ...seleccion.map(p => columnas.map(([, get]) => escape(get(p))).join(",")),
+    ].join("\r\n")
+
+    const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" }))
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `prospectos_seleccion_${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success(`${seleccion.length} prospectos exportados`)
+  }
 
   const STAT_DEFS = [
     { label: "Total prospectos", value: estadisticas.total_prospectos, icon: Users },
@@ -364,20 +453,20 @@ export function BackofficeProspectosView() {
         return (
           <div className="flex gap-1">
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Ver historial" onClick={() => abrirHistorial(p)}><History className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver historial" onClick={() => abrirHistorial(p)}><History className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Historial</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Ver cotizaciones" onClick={() => abrirCotizaciones(p)}><DollarSign className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver cotizaciones" onClick={() => abrirCotizaciones(p)}><DollarSign className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Cotizaciones</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-green-500 hover:bg-green-600 text-white border-0" aria-label="Ver WhatsApp" onClick={() => abrirWhatsapp(p)}><MessageCircle className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver WhatsApp" onClick={() => abrirWhatsapp(p)}><MessageCircle className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Cambiar estado" onClick={() => abrirCambioEstado(p)}><Edit className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Cambiar estado" onClick={() => abrirCambioEstado(p)}><Edit className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
             {opcionesFiltros.vendedores.length > 0 && (
               <Tooltip><TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Reasignar vendedor"
+                <Button size="icon" variant="outline" className="size-8" aria-label="Reasignar vendedor"
                   onClick={() => { setProspectoSeleccionado(p); setNuevoVendedorId(""); setReasignarModal(true) }}>
                   <ArrowLeftRight className="size-3.5" aria-hidden="true" />
                 </Button>
@@ -400,7 +489,7 @@ export function BackofficeProspectosView() {
           <p className="text-sm text-muted-foreground mt-0.5">Gestión y seguimiento de todos los prospectos del sistema</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          {/* Toggle Tabla / Tarjetas */}
+          {/* Toggle Padrón / Tabla */}
           <div className="flex rounded-md border overflow-hidden">
             <Button
               variant={tipoVista === "tabla" ? "default" : "ghost"}
@@ -416,7 +505,7 @@ export function BackofficeProspectosView() {
               className="h-8 rounded-none text-xs gap-1.5 px-3 border-l"
               onClick={() => setTipoVista("tarjetas")}
             >
-              <LayoutGrid className="size-3.5" />Tarjetas
+              <ClipboardList className="size-3.5" />Padrón
             </Button>
           </div>
           <Button variant="outline" size="sm" onClick={exportar}>
@@ -469,8 +558,14 @@ export function BackofficeProspectosView() {
               <Label className="text-sm font-medium">Buscar</Label>
               <div className="relative">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                <Input className="pl-9 h-9" placeholder="Nombre, email, teléfono..." value={filtros.search}
-                  onChange={e => setFiltros(f => ({ ...f, search: e.target.value }))} />
+                <Input
+                  data-buscador
+                  className="pl-9 h-9"
+                  placeholder="Nombre, email, teléfono…   /"
+                  aria-keyshortcuts="/"
+                  value={filtros.search}
+                  onChange={e => setFiltros(f => ({ ...f, search: e.target.value }))}
+                />
               </div>
             </div>
 
@@ -533,7 +628,7 @@ export function BackofficeProspectosView() {
         </CardContent>
       </Card>
 
-      {/* Tabla / Tarjetas */}
+      {/* Tabla / Padrón */}
       <Card>
         <CardContent className="p-0">
           {loading ? <Skeleton className="h-64 w-full rounded-lg" /> : prospectos.length === 0 ? (
@@ -551,97 +646,153 @@ export function BackofficeProspectosView() {
             </div>
           ) : (
             /* ── Vista registro ── */
-            <div className="reg reg--bo-pros border-t-2 border-rule-heavy">
-              <div className="reg-row reg-head" role="presentation">
-                <span>Prospecto</span>
-                <span>Contacto</span>
-                <span>Asignación</span>
-                <span>Actividad</span>
-                <span>Estado</span>
-                <span className="text-right">Registro</span>
-                <span />
+            <>
+            <div className="reg reg--bo-pros border-t-2 border-rule-heavy" role="table" aria-label="Prospectos">
+              <div role="rowgroup">
+                <div role="row" className="reg-row reg-head">
+                  <span role="columnheader" className="f-num">
+                    <Checkbox
+                      checked={todosMarcados ? true : marcados.size > 0 ? "indeterminate" : false}
+                      onCheckedChange={v => marcarTodos(v === true)}
+                      aria-label="Marcar todos los prospectos de la página"
+                    />
+                    <span className="folio-n">Nº</span>
+                  </span>
+                  <span role="columnheader">Prospecto</span>
+                  <span role="columnheader">Contacto</span>
+                  <span role="columnheader">Asignación</span>
+                  <span role="columnheader">Actividad</span>
+                  <span role="columnheader">Estado</span>
+                  <span role="columnheader">Trabado en</span>
+                  <span role="columnheader" className="text-right">Registro</span>
+                  <span role="columnheader" />
+                </div>
               </div>
 
-              {prospectos.map(p => (
-                <div key={p.id} className="reg-row reg-entry">
-                  {/* 1 · prospecto — el eje */}
-                  <span className="min-w-0">
-                    <span className="block truncate text-[13px] font-semibold">{p.apellido}<span className="font-normal text-muted-foreground">, {p.nombre}</span></span>
-                    {(p.edad || p.localidad) && (
-                      <span className="block truncate text-[11.5px] text-muted-foreground">
-                        {p.edad ? `${p.edad} años` : ""}{p.edad && p.localidad ? " · " : ""}{p.localidad ?? ""}
+              {gruposPorEtapa.map(({ etapa, filas, desde }) => (
+                <div key={etapa} role="rowgroup" aria-label={`Etapa: ${etapa}`}>
+                  {/* La banda va oculta al lector: el `aria-label` del grupo ya
+                      dice la etapa, y repetirla sería leerla dos veces. */}
+                  <div className="stage" aria-hidden="true" {...(etapa === etapaActiva ? { "data-active": "" } : {})}>
+                    <h3>{etapa}</h3>
+                    <span className="n">{filas.length}</span>
+                    <span className="axis" />
+                  </div>
+
+                  {filas.map((p, i) => (
+                    <div key={p.id} role="row" className="reg-row reg-entry" aria-selected={marcados.has(p.id)}>
+                      {/* 1 · folio — casilla y número de asiento */}
+                      <span role="cell" className="f-num">
+                        <Checkbox
+                          checked={marcados.has(p.id)}
+                          onCheckedChange={v => marcarUno(p.id, v === true)}
+                          aria-label={`Marcar el asiento de ${p.apellido}`}
+                        />
+                        <span className="folio-n">{String(desde + i + 1).padStart(4, "0")}</span>
                       </span>
-                    )}
-                  </span>
 
-                  {/* 2 · contacto */}
-                  <span className="min-w-0 text-muted-foreground">
-                    {p.numero_contacto && (
-                      <span className="flex items-center gap-1 truncate text-[12.5px] tabular-nums">
-                        <Phone className="size-3 shrink-0" aria-hidden="true" />{p.numero_contacto}
-                        {p.whatsapp_opt_in && <MessageCircle className="size-3 shrink-0" aria-hidden="true" />}
+                      {/* 2 · prospecto — el eje */}
+                      <span role="cell" className="min-w-0">
+                        <span className="block truncate text-[13px] font-semibold">{p.apellido}<span className="font-normal text-muted-foreground">, {p.nombre}</span></span>
+                        {(p.edad || p.localidad) && (
+                          <span className="block truncate text-[11.5px] text-muted-foreground">
+                            {p.edad ? `${p.edad} años` : ""}{p.edad && p.localidad ? " · " : ""}{p.localidad ?? ""}
+                          </span>
+                        )}
                       </span>
-                    )}
-                    {p.correo && (
-                      <span className="flex items-center gap-1 truncate text-[11.5px]">
-                        <Mail className="size-3 shrink-0" aria-hidden="true" />{p.correo}
+
+                      {/* 3 · contacto */}
+                      <span role="cell" className="min-w-0 text-muted-foreground">
+                        {p.numero_contacto && (
+                          <span className="flex items-center gap-1 truncate text-[12.5px] tabular-nums">
+                            <Phone className="size-3 shrink-0" aria-hidden="true" />{p.numero_contacto}
+                            {p.whatsapp_opt_in && <MessageCircle className="size-3 shrink-0" aria-hidden="true" />}
+                          </span>
+                        )}
+                        {p.correo && (
+                          <span className="flex items-center gap-1 truncate text-[11.5px]">
+                            <Mail className="size-3 shrink-0" aria-hidden="true" />{p.correo}
+                          </span>
+                        )}
+                        {!p.numero_contacto && !p.correo && <span className="text-[12.5px]">—</span>}
                       </span>
-                    )}
-                    {!p.numero_contacto && !p.correo && <span className="text-[12.5px]">—</span>}
-                  </span>
 
-                  {/* 3 · asignación */}
-                  <span className="min-w-0 text-muted-foreground">
-                    {p.vendedor_nombre && (
-                      <span className="block truncate text-[12.5px]">{p.vendedor_nombre} {p.vendedor_apellido ?? ""}</span>
-                    )}
-                    {p.supervisor_nombre && (
-                      <span className="flex items-center gap-1 truncate text-[11.5px] font-medium text-primary">
-                        <UserCog className="size-3 shrink-0" aria-hidden="true" />{p.supervisor_nombre} {p.supervisor_apellido ?? ""}
+                      {/* 4 · asignación */}
+                      <span role="cell" className="min-w-0 text-muted-foreground">
+                        {p.vendedor_nombre && (
+                          <span className="block truncate text-[12.5px]">{p.vendedor_nombre} {p.vendedor_apellido ?? ""}</span>
+                        )}
+                        {p.supervisor_nombre && (
+                          <span className="flex items-center gap-1 truncate text-[11.5px] font-medium text-primary">
+                            <UserCog className="size-3 shrink-0" aria-hidden="true" />{p.supervisor_nombre} {p.supervisor_apellido ?? ""}
+                          </span>
+                        )}
+                        {!p.vendedor_nombre && !p.supervisor_nombre && <span className="text-[12.5px]">Sin asignar</span>}
                       </span>
-                    )}
-                    {!p.vendedor_nombre && !p.supervisor_nombre && <span className="text-[12.5px]">Sin asignar</span>}
-                  </span>
 
-                  {/* 4 · actividad */}
-                  <span className="flex min-w-0 flex-wrap items-center gap-1">
-                    {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" size="sm" className="pointer-events-none"><FileText aria-hidden="true" />{p.cotizaciones_count}</Badge>}
-                    {(p.polizas_count ?? 0) > 0 && <Badge variant="ok" size="sm" className="pointer-events-none"><ShieldCheck aria-hidden="true" />{p.polizas_count}</Badge>}
-                    {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" size="sm" className="pointer-events-none"><History aria-hidden="true" />{p.acciones_count}</Badge>}
-                  </span>
+                      {/* 5 · actividad */}
+                      <span role="cell" className="flex min-w-0 flex-wrap items-center gap-1">
+                        {(p.cotizaciones_count ?? 0) > 0 && <Badge variant="outline" size="sm" className="pointer-events-none"><FileText aria-hidden="true" />{p.cotizaciones_count}</Badge>}
+                        {(p.polizas_count ?? 0) > 0 && <Badge variant="ok" size="sm" className="pointer-events-none"><ShieldCheck aria-hidden="true" />{p.polizas_count}</Badge>}
+                        {(p.acciones_count ?? 0) > 0 && <Badge variant="outline" size="sm" className="pointer-events-none"><History aria-hidden="true" />{p.acciones_count}</Badge>}
+                      </span>
 
-                  {/* 5 · estado */}
-                  <span className="min-w-0">{getBadgeEstado(p.estado)}</span>
+                      {/* 6 · estado */}
+                      <span role="cell" className="min-w-0">{getBadgeEstado(p.estado)}</span>
 
-                  {/* 6 · fecha de registro */}
-                  <span className="text-right text-[12px] tabular-nums text-muted-foreground">{fmtFecha(p.fecha_registro)}</span>
+                      {/* 7 · trabado en — contra qué está esperando */}
+                      <Trabado role="cell" traba={trabadoEn(p.estado)} />
 
-                  {/* 7 · acciones */}
-                  <span className="reg-actions">
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirHistorial(p)}><History className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Historial</TooltipContent></Tooltip>
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCotizaciones(p)}><DollarSign className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Cotizaciones</TooltipContent></Tooltip>
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirWhatsapp(p)}><MessageCircle className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCambioEstado(p)}><Edit className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
-                    {opcionesFiltros.vendedores.length > 0 && (
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" variant="ghost" className="size-7"
-                          onClick={() => { setProspectoSeleccionado(p); setNuevoVendedorId(""); setReasignarModal(true) }}>
-                          <ArrowLeftRight className="size-3.5" />
-                        </Button>
-                      </TooltipTrigger><TooltipContent>Reasignar vendedor</TooltipContent></Tooltip>
-                    )}
-                  </span>
+                      {/* 8 · fecha de registro */}
+                      <span role="cell" className="text-right text-[12px] tabular-nums text-muted-foreground">{fmtFecha(p.fecha_registro)}</span>
+
+                      {/* 9 · acciones */}
+                      <span role="cell" className="reg-actions">
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirHistorial(p)}><History className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Historial</TooltipContent></Tooltip>
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCotizaciones(p)}><DollarSign className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Cotizaciones</TooltipContent></Tooltip>
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirWhatsapp(p)}><MessageCircle className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCambioEstado(p)}><Edit className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
+                        {opcionesFiltros.vendedores.length > 0 && (
+                          <Tooltip><TooltipTrigger asChild>
+                            <Button size="icon" variant="ghost" className="size-7"
+                              onClick={() => { setProspectoSeleccionado(p); setNuevoVendedorId(""); setReasignarModal(true) }}>
+                              <ArrowLeftRight className="size-3.5" />
+                            </Button>
+                          </TooltipTrigger><TooltipContent>Reasignar vendedor</TooltipContent></Tooltip>
+                        )}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
+
+            {/* Barra de selección: aparece al marcar y dice cuántos hay. */}
+            {marcados.size > 0 && (
+              <div className="marked" aria-live="polite">
+                <b className="text-[12.5px] font-bold tabular-nums">
+                  {marcados.size} {marcados.size === 1 ? "asiento marcado" : "asientos marcados"}
+                </b>
+                <span className="sep" aria-hidden="true" />
+                <Button variant="ghost" size="sm" onClick={() => setMarcados(new Set())}>
+                  Desmarcar
+                </Button>
+                <div className="push">
+                  <Button variant="outline" size="sm" onClick={() => exportarSeleccion(prospectosMarcados)}>
+                    Exportar selección
+                  </Button>
+                </div>
+              </div>
+            )}
+            </>
           )}
         </CardContent>
 
@@ -709,14 +860,12 @@ export function BackofficeProspectosView() {
                     {/* Header */}
                     <div className="flex items-start justify-between px-4 pt-3 pb-2 bg-card">
                       <div>
-                        <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full ${getPlanBadgeClass(c.plan_nombre)}`}>
-                          {String(c.plan_nombre ?? `Plan #${i + 1}`)}
-                        </span>
+                        <Badge variant="outline">{String(c.plan_nombre ?? `Plan #${i + 1}`)}</Badge>
                         <p className="text-xs text-muted-foreground mt-1">Año: {String(c.anio ?? new Date().getFullYear())}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold">${fmtPeso(c.total_final)}</p>
-                        <p className="text-xs text-muted-foreground">Total Final</p>
+                        <p className="text-[21px] leading-none font-bold tracking-[-0.025em] tabular-nums">${fmtPeso(c.total_final)}</p>
+                        <p className="mt-1 text-[10.5px] font-bold tracking-[0.09em] text-muted-foreground uppercase">Total final</p>
                       </div>
                     </div>
                     {/* Body */}

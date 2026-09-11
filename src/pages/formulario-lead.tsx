@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { toast } from "sonner"
-import { Plus, Trash2, Users, Phone, Mail, MapPin, UserPlus, MessageCircle, PhoneCall } from "lucide-react"
+import { Plus, Trash2, Users, Phone, Mail, MapPin, UserPlus, MessageCircle, PhoneCall, CheckCircle2 } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -268,36 +268,35 @@ export default function FormularioLeadPage() {
 
   if (enviado) {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-xl text-center">
-          <CardContent className="p-10 space-y-4">
-            <div className="flex justify-center">
-              <div className="size-16 bg-state-ok-soft rounded-full flex items-center justify-center">
-                <Users className="size-8 text-state-ok-text" />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-state-ok-text">¡Solicitud enviada!</h2>
-            <p className="text-muted-foreground">
-              Recibimos tu información. Un asesor de COBER Salud se pondrá en contacto contigo a la brevedad.
-            </p>
-            <Badge variant="outline" className="text-sm">
-              <Phone className="size-3 mr-1" /> +1 (616) 207-1267
-            </Badge>
-          </CardContent>
-        </Card>
-      </div>
+      <main className="grid min-h-svh place-items-center px-6 py-10">
+        <div className="w-full max-w-[420px] text-center">
+          {/* El ícono va dibujado y suelto: la ficha circular de color era
+              decoración alrededor de un ícono que ya se veía. */}
+          <CheckCircle2 className="mx-auto mb-3 size-8 text-state-ok-text" aria-hidden="true" />
+          <h2 className="text-[21px] font-bold tracking-[-0.025em]">¡Solicitud enviada!</h2>
+          <p className="mx-auto mt-2 max-w-[46ch] text-[12.5px] text-muted-foreground">
+            Recibimos tu información. Un asesor de COBER Salud se va a poner en contacto a la brevedad.
+          </p>
+          <Badge variant="outline" className="mt-4">
+            <Phone aria-hidden="true" /> +1 (616) 207-1267
+          </Badge>
+        </div>
+      </main>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    /* El degradado azul no era del sistema: esta app es violeta, y el único
+       plano de color de la marca es la cabecera del panel. Papel hundido y
+       filete alcanzan para separar el formulario del fondo. */
+    <div className="min-h-svh bg-paper-sunk px-4 py-8">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary">COBER Salud</h1>
-          <p className="text-muted-foreground mt-1">Solicitud de cobertura médica</p>
+        <div className="text-center mb-7">
+          <h1 className="text-[27px] font-extrabold tracking-[-0.03em] text-primary">COBER Salud</h1>
+          <p className="mt-1 text-[12.5px] text-muted-foreground">Solicitud de cobertura médica</p>
         </div>
 
-        <Card className="shadow-xl">
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="size-5" />
@@ -308,7 +307,7 @@ export default function FormularioLeadPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Datos personales */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
                   <Label htmlFor="nombre">Nombre *</Label>
                   <Input
@@ -331,7 +330,7 @@ export default function FormularioLeadPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
                   <Label htmlFor="edad">Edad *</Label>
                   <Input

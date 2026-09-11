@@ -18,7 +18,8 @@ import { DataTable } from "@/components/ui/data-table"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { getBadgeEstado, estadosConfig } from "@/utils/estadosHelper"
+import { getBadgeEstado } from "@/utils/estadosHelper"
+import { estadosConfig } from "@/utils/estados"
 import { API_URL } from "@/lib/config"
 import { getAuthToken } from "@/lib/auth"
 
@@ -304,30 +305,30 @@ export default function ProspectosAdmin() {
 
   const AccionesBotones = ({ p }: { p: Prospecto }) => (
     <div className="flex gap-1 flex-wrap">
-      <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirDetalle(p)} title="Ver detalle">
+      <Button size="icon" variant="outline" className="size-8" onClick={() => abrirDetalle(p)} title="Ver detalle">
         <Eye className="size-3.5" />
       </Button>
-      <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirHistorial(p)} title="Historial">
+      <Button size="icon" variant="outline" className="size-8" onClick={() => abrirHistorial(p)} title="Historial">
         <FileText className="size-3.5" />
       </Button>
-      <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirCotizaciones(p)} title="Cotizaciones">
+      <Button size="icon" variant="outline" className="size-8" onClick={() => abrirCotizaciones(p)} title="Cotizaciones">
         <DollarSign className="size-3.5" />
       </Button>
       {/* Ver la conversación registrada en el sistema (no abre wa.me) */}
       <Button
         size="icon"
-        className="size-8 bg-muted text-foreground border hover:bg-accent"
+        variant="outline" className="size-8"
         onClick={() => setConversacionModal({ open: true, prospecto: p })}
         title="Ver conversación de WhatsApp"
       >
         <MessagesSquare className="size-3.5" />
       </Button>
-      <Button size="icon" className="size-8 bg-green-500 hover:bg-green-600 text-white border-0" onClick={() => abrirWhatsApp(p)} title="Abrir WhatsApp">
+      <Button size="icon" variant="outline" className="size-8" onClick={() => abrirWhatsApp(p)} title="Abrir WhatsApp">
         <MessageCircle className="size-3.5" />
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" className="size-8 bg-muted hover:bg-muted/80 text-foreground border">
+          <Button size="icon" variant="outline" className="size-8">
             <MoreVertical className="size-3.5" />
           </Button>
         </DropdownMenuTrigger>
@@ -773,7 +774,7 @@ export default function ProspectosAdmin() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setReasignarModal({ open: false, prospecto: null })}>Cancelar</Button>
-            <Button onClick={reasignar} disabled={!nuevoVendedorId} className="bg-primary hover:bg-primary/90 text-primary-foreground">Reasignar</Button>
+            <Button onClick={reasignar} disabled={!nuevoVendedorId} className="text-primary-foreground">Reasignar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -802,7 +803,7 @@ export default function ProspectosAdmin() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEstadoModal({ open: false, prospecto: null })}>Cancelar</Button>
-            <Button onClick={cambiarEstado} disabled={!nuevoEstado} className="bg-primary hover:bg-primary/90 text-primary-foreground">Guardar</Button>
+            <Button onClick={cambiarEstado} disabled={!nuevoEstado} className="text-primary-foreground">Guardar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -36,10 +36,12 @@ export function ForgotPasswordForm({
         {...props}
       >
         <FieldGroup>
-          <div className="flex flex-col items-center gap-1 text-center">
-            <h1 className="text-2xl font-bold whitespace-nowrap">¿Olvidaste tu contraseña?</h1>
-            <p className="text-sm text-balance text-muted-foreground">
-              Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+          <div className="flex flex-col items-center gap-1.5 text-center">
+            {/* Sin `whitespace-nowrap`: a 336px de panel, este título en una
+                sola línea se sale del papel. */}
+            <h1 className="text-[21px] font-bold tracking-[-0.025em]">¿Olvidaste tu contraseña?</h1>
+            <p className="text-[12.5px] text-balance text-muted-foreground">
+              Ingresá tu correo electrónico y te enviamos un enlace para restablecer la contraseña.
             </p>
           </div>
 
@@ -57,11 +59,11 @@ export function ForgotPasswordForm({
             )}
           />
 
-          <Button type="submit">Enviar</Button>
+          <Button type="submit" className="h-9 w-full">Enviar enlace</Button>
 
-          <p className="text-center text-sm text-muted-foreground">
+          <p className="text-center text-[12px] text-muted-foreground">
             ¿Recordaste tu contraseña?{" "}
-            <Link to="/login" className="underline underline-offset-4">
+            <Link to="/login" className="font-semibold text-primary hover:underline">
               Iniciar sesión
             </Link>
           </p>

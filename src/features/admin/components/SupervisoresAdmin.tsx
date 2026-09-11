@@ -224,13 +224,13 @@ export default function SupervisoresAdmin() {
         const s = row.original
         return (
           <div className="flex items-center justify-center gap-1.5">
-            <Button size="icon" onClick={() => abrirDetalle(s)} title="Ver detalles" className="size-8 bg-muted text-foreground border hover:bg-accent">
+            <Button size="icon" onClick={() => abrirDetalle(s)} title="Ver detalles" variant="outline" className="size-8">
               <Eye className="size-3.5" />
             </Button>
-            <Button size="icon" onClick={() => setAsignarModal({ open: true, sup: s })} title="Asignar vendedor" className="size-8 bg-muted text-foreground border hover:bg-accent">
+            <Button size="icon" onClick={() => setAsignarModal({ open: true, sup: s })} title="Asignar vendedor" variant="outline" className="size-8">
               <UserPlus className="size-3.5" />
             </Button>
-            <Button size="icon" onClick={() => setConfirmToggle({ open: true, sup: s })} title={s.is_enabled !== false ? "Deshabilitar" : "Habilitar"} className="size-8 bg-muted text-foreground border hover:bg-accent">
+            <Button size="icon" onClick={() => setConfirmToggle({ open: true, sup: s })} title={s.is_enabled !== false ? "Deshabilitar" : "Habilitar"} variant="outline" className="size-8">
               <Link2Off className="size-3.5" />
             </Button>
           </div>

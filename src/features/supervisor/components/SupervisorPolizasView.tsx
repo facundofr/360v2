@@ -5,7 +5,7 @@ import {
   Search, Filter, RefreshCw, FileText,
   ChevronLeft, ChevronRight,
   History, MessageCircle, AlertCircle, CheckCircle2, FolderOpen, Download, Eye,
-  Percent, LayoutGrid, List, ExternalLink, Loader2, FilePlus, Upload, Pencil
+  Percent, ClipboardList, List, ExternalLink, Loader2, FilePlus, Upload, Pencil
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 import { SubirDocumentosLibresModal } from "@/features/vendedor/components/SubirDocumentosLibresModal"
@@ -29,7 +29,15 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Checkbox } from "@/components/ui/checkbox"
 import { API_URL } from "@/lib/config"
+import { cn } from "@/lib/utils"
+import {
+  ETAPAS_POLIZA, ETAPAS_POLIZA_CERRADAS, etapaPoliza, trabaPoliza, antiguedadDe,
+  type EtapaPoliza,
+} from "@/utils/estados"
+import { Trabado } from "@/components/common/Trabado"
+import { useTecladoRegistro } from "@/hooks/useTecladoRegistro"
 import PolizaDetalleSupervisor from "@/components/supervisor/PolizaDetalleSupervisor"
 import { getAuthToken } from "@/lib/auth"
 
@@ -118,7 +126,13 @@ export function SupervisorPolizasView() {
   const [totalPaginas, setTotalPaginas] = useState(0)
   const [totalPolizas, setTotalPolizas] = useState(0)
   const perPage = 20
-  const [tipoVista, setTipoVista] = useState<"tabla" | "tarjetas">("tabla")
+  // El padrón es la vista por defecto: agrupa por etapa y expone la traba,
+  // que es como el supervisor decide qué desatascar. La tabla queda a un clic.
+  const [tipoVista, setTipoVista] = useState<"tabla" | "tarjetas">("tarjetas")
+
+  // Marcado del registro, por id y no por índice: la página se repagina y
+  // un índice terminaría marcando a otra póliza.
+  const [marcadas, setMarcadas] = useState<Set<number>>(new Set())
 
   // Modal cambio estado
   const [cambioEstadoModal, setCambioEstadoModal] = useState(false)
@@ -346,6 +360,97 @@ export function SupervisorPolizasView() {
     Array.isArray(items) ? items : [items]
   ) as Record<string, unknown>[]
 
+
+  // ── El registro: bandas de etapa, traba y marcado ──────────────────────
+  // La etapa no es un dato nuevo: se deriva de `estado` y `estado_firma`, que
+  // ya vienen del backend. Agrupar la página en bandas es lo que deja ver de
+  // un vistazo dónde está trabado el equipo.
+  const gruposPorEtapa = useMemo(() => {
+    const grupos = ETAPAS_POLIZA.map(etapa => ({ etapa, filas: [] as Poliza[] }))
+    for (const pol of polizas) {
+      const grupo = grupos.find(g => g.etapa === etapaPoliza(pol))
+      if (grupo) grupo.filas.push(pol)
+    }
+    // El folio es la posición absoluta en el padrón, no la de la página.
+    let folio = (pagina - 1) * perPage
+    return grupos.filter(g => g.filas.length > 0).map(g => {
+      const desde = folio
+      folio += g.filas.length
+      return { ...g, desde }
+    })
+  }, [polizas, pagina])
+
+  /** La banda activa es la primera que todavía espera trabajo. */
+  const etapaActiva: EtapaPoliza | undefined =
+    gruposPorEtapa.find(g => !ETAPAS_POLIZA_CERRADAS.includes(g.etapa))?.etapa
+
+  // Al repaginar o refiltrar se sueltan las marcas de lo que ya no está en
+  // pantalla: exportar algo que no se ve sería una sorpresa.
+  useEffect(() => {
+    setMarcadas(prev => {
+      if (prev.size === 0) return prev
+      const vivas = new Set(polizas.map(p => p.id))
+      const next = new Set([...prev].filter(id => vivas.has(id)))
+      return next.size === prev.size ? prev : next
+    })
+  }, [polizas])
+
+  const marcarUna = (id: number, marcada: boolean) => setMarcadas(prev => {
+    const next = new Set(prev)
+    if (marcada) next.add(id)
+    else next.delete(id)
+    return next
+  })
+  const marcarTodas = (marcada: boolean) =>
+    setMarcadas(marcada ? new Set(polizas.map(p => p.id)) : new Set())
+
+  const polizasMarcadas = polizas.filter(p => marcadas.has(p.id))
+  const todasMarcadas = polizas.length > 0 && marcadas.size === polizas.length
+
+  /* El turno completo se trabaja sin mouse: `/` al buscador, J/K por asiento. */
+  useTecladoRegistro(tipoVista === "tarjetas")
+
+  /**
+   * Exportar la selección.
+   *
+   * El backend no expone un export de pólizas de supervisor, así que el CSV se
+   * arma en el cliente con lo que ya está en memoria: mismo resultado, sin
+   * endpoint nuevo.
+   */
+  const exportarSeleccion = (seleccion: Poliza[]) => {
+    if (seleccion.length === 0) return
+    const columnas: [string, (p: Poliza) => unknown][] = [
+      ["ID",           p => p.id],
+      ["N° Póliza",    p => p.numero_poliza ?? ""],
+      ["N° Oficial",   p => p.numero_poliza_oficial ?? ""],
+      ["Titular",      p => `${p.prospecto_apellido ?? ""}, ${p.prospecto_nombre ?? ""}`.trim()],
+      ["Teléfono",     p => p.prospecto_telefono ?? ""],
+      ["Plan",         p => p.plan_nombre ?? ""],
+      ["Año plan",     p => p.anio_plan ?? ""],
+      ["Total",        p => p.total_final ?? ""],
+      ["Vendedor",     p => p.vendedor?.nombre ?? p.vendedor_nombre ?? ""],
+      ["Estado",       p => p.estado ?? ""],
+      ["Estado firma", p => p.estado_firma ?? ""],
+      ["Etapa",        p => etapaPoliza(p)],
+      ["Trabado en",   p => trabaPoliza(p).texto],
+      ["Creada",       p => p.created_at ?? ""],
+    ]
+    // Comillas dobles escapadas + BOM para que Excel abra bien los acentos.
+    const escape = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`
+    const csv = [
+      columnas.map(([h]) => escape(h)).join(","),
+      ...seleccion.map(p => columnas.map(([, get]) => escape(get(p))).join(",")),
+    ].join("\r\n")
+
+    const url = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" }))
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `polizas_seleccion_${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success(`${seleccion.length} pólizas exportadas`)
+  }
+
   const columnsPolizas = useMemo<ColumnDef<Poliza>[]>(() => [
     {
       id: "poliza",
@@ -441,7 +546,7 @@ export function SupervisorPolizasView() {
           <div className="flex gap-1">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                <Button size="icon" variant="outline" className="size-8"
                   onClick={() => abrirCambioEstado(pol)}>
                   <AlertCircle className="size-3.5" />
                 </Button>
@@ -450,7 +555,7 @@ export function SupervisorPolizasView() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted hover:bg-muted/80 text-foreground border"
+                <Button size="icon" variant="outline" className="size-8"
                   disabled={isBtnLoad(pol.id, "documentos")}
                   onClick={() => abrirDocumentos(pol)}>
                   {isBtnLoad(pol.id, "documentos") ? <Loader2 className="size-3.5 animate-spin" /> : <FolderOpen className="size-3.5" />}
@@ -461,7 +566,7 @@ export function SupervisorPolizasView() {
             {/* Subida de documentos sueltos, como PolizasSupervisor.jsx */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                <Button size="icon" variant="outline" className="size-8"
                   onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}>
                   <FilePlus className="size-3.5" />
                 </Button>
@@ -470,7 +575,7 @@ export function SupervisorPolizasView() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                <Button size="icon" variant="outline" className="size-8"
                   disabled={isBtnLoad(pol.id, "historial")}
                   onClick={() => abrirHistorial(pol)}>
                   {isBtnLoad(pol.id, "historial") ? <Loader2 className="size-3.5 animate-spin" /> : <History className="size-3.5" />}
@@ -480,7 +585,7 @@ export function SupervisorPolizasView() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-green-500 hover:bg-green-600 text-white border-0"
+                <Button size="icon" variant="outline" className="size-8"
                   disabled={isBtnLoad(pol.id, "whatsapp")}
                   onClick={() => abrirWhatsapp(pol)}>
                   {isBtnLoad(pol.id, "whatsapp") ? <Loader2 className="size-3.5 animate-spin" /> : <MessageCircle className="size-3.5" />}
@@ -490,7 +595,7 @@ export function SupervisorPolizasView() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                <Button size="icon" variant="outline" className="size-8"
                   onClick={() => { setDetallePolizaId(pol.id); setDetalleModal(true) }}>
                   <Eye className="size-3.5" />
                 </Button>
@@ -499,7 +604,7 @@ export function SupervisorPolizasView() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                <Button size="icon" variant="outline" className="size-8"
                   onClick={() => setEditarPolizaId(pol.id)}>
                   <Pencil className="size-3.5" />
                 </Button>
@@ -509,7 +614,7 @@ export function SupervisorPolizasView() {
             {pol.pdf_hash && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0"
+                  <Button size="icon" className="size-8"
                     onClick={() => descargarPDF(pol)}>
                     <ExternalLink className="size-3.5" />
                   </Button>
@@ -522,7 +627,7 @@ export function SupervisorPolizasView() {
             {pol.estado_firma === "signed" && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                  <Button size="icon" variant="outline" className="size-8"
                     onClick={() => setCargarFirmada({ open: true, poliza: pol })}>
                     <Upload className="size-3.5" />
                   </Button>
@@ -567,7 +672,7 @@ export function SupervisorPolizasView() {
                 size="sm" className="h-8 rounded-none text-xs gap-1.5 px-3 border-l"
                 onClick={() => setTipoVista("tarjetas")}
               >
-                <LayoutGrid className="size-3.5" />Tarjetas
+                <ClipboardList className="size-3.5" />Padrón
               </Button>
             </div>
             <Button variant="ghost" size="icon" className="size-8" onClick={fetchPolizas}>
@@ -608,8 +713,14 @@ export function SupervisorPolizasView() {
                 <Label className="text-sm font-medium">Buscar</Label>
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  <Input className="pl-9 h-9" placeholder="Nombre, DNI, póliza..."
-                    value={filtros.buscar} onChange={e => cambiarFiltro("buscar", e.target.value)} />
+                  <Input
+                    data-buscador
+                    className="pl-9 h-9"
+                    placeholder="Nombre, DNI, póliza…   /"
+                    aria-keyshortcuts="/"
+                    value={filtros.buscar}
+                    onChange={e => cambiarFiltro("buscar", e.target.value)}
+                  />
                 </div>
               </div>
               <div className="space-y-1.5">
@@ -732,97 +843,169 @@ export function SupervisorPolizasView() {
                 <p className="text-sm">No se encontraron pólizas</p>
               </div>
             ) : (
-              <div className="reg reg--sup-pol border-t-2 border-rule-heavy">
-                <div className="reg-row reg-head" role="presentation">
-                  <span>Titular</span>
-                  <span>Plan</span>
-                  <span className="text-right">Total</span>
-                  <span>Vendedor</span>
-                  <span>Fecha</span>
-                  <span>Estado</span>
-                  <span />
+              <>
+              {/* ── Vista registro ──────────────────────────────────────────
+                  Semántica de tabla real: un lector de pantalla anuncia fila,
+                  columna y en qué etapa está parado. Antes eran div sueltos. */}
+              <div className="reg reg--sup-pol border-t-2 border-rule-heavy" role="table" aria-label="Pólizas del equipo">
+                <div role="rowgroup">
+                  <div role="row" className="reg-row reg-head">
+                    <span role="columnheader" className="f-num">
+                      <Checkbox
+                        checked={todasMarcadas ? true : marcadas.size > 0 ? "indeterminate" : false}
+                        onCheckedChange={v => marcarTodas(v === true)}
+                        aria-label="Marcar todas las pólizas de la página"
+                      />
+                      <span className="folio-n">Nº</span>
+                    </span>
+                    <span role="columnheader">Titular</span>
+                    <span role="columnheader">Plan</span>
+                    <span role="columnheader" className="text-right">Total</span>
+                    <span role="columnheader">Vendedor</span>
+                    <span role="columnheader">Estado</span>
+                    <span role="columnheader">Trabado en</span>
+                    <span role="columnheader" className="text-right">Antigüedad</span>
+                    <span role="columnheader" />
+                  </div>
                 </div>
 
-                {polizas.map(pol => (
-                  <div key={pol.id} className="reg-row reg-entry">
-                    {/* 1 · titular y número — el eje */}
-                    <span className="min-w-0">
-                      <span className="block truncate text-[13px] font-semibold">
-                        {pol.prospecto_apellido}<span className="font-normal text-muted-foreground">, {pol.prospecto_nombre}</span>
-                      </span>
-                      <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">
-                        {pol.numero_poliza_oficial ?? pol.numero_poliza}
-                      </span>
-                    </span>
+                {gruposPorEtapa.map(({ etapa, filas, desde }) => (
+                  <div key={etapa} role="rowgroup" aria-label={`Etapa: ${etapa}`}>
+                    {/* La banda va oculta al lector: el `aria-label` del grupo
+                        ya dice la etapa, y repetirla sería leerla dos veces. */}
+                    <div className="stage" aria-hidden="true" {...(etapa === etapaActiva ? { "data-active": "" } : {})}>
+                      <h3>{etapa}</h3>
+                      <span className="n">{filas.length}</span>
+                      <span className="axis" />
+                    </div>
 
-                    {/* 2 · plan */}
-                    <span className="truncate text-[12.5px] text-muted-foreground">{pol.plan_nombre ?? "—"}</span>
+                    {filas.map((pol, i) => {
+                      const edad = antiguedadDe(pol.created_at)
+                      return (
+                      <div key={pol.id} role="row" className="reg-row reg-entry" aria-selected={marcadas.has(pol.id)}>
+                        {/* 1 · folio — casilla y número de asiento */}
+                        <span role="cell" className="f-num">
+                          <Checkbox
+                            checked={marcadas.has(pol.id)}
+                            onCheckedChange={v => marcarUna(pol.id, v === true)}
+                            aria-label={`Marcar la póliza de ${pol.prospecto_apellido ?? "titular sin apellido"}`}
+                          />
+                          <span className="folio-n">{String(desde + i + 1).padStart(4, "0")}</span>
+                        </span>
 
-                    {/* 3 · total */}
-                    <span className="text-right text-[13px] font-semibold tabular-nums">{fmtPeso(pol.total_final)}</span>
+                        {/* 2 · titular y número — el eje */}
+                        <span role="cell" className="min-w-0">
+                          <span className="block truncate text-[13px] font-semibold">
+                            {pol.prospecto_apellido}<span className="font-normal text-muted-foreground">, {pol.prospecto_nombre}</span>
+                          </span>
+                          <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">
+                            {pol.numero_poliza_oficial ?? pol.numero_poliza}
+                          </span>
+                        </span>
 
-                    {/* 4 · vendedor */}
-                    <span className="truncate text-[12.5px] text-muted-foreground">
-                      {pol.vendedor?.nombre ?? pol.vendedor_nombre ?? "—"}
-                    </span>
+                        {/* 3 · plan */}
+                        <span role="cell" className="truncate text-[12.5px] text-muted-foreground">{pol.plan_nombre ?? "—"}</span>
 
-                    {/* 5 · fecha */}
-                    <span className="truncate text-[12px] tabular-nums text-muted-foreground">{fmtFecha(pol.created_at)}</span>
+                        {/* 4 · total */}
+                        <span role="cell" className="text-right text-[13px] font-semibold tabular-nums">{fmtPeso(pol.total_final)}</span>
 
-                    {/* 6 · estado y firma */}
-                    <span className="flex min-w-0 flex-wrap items-center gap-1">
-                      {getBadgePolizaEstado(pol.estado)}
-                      <BadgeEstadoFirma poliza={pol} />
-                    </span>
+                        {/* 5 · vendedor */}
+                        <span role="cell" className="truncate text-[12.5px] text-muted-foreground">
+                          {pol.vendedor?.nombre ?? pol.vendedor_nombre ?? "—"}
+                        </span>
 
-                    {/* 7 · acciones */}
-                    <span className="reg-actions">
-                      <Button size="icon" variant="ghost" className="size-7" title="Cambiar estado"
-                        onClick={() => abrirCambioEstado(pol)}>
-                        <AlertCircle className="size-3.5" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="size-7" title="Documentos"
-                        disabled={isBtnLoad(pol.id, "documentos")}
-                        onClick={() => abrirDocumentos(pol)}>
-                        {isBtnLoad(pol.id, "documentos") ? <Loader2 className="size-3.5 animate-spin" /> : <FolderOpen className="size-3.5" />}
-                      </Button>
-                      <Button size="icon" variant="ghost" className="size-7" title="Historial"
-                        disabled={isBtnLoad(pol.id, "historial")}
-                        onClick={() => abrirHistorial(pol)}>
-                        {isBtnLoad(pol.id, "historial") ? <Loader2 className="size-3.5 animate-spin" /> : <History className="size-3.5" />}
-                      </Button>
-                      <Button size="icon" variant="ghost" className="size-7" title="Editar póliza"
-                        onClick={() => setEditarPolizaId(pol.id)}>
-                        <Pencil className="size-3.5" />
-                      </Button>
-                      {pol.pdf_hash && (
-                        <Button size="icon" variant="ghost" className="size-7" title="Descargar PDF"
-                          onClick={() => descargarPDF(pol)}>
-                          <ExternalLink className="size-3.5" />
-                        </Button>
-                      )}
-                      <BotonEnviarFirma poliza={pol} userRole="supervisor" onExito={fetchPolizas} />
-                      {pol.estado_firma === "signed" && (
-                        <Button size="icon" variant="ghost" className="size-7" title="Cargar póliza firmada"
-                          onClick={() => setCargarFirmada({ open: true, poliza: pol })}>
-                          <Upload className="size-3.5" />
-                        </Button>
-                      )}
-                      <Button size="icon" variant="ghost" className="size-7" title="Subir documentos"
-                        onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}>
-                        <FilePlus className="size-3.5" />
-                      </Button>
-                      <BotonEliminarPoliza
-                        poliza={pol}
-                        onEliminada={fetchPolizas}
-                        size="icon"
-                        showLabel={false}
-                        endpointBase={`${API_URL}/supervisor/polizas`}
-                      />
-                    </span>
+                        {/* 6 · estado y firma */}
+                        <span role="cell" className="flex min-w-0 flex-wrap items-center gap-1">
+                          {getBadgePolizaEstado(pol.estado)}
+                          <BadgeEstadoFirma poliza={pol} />
+                        </span>
+
+                        {/* 7 · trabado en — contra qué está esperando el alta */}
+                        <Trabado role="cell" traba={trabaPoliza(pol)} />
+
+                        {/* 8 · antigüedad — un solo eje de tiempo, con la banda
+                               fría marcada. La fecha exacta queda en el título. */}
+                        <span
+                          role="cell"
+                          className={cn(
+                            "text-right text-[12px] tabular-nums",
+                            edad.fria ? "font-semibold text-destructive" : "text-muted-foreground",
+                          )}
+                          title={`Creada el ${fmtFecha(pol.created_at)}`}
+                        >
+                          {edad.texto}
+                        </span>
+
+                        {/* 9 · acciones */}
+                        <span role="cell" className="reg-actions">
+                          <Button size="icon" variant="ghost" className="size-7" title="Cambiar estado"
+                            onClick={() => abrirCambioEstado(pol)}>
+                            <AlertCircle className="size-3.5" />
+                          </Button>
+                          <Button size="icon" variant="ghost" className="size-7" title="Documentos"
+                            disabled={isBtnLoad(pol.id, "documentos")}
+                            onClick={() => abrirDocumentos(pol)}>
+                            {isBtnLoad(pol.id, "documentos") ? <Loader2 className="size-3.5 animate-spin" /> : <FolderOpen className="size-3.5" />}
+                          </Button>
+                          <Button size="icon" variant="ghost" className="size-7" title="Historial"
+                            disabled={isBtnLoad(pol.id, "historial")}
+                            onClick={() => abrirHistorial(pol)}>
+                            {isBtnLoad(pol.id, "historial") ? <Loader2 className="size-3.5 animate-spin" /> : <History className="size-3.5" />}
+                          </Button>
+                          <Button size="icon" variant="ghost" className="size-7" title="Editar póliza"
+                            onClick={() => setEditarPolizaId(pol.id)}>
+                            <Pencil className="size-3.5" />
+                          </Button>
+                          {pol.pdf_hash && (
+                            <Button size="icon" variant="ghost" className="size-7" title="Descargar PDF"
+                              onClick={() => descargarPDF(pol)}>
+                              <ExternalLink className="size-3.5" />
+                            </Button>
+                          )}
+                          <BotonEnviarFirma poliza={pol} userRole="supervisor" onExito={fetchPolizas} />
+                          {pol.estado_firma === "signed" && (
+                            <Button size="icon" variant="ghost" className="size-7" title="Cargar póliza firmada"
+                              onClick={() => setCargarFirmada({ open: true, poliza: pol })}>
+                              <Upload className="size-3.5" />
+                            </Button>
+                          )}
+                          <Button size="icon" variant="ghost" className="size-7" title="Subir documentos"
+                            onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}>
+                            <FilePlus className="size-3.5" />
+                          </Button>
+                          <BotonEliminarPoliza
+                            poliza={pol}
+                            onEliminada={fetchPolizas}
+                            size="icon"
+                            showLabel={false}
+                            endpointBase={`${API_URL}/supervisor/polizas`}
+                          />
+                        </span>
+                      </div>
+                      )
+                    })}
                   </div>
                 ))}
               </div>
+
+              {/* Barra de selección: aparece al marcar y dice cuántas hay. */}
+              {marcadas.size > 0 && (
+                <div className="marked" aria-live="polite">
+                  <b className="text-[12.5px] font-bold tabular-nums">
+                    {marcadas.size} {marcadas.size === 1 ? "póliza marcada" : "pólizas marcadas"}
+                  </b>
+                  <span className="sep" aria-hidden="true" />
+                  <Button variant="ghost" size="sm" onClick={() => setMarcadas(new Set())}>
+                    Desmarcar
+                  </Button>
+                  <div className="push">
+                    <Button variant="outline" size="sm" onClick={() => exportarSeleccion(polizasMarcadas)}>
+                      Exportar selección
+                    </Button>
+                  </div>
+                </div>
+              )}
+              </>
             )}
           </>
         )}
@@ -979,11 +1162,11 @@ export function SupervisorPolizasView() {
                   <p className="text-xs text-muted-foreground">{doc.nombre_archivo as string}</p>
                 </div>
               <div className="flex gap-1">
-                  <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                  <Button size="icon" variant="outline" className="size-8"
                     onClick={() => previewDocumento(doc.id as number)}>
                     <Eye className="size-3.5" />
                   </Button>
-                  <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0"
+                  <Button size="icon" className="size-8"
                     onClick={() => descargarDocumento(doc.id as number, doc.nombre_archivo as string)}>
                     <Download className="size-3.5" />
                   </Button>

@@ -3,15 +3,32 @@ import axios from "axios"
 import { toast } from "sonner"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Medidor, MedidorFila } from "@/components/common/Medidor"
+import { EstadoVacio } from "@/components/common/EstadoVacio"
+import { ETAPAS, etapaDe } from "@/utils/estados"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell, LabelList,
+  LabelList,
 } from "recharts"
 import { API_URL } from "@/lib/config"
 import { getAuthToken } from "@/lib/auth"
 
-const COLORS = ["#1976D2","#388E3C","#FBC02D","#D32F2F","#7B1FA2","#0288D1","#C2185B","#FFA000"]
+/**
+ * Rampa de etapa: monótona en luminosidad, sin matiz.
+ *
+ * Cinco pasos de tinta sobre papel, uno por etapa del embudo. «Más oscuro es
+ * más adelante» se lee sin leyenda, y al no tener matiz no compite con los
+ * sellos de estado ni gasta el violeta, que en esta app significa ACCIÓN.
+ * Reemplaza ocho colores Material que se reciclaban cada ocho estados.
+ */
+const RAMPA_ETAPA = [
+  "color-mix(in oklch, var(--foreground) 18%, var(--background))",
+  "color-mix(in oklch, var(--foreground) 34%, var(--background))",
+  "color-mix(in oklch, var(--foreground) 52%, var(--background))",
+  "color-mix(in oklch, var(--foreground) 72%, var(--background))",
+  "var(--foreground)",
+]
 
 interface ConversionVendedor {
   vendedor_id: number
@@ -87,90 +104,96 @@ export default function MetricasVendedorView() {
     }
   })
 
-  const pieData = metricas.conversionPorVendedor.map(row => ({
-    name: row.vendedor,
-    value: row.tasa_conversion,
-  }))
+  const tasas = metricas.conversionPorVendedor
+    .map(row => ({ name: row.vendedor, value: row.tasa_conversion }))
+    .sort((a, b) => b.value - a.value)
 
-  const estados = [...new Set(metricas.estadosPorVendedor.map(e => e.estado))]
   const vendedores = [...new Set(metricas.estadosPorVendedor.map(e => e.vendedor))]
   const stackedData = vendedores.map(vendedor => {
     const obj: Record<string, string | number> = { vendedor }
-    estados.forEach(estado => {
-      const found = metricas.estadosPorVendedor.find(e => e.vendedor === vendedor && e.estado === estado)
-      obj[estado] = found?.cantidad ?? 0
-    })
+    for (const etapa of ETAPAS) obj[etapa] = 0
+    for (const e of metricas.estadosPorVendedor) {
+      if (e.vendedor !== vendedor) continue
+      const etapa = etapaDe(e.estado)
+      obj[etapa] = Number(obj[etapa]) + (e.cantidad ?? 0)
+    }
     return obj
   })
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-semibold">Métricas por Vendedor</h2>
+      <h2 className="text-[14px] font-bold tracking-[-0.01em]">Métricas por vendedor</h2>
 
       {/* Conversión y prospectos */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Conversión por Vendedor</CardTitle>
+          <CardTitle>Conversión por vendedor</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={barData} margin={{ top: 10, right: 20, left: 0, bottom: 60 }}>
-              <XAxis dataKey="vendedor" angle={-35} textAnchor="end" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Prospectos" fill={COLORS[0]}>
-                <LabelList dataKey="Prospectos" position="top" fontSize={10} />
-              </Bar>
-              <Bar dataKey="Ventas" fill={COLORS[1]}>
-                <LabelList dataKey="Ventas" position="top" fontSize={10} />
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          {barData.length === 0 ? (
+            <EstadoVacio titulo="Sin datos" descripcion="Todavía no hay prospectos cargados por el equipo." compacto />
+          ) : (
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={barData} margin={{ top: 10, right: 20, left: 0, bottom: 60 }}>
+                <XAxis dataKey="vendedor" angle={-35} textAnchor="end" tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
+                <Tooltip />
+                <Legend />
+                {/* La cartera en filete y las ventas en tinta: se lee «de esto,
+                    esto cerró» sin aprender una paleta. DESIGN.md § Ink-Carries-Data. */}
+                <Bar dataKey="Prospectos" fill="var(--rule-firm)">
+                  <LabelList dataKey="Prospectos" position="top" fontSize={10} />
+                </Bar>
+                <Bar dataKey="Ventas" fill="var(--foreground)">
+                  <LabelList dataKey="Ventas" position="top" fontSize={10} />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Pie conversión */}
+        {/* Tasa de conversión.
+            Era una torta. Una torta reparte un entero entre sus partes, y estas
+            son TASAS por vendedor: no suman 100 y ninguna es una porción de
+            otra. El medidor dice lo mismo sin afirmar algo falso, y además
+            ordena de mayor a menor, que es la pregunta real. */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Tasa de Conversión (%)</CardTitle>
+            <CardTitle>Tasa de conversión</CardTitle>
           </CardHeader>
           <CardContent>
-            {pieData.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-8">Sin datos</p>
+            {tasas.length === 0 ? (
+              <EstadoVacio titulo="Sin datos" descripcion="Ningún vendedor tiene conversiones registradas." compacto />
             ) : (
-              <ResponsiveContainer width="100%" height={220}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    label={({ name, value }) => `${name}: ${value}%`}
-                    labelLine={false}
-                  >
-                    {pieData.map((_, i) => (
-                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v) => `${v}%`} />
-                </PieChart>
-              </ResponsiveContainer>
+              <Medidor>
+                {tasas.map(t => (
+                  <MedidorFila
+                    key={t.name}
+                    rotulo={t.name}
+                    cifra={`${t.value}%`}
+                    porcentaje={t.value}
+                    descripcion={`${t.name}: ${t.value}% de conversión`}
+                  />
+                ))}
+              </Medidor>
             )}
           </CardContent>
         </Card>
 
-        {/* Stacked estados */}
+        {/* Prospectos por etapa y vendedor.
+            Antes eran los 26 estados apilados con ocho colores reciclados: dos
+            estados distintos podían compartir color. Ahora se agrupan en las
+            cinco etapas del embudo, con una rampa monótona en luminosidad —más
+            oscuro es más adelante—, así el apilado se lee sin leyenda. */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Prospectos por Estado y Vendedor</CardTitle>
+            <CardTitle>Prospectos por etapa</CardTitle>
           </CardHeader>
           <CardContent>
             {stackedData.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-8">Sin datos</p>
+              <EstadoVacio titulo="Sin datos" descripcion="Todavía no hay prospectos asignados." compacto />
             ) : (
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={stackedData} margin={{ top: 5, right: 10, left: 0, bottom: 30 }}>
@@ -178,8 +201,8 @@ export default function MetricasVendedorView() {
                   <YAxis tick={{ fontSize: 10 }} />
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: 10 }} />
-                  {estados.map((estado, i) => (
-                    <Bar key={estado} dataKey={estado} stackId="a" fill={COLORS[i % COLORS.length]} />
+                  {ETAPAS.map((etapa, i) => (
+                    <Bar key={etapa} dataKey={etapa} stackId="a" fill={RAMPA_ETAPA[i]} />
                   ))}
                 </BarChart>
               </ResponsiveContainer>

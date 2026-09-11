@@ -172,8 +172,8 @@ export default function PromocionesAdmin() {
         const p = row.original
         return (
           <div className="flex gap-1">
-            <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirModal(p)} title="Editar"><Edit2 className="size-3.5" /></Button>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleActiva(p)} title={p.activa ? "Desactivar" : "Activar"}>
+            <Button size="icon" className="size-8" onClick={() => abrirModal(p)} title="Editar"><Edit2 className="size-3.5" /></Button>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => toggleActiva(p)} title={p.activa ? "Desactivar" : "Activar"}>
               {p.activa ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
             </Button>
             <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(p)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
@@ -197,7 +197,7 @@ export default function PromocionesAdmin() {
           <label htmlFor="soloActivas" className="text-sm cursor-pointer">Solo activas</label>
         </div>
         <Button variant="outline" size="icon" onClick={fetchPromociones} disabled={loading}><RefreshCw className="size-4" /></Button>
-        <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={() => abrirModal()}>
+        <Button size="sm" onClick={() => abrirModal()}>
           <Plus className="size-4 mr-1" />Nueva
         </Button>
       </div>
@@ -247,7 +247,7 @@ export default function PromocionesAdmin() {
               {error && <p className="text-sm text-destructive">{error}</p>}
               <DialogFooter>
                 <Button type="button" variant="destructive" onClick={() => setModal(false)}>Cancelar</Button>
-                <Button type="submit" disabled={guardando} className="bg-primary hover:bg-primary/90">{guardando ? "Guardando..." : "Guardar"}</Button>
+                <Button type="submit" disabled={guardando}>{guardando ? "Guardando..." : "Guardar"}</Button>
               </DialogFooter>
             </form>
           </Form>

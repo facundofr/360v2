@@ -626,7 +626,7 @@ export default function ProspectoDetallePage() {
                 onClick={() => navigate("/vendedor/prospectos", { state: { openNuevo: true } })}
                 className="h-auto py-2 px-3 group"
               >
-                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <PlusCircle className="size-3.5" />
                 </div>
                 <div className="flex-1 min-w-0">

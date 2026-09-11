@@ -350,22 +350,22 @@ export function BackofficeVendedoresView() {
         return (
           <div className="flex gap-1">
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Ver detalle" onClick={() => verDetalle(v)}><Eye className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver detalle" onClick={() => verDetalle(v)}><Eye className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Ver detalle</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Asignar supervisor" onClick={() => abrirAsignarSupervisor(v)}><UserCog className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Asignar supervisor" onClick={() => abrirAsignarSupervisor(v)}><UserCog className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Asignar supervisor</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Ver prospectos" onClick={() => abrirProspectos(v)}><FileText className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver prospectos" onClick={() => abrirProspectos(v)}><FileText className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Ver prospectos</TooltipContent></Tooltip>
             {categorias.length > 0 && (
               <Tooltip><TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Cambiar categoría" onClick={() => abrirCategoria(v)}><Tag className="size-3.5" aria-hidden="true" /></Button>
+                <Button size="icon" variant="outline" className="size-8" aria-label="Cambiar categoría" onClick={() => abrirCategoria(v)}><Tag className="size-3.5" aria-hidden="true" /></Button>
               </TooltipTrigger><TooltipContent>Cambiar categoría</TooltipContent></Tooltip>
             )}
             <Tooltip><TooltipTrigger asChild>
               <Button size="icon"
-                className="size-8 bg-muted text-foreground border hover:bg-accent"
+                variant="outline" className="size-8"
                 aria-label={v.is_enabled !== 0 ? "Deshabilitar vendedor" : "Habilitar vendedor"}
                 disabled={savingToggle === v.id}
                 onClick={() => toggleEstado(v)}>
@@ -499,44 +499,48 @@ export function BackofficeVendedoresView() {
           </CardContent>
         </Card>
       ) : (
-        <div className="reg reg--vend border-t-2 border-rule-heavy">
-          <div className="reg-row reg-head" role="presentation">
-            <span>Vendedor</span>
-            <span>Supervisor</span>
-            <span className="text-right">Prospectos</span>
-            <span className="text-right">Ventas</span>
-            <span>Estado</span>
-            <span />
+        <div className="reg reg--vend border-t-2 border-rule-heavy" role="table" aria-label="Vendedores">
+          <div role="rowgroup">
+            <div role="row" className="reg-row reg-head">
+              <span role="columnheader">Vendedor</span>
+              <span role="columnheader">Supervisor</span>
+              <span role="columnheader" className="text-right">Prospectos</span>
+              <span role="columnheader" className="text-right">Ventas</span>
+              <span role="columnheader">Estado</span>
+              <span role="columnheader" />
+            </div>
           </div>
 
+          <div role="rowgroup">
+
           {filtrados.map(v => (
-            <div key={v.id} className={`reg-row reg-entry${v.is_enabled === 0 ? " opacity-60" : ""}`}>
+            <div key={v.id} role="row" className={`reg-row reg-entry${v.is_enabled === 0 ? " opacity-60" : ""}`}>
               {/* 1 · vendedor — el eje */}
-              <span className="min-w-0">
+              <span role="cell" className="min-w-0">
                 <span className="block truncate text-[13px] font-semibold">{getNombre(v)}</span>
                 {v.email && <span className="block truncate text-[11.5px] text-muted-foreground">{v.email}</span>}
               </span>
 
               {/* 2 · supervisor */}
-              <span className="truncate text-[12.5px] text-muted-foreground">
+              <span role="cell" className="truncate text-[12.5px] text-muted-foreground">
                 {getSupervisorNombre(v) || "—"}
               </span>
 
               {/* 3 · prospectos */}
-              <span className="text-right text-[13px] font-semibold tabular-nums">{v.total_prospectos ?? "—"}</span>
+              <span role="cell" className="text-right text-[13px] font-semibold tabular-nums">{v.total_prospectos ?? "—"}</span>
 
               {/* 4 · ventas */}
-              <span className="text-right text-[13px] font-semibold tabular-nums">{v.conversiones ?? "—"}</span>
+              <span role="cell" className="text-right text-[13px] font-semibold tabular-nums">{v.conversiones ?? "—"}</span>
 
               {/* 5 · estado */}
-              <span className="min-w-0">
+              <span role="cell" className="min-w-0">
                 <Badge variant={v.is_enabled !== 0 ? "ok" : "secondary"} size="sm" className="pointer-events-none">
                   {v.is_enabled !== 0 ? "Activo" : "Inactivo"}
                 </Badge>
               </span>
 
               {/* 6 · acciones */}
-              <span className="reg-actions">
+              <span role="cell" className="reg-actions">
                 <Button size="icon" variant="ghost" className="size-7" title="Ver detalle" onClick={() => verDetalle(v)}>
                   <Eye className="size-3.5" />
                 </Button>
@@ -566,11 +570,12 @@ export function BackofficeVendedoresView() {
               </span>
             </div>
           ))}
-
-          {filtrados.length === 0 && (
-            <p className="py-12 text-center text-sm text-muted-foreground">Sin vendedores</p>
-          )}
+          </div>
         </div>
+      )}
+
+      {vista === "grilla" && filtrados.length === 0 && (
+        <p className="py-12 text-center text-sm text-muted-foreground">Sin vendedores</p>
       )}
 
       {/* Modal: Detalle vendedor */}
@@ -653,7 +658,6 @@ export function BackofficeVendedoresView() {
           <div className="flex justify-end gap-2">
             <Button variant="destructive" onClick={() => setDetalleModal(false)}>Cerrar</Button>
             <Button
-              className="bg-primary hover:bg-primary/90 text-white"
               onClick={() => { setDetalleModal(false); if (vendedorSeleccionado) abrirProspectos(vendedorSeleccionado) }}
             >
               <Users className="size-4 mr-1.5" />Ver Prospectos
@@ -708,7 +712,7 @@ export function BackofficeVendedoresView() {
           <div className="flex justify-center gap-3">
             <Button variant="destructive" onClick={() => setSupervisorModal(false)}>Cancelar</Button>
             <Button
-              className="bg-primary hover:bg-primary/90 text-white gap-1.5"
+              className="gap-1.5"
               onClick={guardarSupervisor}
               disabled={savingSupervisor}
             >
@@ -834,7 +838,7 @@ export function BackofficeVendedoresView() {
           <div className="flex justify-center gap-3">
             <Button variant="destructive" onClick={() => setCategoriaModal(false)}>Cancelar</Button>
             <Button
-              className="bg-primary hover:bg-primary/90 text-white gap-1.5"
+              className="gap-1.5"
               onClick={guardarCategoria}
               disabled={savingCategoria}
             >

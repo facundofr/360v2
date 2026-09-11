@@ -303,7 +303,7 @@ export function ChatVendedor() {
               onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
             />
             <Button size="icon" onClick={handleSend} disabled={!input.trim() || loading}
-              className="bg-primary hover:bg-primary/90 shrink-0">
+              className="shrink-0">
               <Send className="size-4" />
             </Button>
           </div>

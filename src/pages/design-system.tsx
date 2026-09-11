@@ -1,7 +1,7 @@
 import * as React from "react"
 import {
   Search, Phone, MessageCircle, History, Tag, Eye, Trash2, FileText,
-  Inbox, WifiOff, Stethoscope, Plus, Sun, Moon,
+  Inbox, WifiOff, Stethoscope, Plus, Sun, Moon, Lock, AlertTriangle, Info,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Trabado } from "@/components/common/Trabado"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
@@ -401,6 +402,46 @@ export default function DesignSystemPage() {
           </Muestra>
 
           <Muestra
+            rotulo="Etapas del embudo"
+            nota="El registro se agrupa por etapa y la activa lleva regla pesada y el violeta: la posición en la lista codifica la posición en el embudo. La etapa se deriva del estado, no es un dato aparte."
+          >
+            <div className="w-full overflow-hidden rounded-lg border border-rule">
+              <div className="stage"><h3>Sin trabajar</h3><span className="n">96</span><span className="axis" aria-hidden="true" /></div>
+              <div className="stage" data-active><h3>En contacto</h3><span className="n">58</span><span className="axis" aria-hidden="true" /></div>
+              <div className="stage"><h3>Calificado</h3><span className="n">31</span><span className="axis" aria-hidden="true" /></div>
+              <div className="stage"><h3>Descartado</h3><span className="n">209</span><span className="axis" aria-hidden="true" /></div>
+            </div>
+          </Muestra>
+
+          <Muestra
+            rotulo="Trabado en"
+            nota="Cada fila expone contra qué está esperando, derivado del estado. Permite rastrear un asiento estancado hasta su bloqueo sin abrirlo."
+          >
+            <div className="grid w-full max-w-md gap-2">
+              <span className="blocked"><Lock className="size-3.5" aria-hidden="true" /><span>Sin primer contacto</span></span>
+              <span className="blocked"><Phone className="size-3.5" aria-hidden="true" /><span>Espera devolución de llamada</span></span>
+              <Trabado traba={{ texto: "Esperando firma del afiliado", icono: "alerta" }} />
+              <Trabado traba={{ texto: "Nada pendiente", icono: "libre" }} />
+            </div>
+          </Muestra>
+
+          <Muestra
+            rotulo="Barra de selección"
+            nota="Pegajosa al pie del registro. Aparece al marcar y dice cuántos hay; se limpia sola al cambiar de página."
+          >
+            <div className="w-full overflow-hidden rounded-lg border border-rule">
+              <div className="marked">
+                <b className="text-[12.5px] font-bold tabular-nums">3 asientos marcados</b>
+                <span className="sep" aria-hidden="true" />
+                <Button variant="ghost" size="sm">Desmarcar</Button>
+                <div className="push">
+                  <Button variant="outline" size="sm">Exportar selección</Button>
+                </div>
+              </div>
+            </div>
+          </Muestra>
+
+          <Muestra
             rotulo="Cargando"
             nota="El esqueleto toma la forma de la fila: lo que se carga es un registro, no una tarjeta."
           >
@@ -476,8 +517,9 @@ export default function DesignSystemPage() {
                   <DialogDescription>Maidana, Ricardo Omar · 45 años</DialogDescription>
                 </DialogHeader>
                 <Alert variant="destructive">
+                  <AlertTriangle aria-hidden="true" />
                   <AlertDescription>
-                    <b className="block">Falta el correo del prospecto.</b>
+                    <b>Falta el correo del prospecto.</b>
                     Sin correo la cotización sólo puede salir por WhatsApp. Cargalo para habilitar el
                     envío por mail.
                   </AlertDescription>
@@ -608,19 +650,21 @@ export default function DesignSystemPage() {
           titulo="Avisos"
           bajada="Un aviso nombra el problema y la salida. El color confirma la gravedad, pero el texto tiene que funcionar sin el color."
         >
-          <Muestra rotulo="Informativo">
+          <Muestra rotulo="Informativo" nota="El ícono va como hijo directo del aviso.">
             <Alert className="max-w-lg">
+              <Info aria-hidden="true" />
               <AlertDescription>
-                <b className="block">La cotización viaja por WhatsApp.</b>
+                <b>La cotización viaja por WhatsApp.</b>
                 El PDF es público a propósito, para que el afiliado pueda abrirlo sin cuenta.
               </AlertDescription>
             </Alert>
           </Muestra>
 
-          <Muestra rotulo="Destructivo">
+          <Muestra rotulo="Destructivo" nota="La causa va en la línea guía; la salida, en tinta, se lee normal.">
             <Alert variant="destructive" className="max-w-lg">
+              <AlertTriangle aria-hidden="true" />
               <AlertDescription>
-                <b className="block">5 pólizas llevan más de 7 días esperando firma.</b>
+                <b>5 pólizas llevan más de 7 días esperando firma.</b>
                 Pasado el día 15 la cotización caduca y hay que rehacer la declaración jurada.
               </AlertDescription>
             </Alert>

@@ -350,21 +350,21 @@ export default function VendedoresAdmin() {
         return (
           <div className="flex gap-1 flex-wrap">
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirDetalle(v)}><Eye className="size-3.5" /></Button>
+              <Button size="icon" variant="outline" className="size-8" onClick={() => abrirDetalle(v)}><Eye className="size-3.5" /></Button>
             </TooltipTrigger><TooltipContent>Ver métricas</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => { setSupervisorModal({ open: true, vendedor: v }); setNuevoSupervisorId("") }}><UserCog className="size-3.5" /></Button>
+              <Button size="icon" variant="outline" className="size-8" onClick={() => { setSupervisorModal({ open: true, vendedor: v }); setNuevoSupervisorId("") }}><UserCog className="size-3.5" /></Button>
             </TooltipTrigger><TooltipContent>Asignar supervisor</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirProspectos(v)}><ArrowLeftRight className="size-3.5" /></Button>
+              <Button size="icon" variant="outline" className="size-8" onClick={() => abrirProspectos(v)}><ArrowLeftRight className="size-3.5" /></Button>
             </TooltipTrigger><TooltipContent>Ver y reasignar prospectos</TooltipContent></Tooltip>
             {categorias.length > 0 && (
               <Tooltip><TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => { setCategoriaModal({ open: true, vendedor: v }); setNuevaCategoriaId(v.categoria_id ? String(v.categoria_id) : "") }}><Tag className="size-3.5" /></Button>
+                <Button size="icon" variant="outline" className="size-8" onClick={() => { setCategoriaModal({ open: true, vendedor: v }); setNuevaCategoriaId(v.categoria_id ? String(v.categoria_id) : "") }}><Tag className="size-3.5" /></Button>
               </TooltipTrigger><TooltipContent>Cambiar categoría</TooltipContent></Tooltip>
             )}
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(v)}>
+              <Button size="icon" variant="outline" className="size-8" onClick={() => toggleEstado(v)}>
                 {v.is_enabled !== 0 ? <UserX className="size-3.5" /> : <UserCheck className="size-3.5" />}
               </Button>
             </TooltipTrigger><TooltipContent>{v.is_enabled !== 0 ? "Deshabilitar" : "Habilitar"}</TooltipContent></Tooltip>
@@ -532,7 +532,7 @@ export default function VendedoresAdmin() {
           </Select>
           <DialogFooter>
             <Button variant="outline" onClick={() => setSupervisorModal({ open: false, vendedor: null })}>Cancelar</Button>
-            <Button onClick={asignarSupervisor} disabled={!nuevoSupervisorId} className="bg-primary hover:bg-primary/90 text-primary-foreground">Asignar</Button>
+            <Button onClick={asignarSupervisor} disabled={!nuevoSupervisorId} className="text-primary-foreground">Asignar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -600,7 +600,7 @@ export default function VendedoresAdmin() {
               <Button
                 onClick={() => { setReasignarModal(true); setNuevoVendedorId("") }}
                 disabled={seleccionados.length === 0}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="text-primary-foreground"
               >
                 <ArrowLeftRight className="size-3.5 mr-1.5" />
                 Reasignar seleccionados ({seleccionados.length})
@@ -659,7 +659,7 @@ export default function VendedoresAdmin() {
             <Button
               onClick={confirmarReasignacion}
               disabled={!nuevoVendedorId || reasignando}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="text-primary-foreground"
             >
               <ArrowLeftRight className="size-3.5 mr-1.5" />
               {reasignando ? "Reasignando..." : "Confirmar reasignación"}               
@@ -688,7 +688,7 @@ export default function VendedoresAdmin() {
           </Select>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setCategoriaModal({ open: false, vendedor: null }); setNuevaCategoriaId("") }}>Cancelar</Button>
-            <Button onClick={asignarCategoria} className="bg-primary hover:bg-primary/90 text-primary-foreground">Asignar</Button>
+            <Button onClick={asignarCategoria} className="text-primary-foreground">Asignar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

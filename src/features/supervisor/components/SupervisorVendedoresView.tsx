@@ -11,8 +11,9 @@ import { API_URL } from "@/lib/config"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { Lectura, LecturaItem } from "@/components/common/Lectura"
+import { EstadoVacio } from "@/components/common/EstadoVacio"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
@@ -340,98 +341,6 @@ export function SupervisorVendedoresView() {
     return <Badge variant="secondary" className="text-xs">{v.categoria_nombre}</Badge>
   }
 
-  const columnsVendedores = useMemo<ColumnDef<Vendedor>[]>(() => [
-    {
-      accessorKey: "id",
-      header: "ID",
-      cell: ({ row }) => <span className={`font-bold text-primary text-sm ${!isEnabled(row.original) ? "opacity-60" : ""}`}>{row.original.id}</span>,
-    },
-    {
-      accessorKey: "first_name",
-      header: "Nombre",
-      cell: ({ row }) => <span className={`text-sm ${!isEnabled(row.original) ? "opacity-60" : ""}`}>{row.original.first_name}</span>,
-    },
-    {
-      accessorKey: "last_name",
-      header: "Apellido",
-      cell: ({ row }) => <span className={`text-sm ${!isEnabled(row.original) ? "opacity-60" : ""}`}>{row.original.last_name}</span>,
-    },
-    {
-      accessorKey: "email",
-      header: "Email",
-      meta: { className: "text-sm max-w-[200px] truncate" },
-      cell: ({ row }) => <span className={!isEnabled(row.original) ? "opacity-60" : ""}>{row.original.email}</span>,
-    },
-    {
-      accessorKey: "phone_number",
-      header: "Teléfono",
-      cell: ({ row }) => <span className={`text-sm ${!isEnabled(row.original) ? "opacity-60" : ""}`}>{row.original.phone_number || "—"}</span>,
-    },
-    {
-      id: "categoria",
-      header: "Categoría",
-      accessorFn: (v) => v.categoria_nombre ?? "",
-      cell: ({ row }) => <span className={!isEnabled(row.original) ? "opacity-60" : ""}>{categoriaBadge(row.original)}</span>,
-    },
-    {
-      accessorKey: "total_prospectos",
-      header: "Prospectos",
-      cell: ({ row }) => (
-        <Badge variant="secondary" className={`text-xs ${!isEnabled(row.original) ? "opacity-60" : ""}`}>{row.original.total_prospectos ?? 0}</Badge>
-      ),
-    },
-    {
-      id: "estado",
-      header: "Estado",
-      accessorFn: (v) => (isEnabled(v) ? 1 : 0),
-      cell: ({ row }) => (
-        <Badge variant={isEnabled(row.original) ? "ok" : "secondary"} className="text-xs">
-          {isEnabled(row.original) ? "Habilitado" : "Deshabilitado"}
-        </Badge>
-      ),
-    },
-    {
-      id: "acciones",
-      header: "Acciones",
-      enableSorting: false,
-      meta: { className: "text-center" },
-      cell: ({ row }) => {
-        const v = row.original
-        return (
-          <div className={`flex justify-center gap-1 ${!isEnabled(v) ? "opacity-60" : ""}`}>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" title="Ver detalle" disabled={isBtnLoad(v.id, "detalle")} onClick={() => abrirDetalle(v)}>
-              {isBtnLoad(v.id, "detalle") ? <Loader2 className="size-3.5 animate-spin" /> : <Eye className="size-3.5" />}
-            </Button>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" title="Ver prospectos" disabled={isBtnLoad(v.id, "prospectos")} onClick={() => abrirProspectos(v)}>
-              {isBtnLoad(v.id, "prospectos") ? <Loader2 className="size-3.5 animate-spin" /> : <Users className="size-3.5" />}
-            </Button>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" title="Cambiar categoría" onClick={() => abrirCategoria(v)}>
-              <Tag className="size-3.5" />
-            </Button>
-            <Button
-              size="icon"
-              className="size-8 bg-muted text-foreground border hover:bg-accent"
-              title={isEnabled(v) ? "Deshabilitar" : "Habilitar"}
-              disabled={togglingId === v.id}
-              onClick={() => handleToggle(v)}
-            >
-              {togglingId === v.id ? <Loader2 className="size-3.5 animate-spin" /> : isEnabled(v) ? <UserX className="size-3.5" /> : <UserCheck className="size-3.5" />}
-            </Button>
-            <Button
-              size="icon"
-              variant="destructive"
-              className="size-8"
-              title="Eliminar"
-              onClick={() => setConfirmEliminar(v)}
-            >
-              <Trash2 className="size-3.5" />
-            </Button>
-          </div>
-        )
-      },
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [loadingBtnId, togglingId])
 
   const columnsProspectos = useMemo<ColumnDef<ProspectoVendedor>[]>(() => [
     {
@@ -497,39 +406,22 @@ export function SupervisorVendedoresView() {
   // ─── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-4">
-      {/* Métricas del equipo (GET /supervisor/metricas) */}
+      {/* Métricas del equipo (GET /supervisor/metricas).
+          Una regla horizontal de cifras, no cuatro tarjetas centradas: el
+          ojo compara en vertical y el promedio se lee al lado del total. */}
       {metricasEquipo && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Card><CardContent className="p-3 text-center">
-            <Users className="size-4 mx-auto mb-1 text-primary" />
-            <p className="text-2xl font-bold">{metricasEquipo.totalVendedores}</p>
-            <p className="text-xs text-muted-foreground">Vendedores</p>
-          </CardContent></Card>
-          <Card><CardContent className="p-3 text-center">
-            <UserCheck className="size-4 mx-auto mb-1 text-state-ok-text" />
-            <p className="text-2xl font-bold">{metricasEquipo.vendedoresActivos}</p>
-            <p className="text-xs text-muted-foreground">Con prospectos</p>
-          </CardContent></Card>
-          <Card><CardContent className="p-3 text-center">
-            <BarChart2 className="size-4 mx-auto mb-1 text-muted-foreground" />
-            <p className="text-2xl font-bold">
-              {metricasEquipo.prospectosPorVendedor.reduce((s, v) => s + (v.total_prospectos ?? 0), 0)}
-            </p>
-            <p className="text-xs text-muted-foreground">Prospectos totales</p>
-          </CardContent></Card>
-          <Card><CardContent className="p-3 text-center">
-            <BarChart2 className="size-4 mx-auto mb-1 text-muted-foreground" />
-            <p className="text-2xl font-bold">
-              {metricasEquipo.totalVendedores > 0
-                ? Math.round(
-                    metricasEquipo.prospectosPorVendedor.reduce((s, v) => s + (v.total_prospectos ?? 0), 0) /
-                      metricasEquipo.totalVendedores
-                  )
-                : 0}
-            </p>
-            <p className="text-xs text-muted-foreground">Promedio por vendedor</p>
-          </CardContent></Card>
-        </div>
+        <Lectura>
+          <LecturaItem rotulo="Vendedores" icono={Users} valor={metricasEquipo.totalVendedores} />
+          <LecturaItem rotulo="Con prospectos" icono={UserCheck} valor={metricasEquipo.vendedoresActivos} />
+          <LecturaItem rotulo="Prospectos totales" icono={BarChart2} valor={metricasEquipo.prospectosPorVendedor.reduce((s, v) => s + (v.total_prospectos ?? 0), 0)} />
+          <LecturaItem
+            rotulo="Promedio por vendedor"
+            icono={BarChart2}
+            valor={metricasEquipo.totalVendedores > 0
+              ? Math.round(metricasEquipo.prospectosPorVendedor.reduce((s, v) => s + (v.total_prospectos ?? 0), 0) / metricasEquipo.totalVendedores)
+              : 0}
+          />
+        </Lectura>
       )}
 
       {/* Controles */}
@@ -562,79 +454,101 @@ export function SupervisorVendedoresView() {
         </p>
       </div>
 
-      {/* Tabla desktop */}
+      {/* Registro del equipo. Una sola implementación: antes había una
+          DataTable para escritorio y una grilla de tarjetas para móvil, con
+          acciones distintas en cada una. La retícula se apila sola. */}
       {loading ? (
         <Skeleton className="h-64 w-full rounded-lg" />
+      ) : vendedoresFiltrados.length === 0 ? (
+        <EstadoVacio
+          icono={Users}
+          titulo="No hay vendedores"
+          descripcion="Ninguno coincide con los filtros aplicados."
+        />
       ) : (
-        <>
-          <div className="hidden lg:block">
-            <DataTable
-              columns={columnsVendedores}
-              data={vendedoresFiltrados}
-              emptyMessage="No hay vendedores que coincidan con los filtros."
-            />
+        <div className="reg reg--sup-vend border-t-2 border-rule-heavy" role="table" aria-label="Vendedores del equipo">
+          <div role="rowgroup">
+            <div role="row" className="reg-row reg-head">
+              <span role="columnheader" className="f-num">Nº</span>
+              <span role="columnheader">Vendedor</span>
+              <span role="columnheader">Contacto</span>
+              <span role="columnheader">Categoría</span>
+              <span role="columnheader" className="text-right">Cartera</span>
+              <span role="columnheader">Estado</span>
+              <span role="columnheader" />
+            </div>
           </div>
 
-          {/* Cards mobile/tablet */}
-          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {vendedoresFiltrados.length === 0 ? (
-              <div className="col-span-2 text-center py-12 text-muted-foreground">
-                <Users className="size-10 mx-auto mb-2 opacity-40" />
-                <p>No hay vendedores</p>
+          <div role="rowgroup">
+            {vendedoresFiltrados.map(v => (
+              <div
+                key={v.id}
+                role="row"
+                className={`reg-row reg-entry${isEnabled(v) ? "" : " opacity-60"}`}
+              >
+                {/* 1 · folio — el id real, que es como se nombra al vendedor acá */}
+                <span role="cell" className="f-num">
+                  <span className="folio-n">{String(v.id).padStart(4, "0")}</span>
+                </span>
+
+                {/* 2 · vendedor — el eje */}
+                <span role="cell" className="min-w-0">
+                  <span className="block truncate text-[13px] font-semibold">
+                    {v.last_name}<span className="font-normal text-muted-foreground">, {v.first_name}</span>
+                  </span>
+                  {v.email && <span className="block truncate text-[11.5px] text-muted-foreground">{v.email}</span>}
+                </span>
+
+                {/* 3 · contacto */}
+                <span role="cell" className="truncate text-[12.5px] tabular-nums text-muted-foreground">
+                  {v.phone_number || "—"}
+                </span>
+
+                {/* 4 · categoría */}
+                <span role="cell" className="min-w-0">{categoriaBadge(v)}</span>
+
+                {/* 5 · cartera */}
+                <span role="cell" className="text-right text-[13px] font-semibold tabular-nums">
+                  {v.total_prospectos ?? 0}
+                </span>
+
+                {/* 6 · estado */}
+                <span role="cell" className="min-w-0">
+                  <Badge variant={isEnabled(v) ? "ok" : "secondary"} size="sm" className="pointer-events-none">
+                    {isEnabled(v) ? "Habilitado" : "Deshabilitado"}
+                  </Badge>
+                </span>
+
+                {/* 7 · acciones */}
+                <span role="cell" className="reg-actions">
+                  <Button size="icon" variant="ghost" className="size-7" title="Ver detalle"
+                    disabled={isBtnLoad(v.id, "detalle")} onClick={() => abrirDetalle(v)}>
+                    {isBtnLoad(v.id, "detalle") ? <Loader2 className="size-3.5 animate-spin" /> : <Eye className="size-3.5" />}
+                  </Button>
+                  <Button size="icon" variant="ghost" className="size-7" title="Ver prospectos"
+                    disabled={isBtnLoad(v.id, "prospectos")} onClick={() => abrirProspectos(v)}>
+                    {isBtnLoad(v.id, "prospectos") ? <Loader2 className="size-3.5 animate-spin" /> : <Users className="size-3.5" />}
+                  </Button>
+                  <Button size="icon" variant="ghost" className="size-7" title="Cambiar categoría"
+                    onClick={() => abrirCategoria(v)}>
+                    <Tag className="size-3.5" />
+                  </Button>
+                  <Button size="icon" variant="ghost" className="size-7"
+                    title={isEnabled(v) ? "Deshabilitar" : "Habilitar"}
+                    disabled={togglingId === v.id} onClick={() => handleToggle(v)}>
+                    {togglingId === v.id
+                      ? <Loader2 className="size-3.5 animate-spin" />
+                      : isEnabled(v) ? <UserX className="size-3.5" /> : <UserCheck className="size-3.5" />}
+                  </Button>
+                  <Button size="icon" variant="ghost" className="size-7 text-destructive hover:text-destructive"
+                    title="Eliminar vendedor" onClick={() => setConfirmEliminar(v)}>
+                    <Trash2 className="size-3.5" />
+                  </Button>
+                </span>
               </div>
-            ) : vendedoresFiltrados.map(v => (
-              <Card key={v.id} className={!isEnabled(v) ? "opacity-70" : undefined}>
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <CardTitle className="text-sm truncate">{nombreCompleto(v)}</CardTitle>
-                      <p className="text-xs text-muted-foreground">ID: {v.id}</p>
-                    </div>
-                    <Badge variant={isEnabled(v) ? "ok" : "secondary"} className="text-[10.5px] shrink-0">
-                      {isEnabled(v) ? "Activo" : "Inactivo"}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-2 space-y-1.5 text-xs">
-                  <p className="text-muted-foreground truncate">{v.email}</p>
-                  <p>{v.phone_number || "Sin teléfono"}</p>
-                  <div className="flex items-center gap-2">
-                    {categoriaBadge(v)}
-                    <Badge variant="secondary">{v.total_prospectos ?? 0} prospectos</Badge>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0 flex flex-wrap gap-1">
-                  <Button size="sm" variant="outline" className="h-7 text-xs flex-1" onClick={() => abrirDetalle(v)}>
-                    <Eye className="size-3 mr-1" />Ver
-                  </Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs flex-1" onClick={() => abrirProspectos(v)}>
-                    <Users className="size-3 mr-1" />Prospectos
-                  </Button>
-                  <Button size="sm" variant="outline" className="h-7 text-xs flex-1" onClick={() => abrirCategoria(v)}>
-                    <Tag className="size-3 mr-1" />Categ.
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant={isEnabled(v) ? "outline" : "default"}
-                    className="h-7 text-xs flex-1"
-                    disabled={togglingId === v.id}
-                    onClick={() => handleToggle(v)}
-                  >
-                    {isEnabled(v) ? <><UserX className="size-3 mr-1" />Deshab.</> : <><UserCheck className="size-3 mr-1" />Hab.</>}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    className="h-7 text-xs w-full"
-                    onClick={() => setConfirmEliminar(v)}
-                  >
-                    <Trash2 className="size-3 mr-1" />Eliminar
-                  </Button>
-                </CardFooter>
-              </Card>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       {/* ─── Modal Detalle ─────────────────────────────────────────────────── */}

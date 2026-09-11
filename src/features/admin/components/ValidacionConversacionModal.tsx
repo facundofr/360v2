@@ -55,7 +55,7 @@ function TicksEntrega({ estado }: { estado?: EstadoEntrega }) {
     case "entregado":
       return <CheckCheck className="size-3 opacity-75" />
     case "leido":
-      return <CheckCheck className="size-3 text-[#34B7F1]" />
+      return <CheckCheck className="size-3 text-state-ok-text" />
     case "fallido":
       return <X className="size-3 text-destructive" />
     default:

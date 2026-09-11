@@ -233,9 +233,9 @@ export default function PrestadoresAdmin() {
         const p = row.original
         return (
           <div className="flex gap-1">
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => abrirDetalle(p)} title="Ver detalle"><Eye className="size-3.5" /></Button>
-            <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(p)} title="Editar"><Edit2 className="size-3.5" /></Button>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => toggleEstado(p)} title={p.estado ? "Desactivar" : "Activar"}>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => abrirDetalle(p)} title="Ver detalle"><Eye className="size-3.5" /></Button>
+            <Button size="icon" className="size-8" onClick={() => abrirEditar(p)} title="Editar"><Edit2 className="size-3.5" /></Button>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => toggleEstado(p)} title={p.estado ? "Desactivar" : "Activar"}>
               {p.estado ? <ToggleRight className="size-3.5" /> : <ToggleLeft className="size-3.5" />}
             </Button>
             <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(p)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
@@ -255,7 +255,7 @@ export default function PrestadoresAdmin() {
           <Input className="pl-9" placeholder="Buscar por nombre, especialidad..." value={busqueda} onChange={e => setBusqueda(e.target.value)} />
         </div>
         <Button variant="outline" size="icon" onClick={fetchPrestadores} disabled={loading}><RefreshCw className="size-4" /></Button>
-        <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={abrirCrear}>
+        <Button size="sm" onClick={abrirCrear}>
           <Plus className="size-4 mr-1" />Nuevo
         </Button>
       </div>
@@ -349,7 +349,7 @@ export default function PrestadoresAdmin() {
           )}
           <DialogFooter>
             <Button variant="destructive" onClick={() => setDetalleModal(null)}>Cerrar</Button>
-            <Button onClick={() => { if (detalleModal) { abrirEditar(detalleModal); setDetalleModal(null) } }} className="bg-primary hover:bg-primary/90">Editar</Button>
+            <Button onClick={() => { if (detalleModal) { abrirEditar(detalleModal); setDetalleModal(null) } }}>Editar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -454,7 +454,7 @@ export default function PrestadoresAdmin() {
               </div>
               <DialogFooter>
                 <Button type="button" variant="destructive" onClick={() => setModal(false)}>Cancelar</Button>
-                <Button type="submit" disabled={guardando} className="bg-primary hover:bg-primary/90">{guardando ? "Guardando..." : "Guardar"}</Button>
+                <Button type="submit" disabled={guardando}>{guardando ? "Guardando..." : "Guardar"}</Button>
               </DialogFooter>
             </form>
           </Form>

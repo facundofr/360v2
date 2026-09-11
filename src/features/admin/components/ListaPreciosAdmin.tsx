@@ -328,7 +328,7 @@ export default function ListaPreciosAdmin() {
             <Button size="icon" variant="outline" className="size-8" title="Ver detalle" onClick={() => setDetalle(item)}>
               <Eye className="size-3.5" />
             </Button>
-            <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" title="Editar precio" onClick={() => abrirEditar(item)}>
+            <Button size="icon" className="size-8" title="Editar precio" onClick={() => abrirEditar(item)}>
               <Edit2 className="size-3.5" />
             </Button>
             <Button size="icon" variant="outline" className="size-8 text-destructive" title="Eliminar precio" onClick={() => eliminarPrecio(item)}>
@@ -535,7 +535,7 @@ export default function ListaPreciosAdmin() {
           )}
           <DialogFooter>
             <Button variant="destructive" onClick={() => setEditModal(false)}>Cancelar</Button>
-            <Button onClick={guardarEdicion} disabled={guardando} className="bg-primary hover:bg-primary/90">{guardando ? "Guardando..." : "Guardar"}</Button>
+            <Button onClick={guardarEdicion} disabled={guardando}>{guardando ? "Guardando..." : "Guardar"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -555,7 +555,7 @@ export default function ListaPreciosAdmin() {
           </div>
           <DialogFooter>
             <Button variant="destructive" onClick={() => setPorcentajeModal(null)}>Cancelar</Button>
-            <Button onClick={() => porcentajeModal && aplicarPorcentaje(porcentajeModal)} disabled={guardando || !porcentaje} className="bg-primary hover:bg-primary/90">
+            <Button onClick={() => porcentajeModal && aplicarPorcentaje(porcentajeModal)} disabled={guardando || !porcentaje}>
               {guardando ? "Aplicando..." : "Aplicar"}
             </Button>
           </DialogFooter>
@@ -575,7 +575,7 @@ export default function ListaPreciosAdmin() {
                 ref={fileInputRef}
                 type="file"
                 accept=".csv"
-                className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-primary file:text-white cursor-pointer"
+                className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-primary file:text-primary-foreground cursor-pointer"
                 onChange={e => setImportFile(e.target.files?.[0] ?? null)}
               />
             </div>
@@ -586,7 +586,7 @@ export default function ListaPreciosAdmin() {
           </div>
           <DialogFooter>
             <Button variant="destructive" onClick={() => setImportarModal(false)}>Cancelar</Button>
-            <Button onClick={importarCSV} disabled={importando || !importFile} className="bg-primary hover:bg-primary/90">{importando ? "Importando..." : "Importar"}</Button>
+            <Button onClick={importarCSV} disabled={importando || !importFile}>{importando ? "Importando..." : "Importar"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

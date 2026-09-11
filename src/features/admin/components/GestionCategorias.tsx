@@ -218,8 +218,8 @@ export default function GestionCategorias() {
         const c = row.original
         return (
           <div className="flex gap-1">
-            <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(c)} title="Editar"><Edit2 className="size-3.5" /></Button>
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => resetRoundRobin(c)} title="Reset round-robin">
+            <Button size="icon" className="size-8" onClick={() => abrirEditar(c)} title="Editar"><Edit2 className="size-3.5" /></Button>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => resetRoundRobin(c)} title="Reset round-robin">
               <RotateCcw className="size-3.5" />
             </Button>
             <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(c)} title="Eliminar">
@@ -315,7 +315,7 @@ export default function GestionCategorias() {
         <h2 className="text-sm font-semibold text-muted-foreground">Categorías de asignación</h2>
         <div className="flex gap-2">
           <Button variant="outline" size="icon" onClick={fetchData} disabled={loading}><RefreshCw className="size-4" /></Button>
-          <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={abrirCrear}>
+          <Button size="sm" onClick={abrirCrear}>
             <Plus className="size-4 mr-1" />Nueva categoría
           </Button>
         </div>
@@ -381,7 +381,7 @@ export default function GestionCategorias() {
               {error && <p className="text-sm text-destructive">{error}</p>}
               <DialogFooter>
                 <Button type="button" variant="destructive" onClick={() => setModal(false)}>Cancelar</Button>
-                <Button type="submit" disabled={guardando} className="bg-primary hover:bg-primary/90">
+                <Button type="submit" disabled={guardando}>
                   {guardando ? "Guardando..." : "Guardar"}
                 </Button>
               </DialogFooter>

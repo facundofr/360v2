@@ -2,18 +2,16 @@ import * as React from "react"
 import axios from "axios"
 import { toast } from "sonner"
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell,
-} from "recharts"
-import {
   ClipboardList, CalendarDays, CalendarRange, TrendingUp, Users, RefreshCw,
 } from "lucide-react"
 
 import { API_URL } from "@/lib/config"
 import { getAuthHeaders } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Lectura, LecturaItem } from "@/components/common/Lectura"
+import { Medidor, MedidorFila } from "@/components/common/Medidor"
+import { EstadoVacio } from "@/components/common/EstadoVacio"
+import { ETAPAS, etapaDe, trabadoEn } from "@/utils/estados"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Resumen del supervisor — GET /supervisor/resumen
@@ -44,22 +42,6 @@ const RESUMEN_VACIO: Resumen = {
   prospectosPorEstado: [],
 }
 
-/**
- * Paleta por defecto cuando el backend no manda color.
- * Arranca en el violeta de marca y sigue con los estados semánticos, así el
- * gráfico usa el mismo vocabulario cromático que el resto de la app y se
- * adapta solo al tema claro/oscuro.
- */
-const COLORES = [
-  "var(--primary)",
-  "var(--state-ok)",
-  "var(--state-warn)",
-  "var(--state-risk)",
-  "color-mix(in oklch, var(--primary) 55%, transparent)",
-  "color-mix(in oklch, var(--state-ok) 55%, transparent)",
-  "color-mix(in oklch, var(--state-warn) 55%, transparent)",
-]
-
 /** Conteo animado, igual que el `CountUp` de producción. */
 function CountUp({ end, duration = 1000 }: { end: number; duration?: number }) {
   const [count, setCount] = React.useState(0)
@@ -81,6 +63,19 @@ function CountUp({ end, duration = 1000 }: { end: number; duration?: number }) {
   }, [end, duration])
 
   return <>{count}</>
+}
+
+/** Sección reglada: encabezado con filete, sin tarjeta de por medio. */
+function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+  return (
+    <section className="min-w-0">
+      <header className="flex items-center gap-3 border-b border-rule-firm pb-1.5">
+        <h3 className="text-[10.5px] font-bold tracking-[0.09em] text-muted-foreground uppercase">{titulo}</h3>
+        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+      </header>
+      <div className="pt-3">{children}</div>
+    </section>
+  )
 }
 
 export function SupervisorResumenView() {
@@ -113,81 +108,114 @@ export function SupervisorResumenView() {
   React.useEffect(() => { fetchResumen() }, [fetchResumen])
 
   const kpis = [
-    { label: "Prospectos asignados", valor: resumen.totalAsignados, icon: ClipboardList, color: "text-primary" },
-    { label: "Nuevos hoy",           valor: resumen.nuevosDia,      icon: CalendarDays,  color: "text-muted-foreground" },
-    { label: "Nuevos esta semana",   valor: resumen.nuevosSemana,   icon: CalendarRange, color: "text-muted-foreground" },
-    { label: "Nuevos este mes",      valor: resumen.nuevosMes,      icon: TrendingUp,    color: "text-muted-foreground" },
-    { label: "Ventas",               valor: resumen.totalVentas,    icon: Users,         color: "text-state-ok-text" },
+    { label: "Prospectos asignados", valor: resumen.totalAsignados, icon: ClipboardList },
+    { label: "Nuevos hoy",           valor: resumen.nuevosDia,      icon: CalendarDays },
+    { label: "Nuevos esta semana",   valor: resumen.nuevosSemana,   icon: CalendarRange },
+    { label: "Nuevos este mes",      valor: resumen.nuevosMes,      icon: TrendingUp },
+    { label: "Ventas",               valor: resumen.totalVentas,    icon: Users },
   ]
 
-  const datosGrafico = resumen.prospectosPorEstado.map((p, i) => ({
-    ...p,
-    fill: p.color ?? COLORES[i % COLORES.length],
-  }))
+  const total = resumen.prospectosPorEstado.reduce((a, p) => a + (p.cantidad ?? 0), 0)
+
+  /**
+   * Dónde se traba el embudo.
+   *
+   * Los 26 estados se agrupan por su TRABA, que es la pregunta que el
+   * supervisor se hace: contra qué está esperando la cartera. Antes esto era
+   * un gráfico de barras con los 26 estados y las etiquetas rotadas −20°:
+   * ilegible, y además obligaba a cargar recharts para leer cinco números.
+   *
+   * La proporción es sobre el total, no sobre la barra más larga: así el
+   * ancho significa algo por sí mismo y la cifra impresa es el conteo exacto.
+   */
+  const porTraba = React.useMemo(() => {
+    const mapa = new Map<string, { cantidad: number; estados: string[] }>()
+    for (const p of resumen.prospectosPorEstado) {
+      const { texto } = trabadoEn(p.estado)
+      const acumulado = mapa.get(texto) ?? { cantidad: 0, estados: [] }
+      acumulado.cantidad += p.cantidad ?? 0
+      acumulado.estados.push(p.estado)
+      mapa.set(texto, acumulado)
+    }
+    return [...mapa.entries()]
+      .map(([texto, v]) => ({ texto, ...v }))
+      .sort((a, b) => b.cantidad - a.cantidad)
+  }, [resumen.prospectosPorEstado])
+
+  /** Por etapa del embudo. Se listan en orden de embudo, no por cantidad: el orden ES el dato. */
+  const porEtapa = React.useMemo(() => {
+    const mapa = new Map<string, number>()
+    for (const p of resumen.prospectosPorEstado) {
+      const etapa = etapaDe(p.estado)
+      mapa.set(etapa, (mapa.get(etapa) ?? 0) + (p.cantidad ?? 0))
+    }
+    return ETAPAS.map(etapa => ({ etapa, cantidad: mapa.get(etapa) ?? 0 }))
+      .filter(e => e.cantidad > 0)
+  }, [resumen.prospectosPorEstado])
+
+  const pct = (n: number) => (total > 0 ? (n / total) * 100 : 0)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-muted-foreground">Resumen de mi equipo</h2>
+        <h2 className="text-[14px] font-bold tracking-[-0.01em]">Resumen de mi equipo</h2>
         <Button variant="outline" size="sm" onClick={fetchResumen} disabled={loading}>
           <RefreshCw className={`size-3.5 mr-1 ${loading ? "animate-spin" : ""}`} />Actualizar
         </Button>
       </div>
 
-      {/* KPIs */}
-      <dl className="readout">
-        {kpis.map(k => {
-          const Icon = k.icon
-          return (
-            <div key={k.label}>
-              <dt className="flex items-center gap-1.5">
-                <Icon className={`size-3.5 shrink-0 ${k.color}`} aria-hidden="true" />
-                {k.label}
-              </dt>
-              <dd>{loading ? <Skeleton className="h-5 w-12" /> : <CountUp end={k.valor} />}</dd>
-            </div>
-          )
-        })}
-      </dl>
+      <Lectura>
+        {kpis.map(k => (
+          <LecturaItem
+            key={k.label}
+            rotulo={k.label}
+            icono={k.icon}
+            cargando={loading}
+            valor={<CountUp end={k.valor} />}
+          />
+        ))}
+      </Lectura>
 
-      {/* Distribución por estado */}
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Prospectos por estado</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <Skeleton className="h-64 w-full" />
-          ) : datosGrafico.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-10 text-center">
-              Todavía no hay prospectos para mostrar.
-            </p>
-          ) : (
-            <ChartContainer config={{ cantidad: { label: "Prospectos" } }} className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={datosGrafico} margin={{ top: 8, right: 8, bottom: 8, left: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-muted" />
-                  <XAxis
-                    dataKey="estado"
-                    tickLine={false}
-                    axisLine={false}
-                    fontSize={11}
-                    interval={0}
-                    angle={-20}
-                    textAnchor="end"
-                    height={60}
-                  />
-                  <YAxis tickLine={false} axisLine={false} fontSize={11} allowDecimals={false} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="cantidad" radius={[4, 4, 0, 0]}>
-                    {datosGrafico.map((d, i) => <Cell key={i} fill={d.fill} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          )}
-        </CardContent>
-      </Card>
+      {total === 0 ? (
+        <EstadoVacio
+          icono={ClipboardList}
+          titulo="Todavía no hay prospectos"
+          descripcion="Cuando el equipo tenga cartera asignada, acá se ve dónde está trabada."
+        />
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Seccion titulo="Dónde se traba el embudo">
+            <Medidor>
+              {porTraba.map(t => (
+                <MedidorFila
+                  key={t.texto}
+                  rotulo={t.texto}
+                  cifra={t.cantidad}
+                  porcentaje={pct(t.cantidad)}
+                  tono={t.cantidad === 0 ? "muted" : "ink"}
+                  descripcion={`${t.texto}: ${t.cantidad} prospectos (${Math.round(pct(t.cantidad))}% de la cartera). Estados: ${t.estados.join(", ")}`}
+                  title={t.estados.join(" · ")}
+                />
+              ))}
+            </Medidor>
+          </Seccion>
+
+          <Seccion titulo="Por etapa">
+            <Medidor>
+              {porEtapa.map(e => (
+                <MedidorFila
+                  key={e.etapa}
+                  rotulo={e.etapa}
+                  cifra={e.cantidad}
+                  porcentaje={pct(e.cantidad)}
+                  tono={e.etapa === "Descartado" ? "muted" : "ink"}
+                  descripcion={`${e.etapa}: ${e.cantidad} prospectos (${Math.round(pct(e.cantidad))}% de la cartera)`}
+                />
+              ))}
+            </Medidor>
+          </Seccion>
+        </div>
+      )}
     </div>
   )
 }

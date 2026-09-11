@@ -200,16 +200,16 @@ export function BackofficeSupervisoresView() {
         return (
           <div className="flex gap-1">
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Ver equipo" onClick={() => verDetalle(sup)}><Eye className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver equipo" onClick={() => verDetalle(sup)}><Eye className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Ver equipo</TooltipContent></Tooltip>
             {vendedoresSin.length > 0 && (
               <Tooltip><TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Asignar vendedor" onClick={() => abrirAsignacion(sup)}><UserPlus className="size-3.5" aria-hidden="true" /></Button>
+                <Button size="icon" variant="outline" className="size-8" aria-label="Asignar vendedor" onClick={() => abrirAsignacion(sup)}><UserPlus className="size-3.5" aria-hidden="true" /></Button>
               </TooltipTrigger><TooltipContent>Asignar vendedor</TooltipContent></Tooltip>
             )}
             <Tooltip><TooltipTrigger asChild>
               <Button size="icon"
-                className="size-8 bg-muted text-foreground border hover:bg-accent"
+                variant="outline" className="size-8"
                 aria-label={sup.is_enabled !== false ? "Deshabilitar supervisor" : "Habilitar supervisor"}
                 disabled={savingToggle === sup.id}
                 onClick={() => toggleEstado(sup)}>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react"
 import axios from "axios"
 import { toast } from "sonner"
+import { Pista } from "@/components/common/Medidor"
 import { Upload, BarChart3, History, Download, CheckCircle, AlertCircle, Users, Ban, Paperclip, Check } from "lucide-react"
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from "recharts"
 import type { ColumnDef } from "@tanstack/react-table"
@@ -103,7 +104,7 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
           accept=".csv,.xlsx,.xls"
           onChange={handleFileChange}
           disabled={cargando}
-          className="block w-full text-sm text-muted-foreground file:mr-3 file:px-3 file:py-1.5 file:rounded file:border-0 file:bg-primary file:text-white file:text-sm file:cursor-pointer cursor-pointer border rounded-lg p-1"
+          className="block w-full text-sm text-muted-foreground file:mr-3 file:px-3 file:py-1.5 file:rounded file:border-0 file:bg-primary file:text-primary-foreground file:text-sm file:cursor-pointer cursor-pointer border rounded-lg p-1"
         />
         {archivo && <p className="flex items-center gap-1 text-xs text-muted-foreground"><Paperclip className="size-3 shrink-0" aria-hidden="true" />{archivo.name}</p>}
       </div>
@@ -115,7 +116,7 @@ function CargarRefritos({ onSuccess }: { onSuccess: () => void }) {
       )}
 
       <div className="flex gap-2">
-        <Button onClick={handleCargar} disabled={!archivo || cargando} className="bg-primary hover:bg-primary/90">
+        <Button onClick={handleCargar} disabled={!archivo || cargando}>
           <Upload className="size-4 mr-1" />{cargando ? "Cargando..." : "Cargar archivo"}
         </Button>
         <Button variant="outline" onClick={descargarEjemplo}>
@@ -482,9 +483,7 @@ function ReporteVendedoresRefritos({ refreshTrigger }: { refreshTrigger: number 
         return (
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">{pct.toFixed(1)}%</p>
-            <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-              <div className={`h-full rounded-full ${pct >= 60 ? "bg-state-ok" : pct >= 20 ? "bg-state-warn" : "bg-state-risk"}`} style={{ width: `${Math.min(pct, 100)}%` }} />
-            </div>
+            <Pista porcentaje={pct} tono={pct >= 60 ? "ok" : pct >= 20 ? "warn" : "risk"} />
           </div>
         )
       },
@@ -502,9 +501,7 @@ function ReporteVendedoresRefritos({ refreshTrigger }: { refreshTrigger: number 
         return (
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">{pct.toFixed(1)}%{Math.round(pct) === 100 && <Check className="ml-1 inline size-3 align-[-1px] text-state-ok-text" aria-hidden="true" />}</p>
-            <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-              <div className={`h-full rounded-full ${pct >= 60 ? "bg-state-ok" : pct >= 20 ? "bg-state-warn" : "bg-state-risk"}`} style={{ width: `${Math.min(pct, 100)}%` }} />
-            </div>
+            <Pista porcentaje={pct} tono={pct >= 60 ? "ok" : pct >= 20 ? "warn" : "risk"} />
           </div>
         )
       },

@@ -137,7 +137,7 @@ export default function MonotributoAdmin() {
         const cat = row.original
         return (
           <div className="flex gap-1">
-            <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => abrirEditar(cat)} title="Editar"><Edit2 className="size-3.5" /></Button>
+            <Button size="icon" className="size-8" onClick={() => abrirEditar(cat)} title="Editar"><Edit2 className="size-3.5" /></Button>
             <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminar(cat)} title="Eliminar"><Trash2 className="size-3.5" /></Button>
           </div>
         )
@@ -155,7 +155,7 @@ export default function MonotributoAdmin() {
           <Percent className="size-3.5 mr-1" />Aplicar aumento
         </Button>
         <Button variant="outline" size="icon" onClick={fetchCategorias} disabled={loading}><RefreshCw className="size-4" /></Button>
-        <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={abrirCrear}>
+        <Button size="sm" onClick={abrirCrear}>
           <Plus className="size-4 mr-1" />Nueva
         </Button>
       </div>
@@ -201,7 +201,7 @@ export default function MonotributoAdmin() {
               {error && <p className="text-sm text-destructive">{error}</p>}
               <DialogFooter>
                 <Button type="button" variant="destructive" onClick={() => setFormModal(false)}>Cancelar</Button>
-                <Button type="submit" disabled={guardando} className="bg-primary hover:bg-primary/90">{guardando ? "Guardando..." : "Guardar"}</Button>
+                <Button type="submit" disabled={guardando}>{guardando ? "Guardando..." : "Guardar"}</Button>
               </DialogFooter>
             </form>
           </Form>
@@ -230,7 +230,7 @@ export default function MonotributoAdmin() {
           </div>
           <DialogFooter>
             <Button variant="destructive" onClick={() => setPorcentajeModal(false)}>Cancelar</Button>
-            <Button onClick={aplicarAumento} disabled={guardando || !porcentaje} className="bg-primary hover:bg-primary/90">{guardando ? "Aplicando..." : "Aplicar"}</Button>
+            <Button onClick={aplicarAumento} disabled={guardando || !porcentaje}>{guardando ? "Aplicando..." : "Aplicar"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -6,8 +6,8 @@ import {
   Search, Filter, RefreshCw, FileText,
   DollarSign, ChevronLeft, ChevronRight,
   History, Edit, MessageCircle, AlertCircle, CheckCircle2, XCircle, FolderOpen, Download, Trash2, Eye,
-  TrendingUp, Percent, Save, X, Upload, ArrowLeftRight, LayoutGrid, List, FilePlus,
-  UserCog, Stethoscope
+  TrendingUp, Percent, Save, X, Upload, ArrowLeftRight, List, FilePlus,
+  UserCog, Stethoscope, ClipboardList
 } from "lucide-react"
 import type { ColumnDef } from "@tanstack/react-table"
 
@@ -27,7 +27,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { getBadgeEstado } from "@/utils/estadosHelper"
+import {
+  ETAPAS_POLIZA, ETAPAS_POLIZA_CERRADAS, etapaPoliza, trabaPoliza, antiguedadDe,
+  type EtapaPoliza,
+} from "@/utils/estados"
+import { Trabado } from "@/components/common/Trabado"
+import { useTecladoRegistro } from "@/hooks/useTecladoRegistro"
 import { API_URL } from "@/lib/config"
+import { cn } from "@/lib/utils"
 import { BotonEnviarFirma } from "@/components/buttons/BotonEnviarFirma"
 import { BadgeEstadoFirma } from "@/components/badges/BadgeEstadoFirma"
 import { BotonesEliminarFirma } from "@/components/buttons/BotonesEliminarFirma"
@@ -156,7 +163,13 @@ export function BackofficePolizasView() {
   const [polizaDocsLibres, setPolizaDocsLibres] = useState<Poliza | null>(null)
   const [cargarFirmadaModal, setCargarFirmadaModal] = useState(false)
   const [polizaCargarFirmada, setPolizaCargarFirmada] = useState<Poliza | null>(null)
-  const [tipoVista, setTipoVista] = useState<"tabla" | "tarjetas">("tabla")
+  // El padrón es la vista por defecto: agrupa por etapa y expone la traba,
+  // que es como backoffice decide qué auditar. La tabla queda a un clic.
+  const [tipoVista, setTipoVista] = useState<"tabla" | "tarjetas">("tarjetas")
+
+  // Marcado del registro. Se guarda por id de póliza, no por índice: la página
+  // se repagina y se reordena, y un índice terminaría marcando a otra póliza.
+  const [marcadas, setMarcadas] = useState<Set<number>>(new Set())
 
   const getAuth = () => ({ Authorization: `Bearer ${getAuthToken()}` })
 
@@ -353,6 +366,56 @@ export function BackofficePolizasView() {
   const fmtNum = (n?: number) => Number(n ?? 0).toLocaleString("es-AR")
   const fmtPeso = (n?: number) => n ? new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", minimumFractionDigits: 0 }).format(n) : "—"
 
+  // ── El registro: bandas de etapa, traba y marcado ──────────────────────
+  // La etapa no es un dato nuevo: se deriva de `estado`, `estado_firma` y
+  // `requiere_auditoria_medica`, que ya vienen del backend. Agrupar la página
+  // en bandas es lo que deja ver de un vistazo qué le toca a backoffice.
+  const gruposPorEtapa = useMemo(() => {
+    const grupos = ETAPAS_POLIZA.map(etapa => ({ etapa, filas: [] as Poliza[] }))
+    for (const pol of polizas) {
+      const grupo = grupos.find(g => g.etapa === etapaPoliza(pol))
+      if (grupo) grupo.filas.push(pol)
+    }
+    // El folio es la posición absoluta en el padrón, no la de la página: la
+    // póliza 0021 sigue siendo la 0021 cuando se pasa a la página siguiente.
+    let folio = (pagina - 1) * perPage
+    return grupos.filter(g => g.filas.length > 0).map(g => {
+      const desde = folio
+      folio += g.filas.length
+      return { ...g, desde }
+    })
+  }, [polizas, pagina])
+
+  /** La banda activa es la primera que todavía espera trabajo de backoffice. */
+  const etapaActiva: EtapaPoliza | undefined =
+    gruposPorEtapa.find(g => !ETAPAS_POLIZA_CERRADAS.includes(g.etapa))?.etapa
+
+  // Al repaginar o refiltrar se sueltan las marcas de lo que ya no está en
+  // pantalla: exportar algo que no se ve sería una sorpresa.
+  useEffect(() => {
+    setMarcadas(prev => {
+      if (prev.size === 0) return prev
+      const vivas = new Set(polizas.map(p => p.id))
+      const next = new Set([...prev].filter(id => vivas.has(id)))
+      return next.size === prev.size ? prev : next
+    })
+  }, [polizas])
+
+  const marcarUna = (id: number, marcada: boolean) => setMarcadas(prev => {
+    const next = new Set(prev)
+    if (marcada) next.add(id)
+    else next.delete(id)
+    return next
+  })
+  const marcarTodas = (marcada: boolean) =>
+    setMarcadas(marcada ? new Set(polizas.map(p => p.id)) : new Set())
+
+  /* El turno completo se trabaja sin mouse: `/` al buscador, J/K por asiento. */
+  useTecladoRegistro(tipoVista === "tarjetas")
+
+  const polizasMarcadas = polizas.filter(p => marcadas.has(p.id))
+  const todasMarcadas = polizas.length > 0 && marcadas.size === polizas.length
+
   // ── Editar póliza ──────────────────────────────────────────────────────
   const abrirEditar = async (pol: Poliza) => {
     setPolizaSeleccionada(pol)
@@ -414,10 +477,11 @@ export function BackofficePolizasView() {
   // El backend NO expone `/backoffice/polizas/exportar` (sólo existe
   // `/export/prospectos`). Se genera el CSV en el cliente a partir de las
   // pólizas ya filtradas en memoria, así el botón funciona sin backend nuevo.
-  const exportarCSV = async () => {
+  const exportarCSV = async (subconjunto?: Poliza[]) => {
     setExportando(true)
     try {
-      if (polizas.length === 0) { toast.error("No hay pólizas para exportar"); return }
+      const filas = subconjunto ?? polizas
+      if (filas.length === 0) { toast.error("No hay pólizas para exportar"); return }
 
       const columnas: [string, (p: Poliza) => unknown][] = [
         ["ID",              p => p.id],
@@ -440,7 +504,7 @@ export function BackofficePolizasView() {
       const escape = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`
       const csv = [
         columnas.map(([h]) => escape(h)).join(","),
-        ...polizas.map(p => columnas.map(([, get]) => escape(get(p))).join(",")),
+        ...filas.map(p => columnas.map(([, get]) => escape(get(p))).join(",")),
       ].join("\r\n")
 
       const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" })
@@ -450,7 +514,7 @@ export function BackofficePolizasView() {
       a.download = `polizas_${new Date().toISOString().split("T")[0]}.csv`
       a.click()
       URL.revokeObjectURL(url)
-      toast.success(`${polizas.length} pólizas exportadas`)
+      toast.success(`${filas.length} pólizas exportadas`)
     } catch { toast.error("Error al exportar CSV") }
     finally { setExportando(false) }
   }
@@ -575,28 +639,28 @@ export function BackofficePolizasView() {
         return (
           <div className="flex gap-1 flex-wrap">
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" aria-label="Descargar PDF" onClick={() => descargarPDF(pol)}><Download className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" className="size-8" aria-label="Descargar PDF" onClick={() => descargarPDF(pol)}><Download className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Descargar PDF</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted hover:bg-muted/80 text-foreground border" aria-label="Ver documentos" onClick={() => abrirDocumentos(pol)}><FolderOpen className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver documentos" onClick={() => abrirDocumentos(pol)}><FolderOpen className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Ver documentos</TooltipContent></Tooltip>
             <BotonEnviarFirma poliza={pol} userRole="backoffice" onExito={fetchPolizas} />
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Cargar póliza firmada" onClick={() => { setPolizaCargarFirmada(pol); setCargarFirmadaModal(true) }}><Upload className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Cargar póliza firmada" onClick={() => { setPolizaCargarFirmada(pol); setCargarFirmadaModal(true) }}><Upload className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Cargar póliza firmada</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Cambiar estado" onClick={() => abrirCambioEstado(pol)}><ArrowLeftRight className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Cambiar estado" onClick={() => abrirCambioEstado(pol)}><ArrowLeftRight className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Ver historial" onClick={() => abrirHistorial(pol)}><History className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Ver historial" onClick={() => abrirHistorial(pol)}><History className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Ver historial</TooltipContent></Tooltip>
             <BotonesEliminarFirma poliza={pol} onActualizar={fetchPolizas} />
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Editar póliza" onClick={() => abrirEditar(pol)}><Edit className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Editar póliza" onClick={() => abrirEditar(pol)}><Edit className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Editar póliza</TooltipContent></Tooltip>
             {/* Subida de documentos sueltos, como en PolizasBackOffice.jsx */}
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" aria-label="Subir documentos" onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}><FilePlus className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" variant="outline" className="size-8" aria-label="Subir documentos" onClick={() => { setPolizaDocsLibres(pol); setDocsLibresModal(true) }}><FilePlus className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Subir documentos</TooltipContent></Tooltip>
             <BotonEliminarPoliza
               poliza={pol}
@@ -607,7 +671,7 @@ export function BackofficePolizasView() {
             />
             {pol.numero_contacto && (
               <Tooltip><TooltipTrigger asChild>
-                <Button size="icon" className="size-8 bg-green-500 hover:bg-green-600 text-white border-0" aria-label="Ver WhatsApp" onClick={() => abrirWhatsapp(pol)}><MessageCircle className="size-3.5" aria-hidden="true" /></Button>
+                <Button size="icon" variant="outline" className="size-8" aria-label="Ver WhatsApp" onClick={() => abrirWhatsapp(pol)}><MessageCircle className="size-3.5" aria-hidden="true" /></Button>
               </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
             )}
           </div>
@@ -627,7 +691,7 @@ export function BackofficePolizasView() {
           <p className="text-sm text-muted-foreground mt-0.5">Administración de pólizas, estados y documentación asociada</p>
         </div>
         <div className="flex items-center gap-2">
-          {/* Toggle Tabla / Tarjetas */}
+          {/* Toggle Padrón / Tabla */}
           <div className="flex rounded-md border overflow-hidden">
             <Button
               variant={tipoVista === "tabla" ? "default" : "ghost"}
@@ -643,10 +707,10 @@ export function BackofficePolizasView() {
               className="h-8 rounded-none text-xs gap-1.5 px-3 border-l"
               onClick={() => setTipoVista("tarjetas")}
             >
-              <LayoutGrid className="size-3.5" />Tarjetas
+              <ClipboardList className="size-3.5" />Padrón
             </Button>
           </div>
-          <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" onClick={exportarCSV} disabled={exportando} aria-label="Exportar CSV">
+          <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" onClick={() => exportarCSV()} disabled={exportando} aria-label="Exportar CSV">
             <Download className="size-3.5" aria-hidden="true" />
             {exportando ? "Exportando..." : "Exportar CSV"}
           </Button>
@@ -692,8 +756,14 @@ export function BackofficePolizasView() {
               <Label className="text-sm font-medium">Buscar</Label>
               <div className="relative">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" aria-hidden="true" />
-                <Input className="pl-9 h-9" placeholder="Nombre, DNI, póliza..." value={filtros.buscar}
-                  onChange={e => cambiarFiltro("buscar", e.target.value)} />
+                <Input
+                  data-buscador
+                  className="pl-9 h-9"
+                  placeholder="Nombre, DNI, póliza…   /"
+                  aria-keyshortcuts="/"
+                  value={filtros.buscar}
+                  onChange={e => cambiarFiltro("buscar", e.target.value)}
+                />
               </div>
             </div>
 
@@ -791,100 +861,181 @@ export function BackofficePolizasView() {
               <DataTable columns={columnsPolizas} data={polizas} pageSize={perPage} emptyMessage="Sin pólizas" />
             </div>
           ) : (
-            /* ── Vista registro ── */
-            <div className="reg reg--bo-pol border-t-2 border-rule-heavy">
-              <div className="reg-row reg-head" role="presentation">
-                <span>Nº póliza</span>
-                <span>Titular</span>
-                <span>Plan</span>
-                <span className="text-right">Total</span>
-                <span>Asignación</span>
-                <span>Estado</span>
-                <span className="text-right">Fecha</span>
-                <span />
+            /* ── Vista registro ────────────────────────────────────────────
+               El padrón de pólizas en auditoría. Semántica de tabla real
+               (`role="table"` / `rowgroup` / `row` / `cell`): un lector de
+               pantalla anuncia fila, columna y en qué etapa está parado.
+               Antes eran `div` sueltos y no anunciaban nada. */
+            <>
+            <div className="reg reg--bo-pol border-t-2 border-rule-heavy" role="table" aria-label="Pólizas en auditoría">
+              <div role="rowgroup">
+                <div role="row" className="reg-row reg-head">
+                  <span role="columnheader" className="f-num">
+                    <Checkbox
+                      checked={todasMarcadas ? true : marcadas.size > 0 ? "indeterminate" : false}
+                      onCheckedChange={v => marcarTodas(v === true)}
+                      aria-label="Marcar todas las pólizas de la página"
+                    />
+                    <span className="folio-n">Nº</span>
+                  </span>
+                  <span role="columnheader">Nº póliza</span>
+                  <span role="columnheader">Titular</span>
+                  <span role="columnheader">Plan</span>
+                  <span role="columnheader">Asignación</span>
+                  <span role="columnheader">Estado</span>
+                  <span role="columnheader">Trabado en</span>
+                  <span role="columnheader" className="text-right">Antigüedad</span>
+                  <span role="columnheader" />
+                </div>
               </div>
 
-              {polizas.map(pol => (
-                <div key={pol.id} className="reg-row reg-entry">
-                  <span className="min-w-0">
-                    <span className="block truncate text-[13px] font-semibold tabular-nums">
-                      {pol.numero_poliza_oficial ?? pol.numero_poliza ?? "—"}
-                    </span>
-                    {pol.numero_poliza_oficial && pol.numero_poliza && (
-                      <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">#{pol.numero_poliza}</span>
-                    )}
-                  </span>
+              {gruposPorEtapa.map(({ etapa, filas, desde }) => (
+                <div key={etapa} role="rowgroup" aria-label={`Etapa: ${etapa}`}>
+                  {/* La banda va oculta al lector: el `aria-label` del grupo ya
+                      dice la etapa, y repetirla sería leerla dos veces. */}
+                  <div className="stage" aria-hidden="true" {...(etapa === etapaActiva ? { "data-active": "" } : {})}>
+                    <h3>{etapa}</h3>
+                    <span className="n">{filas.length}</span>
+                    <span className="axis" />
+                  </div>
 
-                  <span className="min-w-0">
-                    <span className="block truncate text-[13px] font-semibold">
-                      {pol.prospecto_apellido}<span className="font-normal text-muted-foreground">, {pol.prospecto_nombre}</span>
-                    </span>
-                    {pol.prospecto_telefono && (
-                      <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">{pol.prospecto_telefono}</span>
-                    )}
-                  </span>
-
-                  <span className="min-w-0 text-muted-foreground">
-                    <span className="block truncate text-[12.5px]">{pol.plan_nombre ?? "—"}</span>
-                    {pol.anio_plan && <span className="block truncate text-[11.5px]">Año {pol.anio_plan}</span>}
-                  </span>
-
-                  <span className="text-right text-[13px] font-semibold tabular-nums">
-                    {pol.total_final != null ? fmtPeso(pol.total_final) : "—"}
-                  </span>
-
-                  <span className="min-w-0 text-muted-foreground">
-                    {pol.vendedor_nombre && <span className="block truncate text-[12.5px]">{pol.vendedor_nombre}</span>}
-                    {pol.supervisor_nombre && (
-                      <span className="flex items-center gap-1 truncate text-[11.5px] font-medium text-primary">
-                        <UserCog className="size-3 shrink-0" aria-hidden="true" />{pol.supervisor_nombre}
+                  {filas.map((pol, i) => {
+                    const edad = antiguedadDe(pol.created_at)
+                    return (
+                    <div key={pol.id} role="row" className="reg-row reg-entry" aria-selected={marcadas.has(pol.id)}>
+                      {/* 1 · folio — casilla y número de asiento */}
+                      <span role="cell" className="f-num">
+                        <Checkbox
+                          checked={marcadas.has(pol.id)}
+                          onCheckedChange={v => marcarUna(pol.id, v === true)}
+                          aria-label={`Marcar la póliza de ${pol.prospecto_apellido ?? "titular sin apellido"}`}
+                        />
+                        <span className="folio-n">{String(desde + i + 1).padStart(4, "0")}</span>
                       </span>
-                    )}
-                    {!pol.vendedor_nombre && !pol.supervisor_nombre && <span className="text-[12.5px]">—</span>}
-                  </span>
 
-                  <span className="flex min-w-0 flex-wrap items-center gap-1">
-                    {pol.estado ? getBadgeEstado(pol.estado) : <Badge variant="outline" size="sm">—</Badge>}
-                    <BadgeEstadoFirma poliza={pol} />
-                    {pol.requiere_auditoria_medica === 1 && (
-                      <Badge variant="risk" size="sm" className="pointer-events-none" title="Requiere auditoría médica por IMC elevado">
-                        <Stethoscope aria-hidden="true" />Auditoría
-                      </Badge>
-                    )}
-                  </span>
+                      {/* 2 · nº de póliza — el eje del registro */}
+                      <span role="cell" className="min-w-0">
+                        <span className="block truncate text-[13px] font-semibold tabular-nums">
+                          {pol.numero_poliza_oficial ?? pol.numero_poliza ?? "—"}
+                        </span>
+                        {pol.numero_poliza_oficial && pol.numero_poliza && (
+                          <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">#{pol.numero_poliza}</span>
+                        )}
+                      </span>
 
-                  <span className="text-right text-[12px] tabular-nums text-muted-foreground">{fmtFecha(pol.created_at)}</span>
+                      {/* 3 · titular */}
+                      <span role="cell" className="min-w-0">
+                        <span className="block truncate text-[13px] font-semibold">
+                          {pol.prospecto_apellido}<span className="font-normal text-muted-foreground">, {pol.prospecto_nombre}</span>
+                        </span>
+                        {pol.prospecto_telefono && (
+                          <span className="block truncate text-[11.5px] tabular-nums text-muted-foreground">{pol.prospecto_telefono}</span>
+                        )}
+                      </span>
 
-                  <span className="reg-actions">
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => descargarPDF(pol)}><Download className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Descargar PDF</TooltipContent></Tooltip>
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirDocumentos(pol)}><FolderOpen className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Ver documentos</TooltipContent></Tooltip>
-                    <BotonEnviarFirma poliza={pol} userRole="backoffice" onExito={fetchPolizas} />
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => { setPolizaCargarFirmada(pol); setCargarFirmadaModal(true) }}><Upload className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Cargar firmada</TooltipContent></Tooltip>
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCambioEstado(pol)}><ArrowLeftRight className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirHistorial(pol)}><History className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Ver historial</TooltipContent></Tooltip>
-                    <BotonesEliminarFirma poliza={pol} onActualizar={fetchPolizas} />
-                    <Tooltip><TooltipTrigger asChild>
-                      <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirEditar(pol)}><Edit className="size-3.5" /></Button>
-                    </TooltipTrigger><TooltipContent>Editar póliza</TooltipContent></Tooltip>
-                    {pol.numero_contacto && (
-                      <Tooltip><TooltipTrigger asChild>
-                        <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirWhatsapp(pol)}><MessageCircle className="size-3.5" /></Button>
-                      </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
-                    )}
-                  </span>
+                      {/* 4 · plan — el año y el total bajan al segundo renglón,
+                             que es donde el precio se lee junto a lo que compró */}
+                      <span role="cell" className="min-w-0 text-muted-foreground">
+                        <span className="block truncate text-[12.5px]">{pol.plan_nombre ?? "—"}</span>
+                        <span className="block truncate text-[11.5px] tabular-nums">
+                          {[
+                            pol.anio_plan ? `Año ${pol.anio_plan}` : null,
+                            pol.total_final != null ? fmtPeso(pol.total_final) : null,
+                          ].filter(Boolean).join(" · ") || "—"}
+                        </span>
+                      </span>
+
+                      {/* 5 · asignación */}
+                      <span role="cell" className="min-w-0 text-muted-foreground">
+                        {pol.vendedor_nombre && <span className="block truncate text-[12.5px]">{pol.vendedor_nombre}</span>}
+                        {pol.supervisor_nombre && (
+                          <span className="flex items-center gap-1 truncate text-[11.5px] font-medium text-primary">
+                            <UserCog className="size-3 shrink-0" aria-hidden="true" />{pol.supervisor_nombre}
+                          </span>
+                        )}
+                        {!pol.vendedor_nombre && !pol.supervisor_nombre && <span className="text-[12.5px]">—</span>}
+                      </span>
+
+                      {/* 6 · estado — los sellos */}
+                      <span role="cell" className="flex min-w-0 flex-wrap items-center gap-1">
+                        {pol.estado ? getBadgeEstado(pol.estado) : <Badge variant="outline" size="sm">—</Badge>}
+                        <BadgeEstadoFirma poliza={pol} />
+                        {pol.requiere_auditoria_medica === 1 && (
+                          <Badge variant="risk" size="sm" className="pointer-events-none" title="Requiere auditoría médica por IMC elevado">
+                            <Stethoscope aria-hidden="true" />Auditoría
+                          </Badge>
+                        )}
+                      </span>
+
+                      {/* 7 · trabado en — contra qué está esperando el alta */}
+                      <Trabado role="cell" traba={trabaPoliza(pol)} />
+
+                      {/* 8 · antigüedad — un solo eje de tiempo, con la banda
+                             fría marcada. La fecha exacta queda en el título. */}
+                      <span
+                        role="cell"
+                        className={cn(
+                          "text-right text-[12px] tabular-nums",
+                          edad.fria ? "font-semibold text-destructive" : "text-muted-foreground",
+                        )}
+                        title={`Creada el ${fmtFecha(pol.created_at)}`}
+                      >
+                        {edad.texto}
+                      </span>
+
+                      {/* 9 · acciones */}
+                      <span role="cell" className="reg-actions">
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => descargarPDF(pol)}><Download className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Descargar PDF</TooltipContent></Tooltip>
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirDocumentos(pol)}><FolderOpen className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Ver documentos</TooltipContent></Tooltip>
+                        <BotonEnviarFirma poliza={pol} userRole="backoffice" onExito={fetchPolizas} />
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => { setPolizaCargarFirmada(pol); setCargarFirmadaModal(true) }}><Upload className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Cargar firmada</TooltipContent></Tooltip>
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirCambioEstado(pol)}><ArrowLeftRight className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Cambiar estado</TooltipContent></Tooltip>
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirHistorial(pol)}><History className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Ver historial</TooltipContent></Tooltip>
+                        <BotonesEliminarFirma poliza={pol} onActualizar={fetchPolizas} />
+                        <Tooltip><TooltipTrigger asChild>
+                          <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirEditar(pol)}><Edit className="size-3.5" /></Button>
+                        </TooltipTrigger><TooltipContent>Editar póliza</TooltipContent></Tooltip>
+                        {pol.numero_contacto && (
+                          <Tooltip><TooltipTrigger asChild>
+                            <Button size="icon" variant="ghost" className="size-7" onClick={() => abrirWhatsapp(pol)}><MessageCircle className="size-3.5" /></Button>
+                          </TooltipTrigger><TooltipContent>WhatsApp</TooltipContent></Tooltip>
+                        )}
+                      </span>
+                    </div>
+                    )
+                  })}
                 </div>
               ))}
             </div>
+
+            {/* Barra de selección: aparece al marcar y dice cuántas hay. */}
+            {marcadas.size > 0 && (
+              <div className="marked" aria-live="polite">
+                <b className="text-[12.5px] font-bold tabular-nums">
+                  {marcadas.size} {marcadas.size === 1 ? "póliza marcada" : "pólizas marcadas"}
+                </b>
+                <span className="sep" aria-hidden="true" />
+                <Button variant="ghost" size="sm" onClick={() => setMarcadas(new Set())}>
+                  Desmarcar
+                </Button>
+                <div className="push">
+                  <Button variant="outline" size="sm" disabled={exportando} onClick={() => exportarCSV(polizasMarcadas)}>
+                    Exportar selección
+                  </Button>
+                </div>
+              </div>
+            )}
+            </>
           )}
         </CardContent>
 
@@ -1009,13 +1160,13 @@ export function BackofficePolizasView() {
                             </div>
                             <div className="flex gap-1 shrink-0 ml-2">
                               <Tooltip><TooltipTrigger asChild>
-                                <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent"
+                                <Button size="icon" variant="outline" className="size-8"
                                   onClick={() => previewDocumento(Number(doc.id))}>
                                   <Eye className="size-3.5" />
                                 </Button>
                               </TooltipTrigger><TooltipContent>Previsualizar</TooltipContent></Tooltip>
                               <Tooltip><TooltipTrigger asChild>
-                                <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0"
+                                <Button size="icon" className="size-8"
                                   onClick={() => descargarDocumento(Number(doc.id), String(doc.nombre_original ?? `documento_${idx + 1}`))}>
                                   <Download className="size-3.5" />
                                 </Button>

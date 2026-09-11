@@ -354,11 +354,11 @@ export default function PolizasAdmin() {
         const pol = row.original
         return (
           <div className="flex gap-1">
-            <Button size="icon" className="size-8 bg-muted hover:bg-muted/80 text-foreground border" variant="outline" onClick={() => verDocumentos(pol)}>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => verDocumentos(pol)}>
               <FolderOpen className="size-3.5" />
             </Button>
             {pol.deleted_at ? (
-              <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => restaurarPoliza(pol)} title="Restaurar póliza">
+              <Button size="icon" variant="outline" className="size-8" onClick={() => restaurarPoliza(pol)} title="Restaurar póliza">
                 <RotateCcw className="size-3.5" />
               </Button>
             ) : (
@@ -366,7 +366,7 @@ export default function PolizasAdmin() {
                 <Trash2 className="size-3.5" />
               </Button>
             )}
-            <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => descargarPDF(pol)}>
+            <Button size="icon" variant="outline" className="size-8" onClick={() => descargarPDF(pol)}>
               <DownloadCloud className="size-3.5" />
             </Button>
           </div>
@@ -564,10 +564,10 @@ export default function PolizasAdmin() {
                       <p className="text-sm font-medium truncate">{doc.nombre_original}</p>
                       <p className="text-xs text-muted-foreground">{doc.tipo_mime}</p>
                     </div>
-                    <Button size="icon" className="size-8 bg-muted text-foreground border hover:bg-accent" onClick={() => previewDocumento(doc)} title="Previsualizar">
+                    <Button size="icon" variant="outline" className="size-8" onClick={() => previewDocumento(doc)} title="Previsualizar">
                       <Eye className="size-3.5" />
                     </Button>
-                    <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" onClick={() => descargarDocumento(doc.id, doc.nombre_original)}>
+                    <Button size="icon" className="size-8" onClick={() => descargarDocumento(doc.id, doc.nombre_original)}>
                       <Download className="size-3.5" />
                     </Button>
                     <Button size="icon" variant="destructive" className="size-8" onClick={() => eliminarDocumento(doc.id)}>

@@ -179,11 +179,11 @@ export function BackofficePromocionesView() {
         return (
           <div className="flex gap-1">
             <Tooltip><TooltipTrigger asChild>
-              <Button size="icon" className="size-8 bg-primary hover:bg-primary/90 text-white border-0" aria-label="Editar promoción" onClick={() => abrirEditar(p)}><Edit className="size-3.5" aria-hidden="true" /></Button>
+              <Button size="icon" className="size-8" aria-label="Editar promoción" onClick={() => abrirEditar(p)}><Edit className="size-3.5" aria-hidden="true" /></Button>
             </TooltipTrigger><TooltipContent>Editar</TooltipContent></Tooltip>
             <Tooltip><TooltipTrigger asChild>
               <Button size="icon"
-                className="size-8 bg-muted text-foreground border hover:bg-accent"
+                variant="outline" className="size-8"
                 aria-label={p.activa ? "Desactivar promoción" : "Activar promoción"}
                 disabled={savingToggle === p.id}
                 onClick={() => toggleActiva(p)}>

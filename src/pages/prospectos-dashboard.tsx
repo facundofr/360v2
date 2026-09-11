@@ -12,8 +12,7 @@ import {
   Search, Eye, LogOut, TrendingUp, DollarSign, FileText,
   Trophy, Flame, Star, ChevronRight, MessageSquare, RefreshCw, MessageCircle,
   Phone, History, Tag, X as XIcon, Loader2,
-  CheckCircle2, AlertTriangle
-,
+  CheckCircle2, AlertTriangle,
   ClipboardList
 } from "lucide-react"
 import { ChatVendedor } from "@/features/vendedor/components/ChatVendedor"
@@ -33,6 +32,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { StatCard } from "@/components/common/StatCard"
+import { useTecladoRegistro } from "@/hooks/useTecladoRegistro"
+import { Trabado } from "@/components/common/Trabado"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
@@ -41,11 +42,13 @@ import { DataTable } from "@/components/ui/data-table"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/contexts/AuthContext"
 import { useNotifications } from "@/contexts/NotificationContext"
-import { getBadgeEstado, estadosConfig } from "@/utils/estadosHelper"
+import { getBadgeEstado } from "@/utils/estadosHelper"
+import { estadosConfig, etapaDe, trabadoEn, ETAPAS, type Etapa } from "@/utils/estados"
 import { ENDPOINTS, API_URL } from "@/lib/config"
 import ModalExportacion from "@/components/modals/ModalExportacion"
 import { getAuthToken } from "@/lib/auth"
@@ -300,7 +303,7 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
                 onClick={() => { setVistaActual(v.id as typeof vistaActual); setOpenMobile(false) }}
                 className="h-auto py-2 px-3 group"
               >
-                <div className={cn("flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors", active ? "bg-primary text-white" : "bg-muted text-muted-foreground group-hover:bg-primary/15 group-hover:text-primary")}>
+                <div className={cn("flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors", active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground group-hover:bg-primary/15 group-hover:text-primary")}>
                   <Icon className="size-3.5" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -348,7 +351,7 @@ function SidebarNavContent({ vistaActual, setVistaActual, gaming, setExportarMod
             onClick={() => setShowNuevo(true)}
             className="h-auto py-2 px-3 group"
           >
-            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
               <PlusIcon className="size-3.5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -618,6 +621,51 @@ export default function ProspectosDashboardPage() {
     () => prospectosOrdenados.slice((paginaSegura - 1) * PROSPECTOS_POR_PAGINA, paginaSegura * PROSPECTOS_POR_PAGINA),
     [prospectosOrdenados, paginaSegura]
   )
+
+
+  /* ── Selección y agrupación por etapa ─────────────────────────────────────
+     El registro se agrupa por etapa del embudo: la posición en la lista
+     codifica la posición en el embudo. La etapa ACTIVA es la primera con
+     asientos que no sea "Descartado" — es donde el vendedor tiene trabajo
+     vivo más temprano en el embudo, o sea por dónde empezar.               */
+
+  const [marcados, setMarcados] = useState<Set<number>>(() => new Set())
+
+  /* Al cambiar de página o de filtro, lo marcado deja de estar a la vista:
+     mantenerlo sería actuar sobre asientos que el usuario ya no ve. */
+  useEffect(() => { setMarcados(new Set()) }, [paginaSegura, prospectosFiltrados.length])
+
+  const marcarUno = useCallback((id: number, marcado: boolean) => {
+    setMarcados(prev => {
+      const next = new Set(prev)
+      if (marcado) next.add(id); else next.delete(id)
+      return next
+    })
+  }, [])
+
+  const marcarTodos = useCallback((marcado: boolean) => {
+    setMarcados(marcado ? new Set(prospectosPaginados.map(p => p.id)) : new Set())
+  }, [prospectosPaginados])
+
+  const todosMarcados = prospectosPaginados.length > 0 && marcados.size === prospectosPaginados.length
+  const algunoMarcado = marcados.size > 0 && !todosMarcados
+
+  const gruposPorEtapa = useMemo(() => {
+    const base = (paginaSegura - 1) * PROSPECTOS_POR_PAGINA
+    const porEtapa = new Map<Etapa, { p: Prospecto; folio: number }[]>()
+    prospectosPaginados.forEach((p, i) => {
+      const etapa = etapaDe(p.estado)
+      const lista = porEtapa.get(etapa) ?? []
+      lista.push({ p, folio: base + i + 1 })
+      porEtapa.set(etapa, lista)
+    })
+    return ETAPAS.filter(e => porEtapa.has(e)).map(e => ({ etapa: e, filas: porEtapa.get(e)! }))
+  }, [prospectosPaginados, paginaSegura])
+
+  const etapaActiva = gruposPorEtapa.find(g => g.etapa !== "Descartado")?.etapa
+
+  /* El turno completo se trabaja sin mouse: `/` al buscador, J/K por asiento. */
+  useTecladoRegistro(tipoVista === "tarjetas")
 
   const hayFiltros = Boolean(
     filtros.nombre || filtros.apellido || filtros.edad ||
@@ -955,14 +1003,14 @@ export default function ProspectosDashboardPage() {
                 <Button
                   variant={tipoVista === "tabla" ? "secondary" : "ghost"}
                   size="icon" className="h-8 w-8 rounded-none border-0"
-                  onClick={() => setTipoVista("tabla")} title="Vista lista"
+                  onClick={() => setTipoVista("tabla")} title="Ver como tabla"
                 >
                   <LayoutListIcon className="size-3.5" />
                 </Button>
                 <Button
                   variant={tipoVista === "tarjetas" ? "secondary" : "ghost"}
                   size="icon" className="h-8 w-8 rounded-none border-0 border-l"
-                  onClick={() => setTipoVista("tarjetas")} title="Vista grilla"
+                  onClick={() => setTipoVista("tarjetas")} title="Ver como padrón"
                 >
                   <LayoutGridIcon className="size-3.5" />
                 </Button>
@@ -1000,7 +1048,14 @@ export default function ProspectosDashboardPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-                  <Input className="pl-8 h-8 w-[148px]" placeholder="Nombre..." value={filtros.nombre} onChange={e => setFiltros({ ...filtros, nombre: e.target.value })} />
+                  <Input
+                    data-buscador
+                    className="h-8 w-[148px] pl-8"
+                    placeholder="Nombre…   /"
+                    aria-keyshortcuts="/"
+                    value={filtros.nombre}
+                    onChange={e => setFiltros({ ...filtros, nombre: e.target.value })}
+                  />
                 </div>
                 <Input className="h-8 w-[130px]" placeholder="Apellido..." value={filtros.apellido} onChange={e => setFiltros({ ...filtros, apellido: e.target.value })} />
                 <Input className="h-8 w-[80px]" placeholder="Edad..." type="number" min="0" value={filtros.edad} onChange={e => setFiltros({ ...filtros, edad: e.target.value })} />
@@ -1061,7 +1116,7 @@ export default function ProspectosDashboardPage() {
                    lo que se está cargando es un registro. */
                 <div className="reg border-t-2 border-rule-heavy" aria-busy="true" aria-live="polite">
                   <span className="sr-only">Cargando prospectos…</span>
-                  <RegistroHead />
+                  <RegistroHead todosMarcados={false} algunoMarcado={false} onMarcarTodos={() => {}} />
                   {Array.from({ length: 8 }).map((_, i) => (
                     <div key={i} className="reg-row">
                       <Skeleton className="h-3 w-6 justify-self-end rounded-xs" />
@@ -1082,29 +1137,67 @@ export default function ProspectosDashboardPage() {
                   {hayFiltros && <Button variant="ghost" size="sm" onClick={limpiarFiltros}>Limpiar filtros</Button>}
                 </div>
               ) : tipoVista === "tarjetas" ? (
-                <div className="reg border-t-2 border-rule-heavy">
-                  <RegistroHead />
-                  {prospectosPaginados.map((p, i) => (
-                    <ProspectoRow
-                      key={p.id}
-                      prospecto={p}
-                      folio={(paginaSegura - 1) * PROSPECTOS_POR_PAGINA + i + 1}
-                      tiposAfiliacion={tiposAfiliacion}
-                      onEstadoChange={estado => guardarCambioProspecto(p, "estado", estado)}
-                      onComentarioBlur={comentario => guardarCambioProspecto(p, "comentario", comentario)}
-                      onDniBlur={dni => {
-                        guardarCambioProspecto(p, "dni", dni)
-                        consultarGecros(p.id, dni)
-                      }}
-                      onGecros={() => consultarGecros(p.id, p.dni ?? "")}
-                      onHistorial={() => abrirHistorial(p)}
-                      onWhatsApp={() => enviarPrimerContactoWhatsApp(p)}
-                      onLlamada={() => registrarLlamada(p)}
-                      onPromociones={() => setPromoModal({ open: true, prospectoId: p.id })}
-                      onVerDetalle={() => navigate(`/vendedor/prospecto/${p.id}`)}
-                    />
-                  ))}
-                </div>
+                <>
+                  <div role="table" aria-label="Registro de prospectos" className="reg border-t-2 border-rule-heavy">
+                    <div role="rowgroup">
+                      <RegistroHead
+                        todosMarcados={todosMarcados}
+                        algunoMarcado={algunoMarcado}
+                        onMarcarTodos={marcarTodos}
+                      />
+                    </div>
+
+                    {gruposPorEtapa.map(grupo => (
+                      <div role="rowgroup" aria-label={`Etapa: ${grupo.etapa}`} key={grupo.etapa}>
+                        <BandaEtapa
+                          etapa={grupo.etapa}
+                          cantidad={grupo.filas.length}
+                          activa={grupo.etapa === etapaActiva}
+                        />
+                        {grupo.filas.map(({ p, folio }) => (
+                          <ProspectoRow
+                            key={p.id}
+                            prospecto={p}
+                            folio={folio}
+                            tiposAfiliacion={tiposAfiliacion}
+                            marcado={marcados.has(p.id)}
+                            onMarcar={m => marcarUno(p.id, m)}
+                            onEstadoChange={estado => guardarCambioProspecto(p, "estado", estado)}
+                            onComentarioBlur={comentario => guardarCambioProspecto(p, "comentario", comentario)}
+                            onDniBlur={dni => {
+                              guardarCambioProspecto(p, "dni", dni)
+                              consultarGecros(p.id, dni)
+                            }}
+                            onGecros={() => consultarGecros(p.id, p.dni ?? "")}
+                            onHistorial={() => abrirHistorial(p)}
+                            onWhatsApp={() => enviarPrimerContactoWhatsApp(p)}
+                            onLlamada={() => registrarLlamada(p)}
+                            onPromociones={() => setPromoModal({ open: true, prospectoId: p.id })}
+                            onVerDetalle={() => navigate(`/vendedor/prospecto/${p.id}`)}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Barra de selección: aparece al marcar y dice cuántos hay. */}
+                  {marcados.size > 0 && (
+                    <div className="marked" aria-live="polite">
+                      <b className="text-[12.5px] font-bold tabular-nums">
+                        {marcados.size} {marcados.size === 1 ? "asiento marcado" : "asientos marcados"}
+                      </b>
+                      <span className="sep" aria-hidden="true" />
+                      <Button variant="ghost" size="sm" onClick={() => setMarcados(new Set())}>
+                        Desmarcar
+                      </Button>
+                      <div className="push">
+                        <Button variant="outline" size="sm" onClick={() => setExportarModal(true)}>
+                          Exportar selección
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <DataTable
                   columns={columnsProspectos}
@@ -1471,12 +1564,18 @@ export default function ProspectosDashboardPage() {
    cambio de estado en el lugar, comentario editable y las cinco acciones. La
    barra de progreso se retiró porque era la misma información que el grado de
    carga del sello, derivada del mismo estado.
+
+   Semántica de tabla real (`role="row"` / `role="cell"`): un lector de
+   pantalla anuncia fila y columna. Antes eran `div` sueltos y no anunciaban
+   nada — la brecha que quedó anotada en la auditoría.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 interface ProspectoRowProps {
   prospecto: Prospecto
   folio: number
   tiposAfiliacion: TipoAfiliacion[]
+  marcado: boolean
+  onMarcar: (marcado: boolean) => void
   onEstadoChange: (estado: string) => void
   onComentarioBlur: (comentario: string) => void
   onDniBlur: (dni: string) => void
@@ -1489,7 +1588,8 @@ interface ProspectoRowProps {
 }
 
 function ProspectoRow({
-  prospecto: p, folio, tiposAfiliacion, onEstadoChange, onComentarioBlur, onDniBlur,
+  prospecto: p, folio, tiposAfiliacion, marcado, onMarcar,
+  onEstadoChange, onComentarioBlur, onDniBlur,
   onGecros, onHistorial, onWhatsApp, onLlamada, onPromociones, onVerDetalle
 }: ProspectoRowProps) {
   const [comentario, setComentario] = useState(p.comentario ?? "")
@@ -1499,18 +1599,34 @@ function ProspectoRow({
   React.useEffect(() => { startTransition(() => setDni(p.dni ?? "")) }, [p.dni])
 
   const afiliacion = tiposAfiliacion.find(t => t.id === Number(p.tipo_afiliacion_id))
+  const traba = trabadoEn(p.estado)
+
+  /* Segundo renglón del nombre: edad, localidad, origen y afiliación. Son
+     contexto de la persona, no columnas por las que uno barre. */
+  const contexto = [
+    p.edad ? `${p.edad} años` : null,
+    p.localidad || null,
+    p.origen || null,
+    afiliacion?.etiqueta || null,
+    p.gecros_estado ? `Gecros: ${p.gecros_estado}` : null,
+  ].filter(Boolean).join(" · ")
 
   return (
-    <div className="reg-row reg-entry">
-      {/* 1 · folio */}
-      <span className="text-right text-[11px] tabular-nums text-muted-foreground">
-        {String(folio).padStart(4, "0")}
+    <div role="row" className="reg-row reg-entry" aria-selected={marcado}>
+      {/* 1 · folio — casilla y número de asiento */}
+      <span role="cell" className="f-num">
+        <Checkbox
+          checked={marcado}
+          onCheckedChange={v => onMarcar(v === true)}
+          aria-label={`Marcar el asiento de ${p.apellido}`}
+        />
+        <span className="folio-n">{String(folio).padStart(4, "0")}</span>
       </span>
 
       {/* 2 · documento — el eje */}
-      <span>
+      <span role="cell">
         <Input
-          className="h-7 w-full border-0 bg-transparent px-0 text-[13.5px] font-semibold tabular-nums shadow-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-primary rounded-none"
+          className="h-7 w-full rounded-none border-0 bg-transparent px-0 text-[13.5px] font-semibold tabular-nums shadow-none focus-visible:border-b focus-visible:border-primary focus-visible:ring-0"
           placeholder="Sin DNI"
           aria-label={`Documento de ${p.apellido}`}
           value={dni}
@@ -1520,7 +1636,7 @@ function ProspectoRow({
       </span>
 
       {/* 3 · apellido y nombre */}
-      <span className="min-w-0">
+      <span role="cell" className="min-w-0">
         <span className="flex items-center gap-1.5">
           <span className="truncate text-[13px]">
             <b className="font-semibold">{p.apellido}</b>
@@ -1531,16 +1647,12 @@ function ProspectoRow({
           )}
         </span>
         <span className="block truncate text-[11.5px] text-muted-foreground">
-          {p.edad} años{afiliacion ? ` · ${afiliacion.etiqueta}` : ""}
-          {p.gecros_estado ? ` · Gecros: ${p.gecros_estado}` : ""}
+          {contexto || "—"}
         </span>
       </span>
 
-      {/* 4 · localidad */}
-      <span className="truncate text-[12.5px] text-muted-foreground">{p.localidad || "—"}</span>
-
-      {/* 5 · contacto — teléfono y correo, ambos enmascarados */}
-      <span className="min-w-0 text-muted-foreground">
+      {/* 4 · contacto — teléfono y correo, ambos enmascarados */}
+      <span role="cell" className="min-w-0 text-muted-foreground">
         <span className="block truncate text-[12.5px] tabular-nums">
           {p.numero_contacto ? maskPhone(p.numero_contacto) : "—"}
         </span>
@@ -1549,8 +1661,8 @@ function ProspectoRow({
         )}
       </span>
 
-      {/* 6 · estado — el sello, y el disparador que lo cambia */}
-      <span className="min-w-0">
+      {/* 5 · estado — el sello, y el disparador que lo cambia */}
+      <span role="cell" className="min-w-0">
         <Select value={p.estado} onValueChange={onEstadoChange}>
           <SelectTrigger
             size="sm"
@@ -1565,10 +1677,13 @@ function ProspectoRow({
         </Select>
       </span>
 
+      {/* 6 · trabado en — contra qué está esperando, derivado del estado */}
+      <Trabado role="cell" traba={traba} />
+
       {/* 7 · comentario */}
-      <span>
+      <span role="cell">
         <Input
-          className="h-7 w-full border-0 bg-transparent px-0 text-[12px] shadow-none focus-visible:ring-0 focus-visible:border-b focus-visible:border-primary rounded-none placeholder:text-muted-foreground/60"
+          className="h-7 w-full rounded-none border-0 bg-transparent px-0 text-[12px] shadow-none placeholder:text-muted-foreground/60 focus-visible:border-b focus-visible:border-primary focus-visible:ring-0"
           placeholder="Sin comentario"
           aria-label={`Comentario sobre ${p.apellido}`}
           value={comentario}
@@ -1578,7 +1693,7 @@ function ProspectoRow({
       </span>
 
       {/* 8 · acciones */}
-      <span className="reg-actions">
+      <span role="cell" className="reg-actions">
         <Button size="icon" variant="ghost" className="size-7" title="Historial" onClick={onHistorial}>
           <History className="size-3.5" />
         </Button>
@@ -1605,17 +1720,45 @@ function ProspectoRow({
 }
 
 /** Encabezado de columnas del registro. Consume la misma retícula que la fila. */
-function RegistroHead() {
+function RegistroHead({
+  todosMarcados, algunoMarcado, onMarcarTodos,
+}: {
+  todosMarcados: boolean
+  algunoMarcado: boolean
+  onMarcarTodos: (marcado: boolean) => void
+}) {
   return (
-    <div className="reg-row reg-head" role="presentation">
-      <span className="text-right">Nº</span>
-      <span>Documento</span>
-      <span>Apellido y nombre</span>
-      <span>Localidad</span>
-      <span>Contacto</span>
-      <span>Estado</span>
-      <span>Comentario</span>
-      <span />
+    <div role="row" className="reg-row reg-head">
+      <span role="columnheader" className="f-num">
+        <Checkbox
+          checked={todosMarcados ? true : algunoMarcado ? "indeterminate" : false}
+          onCheckedChange={v => onMarcarTodos(v === true)}
+          aria-label="Marcar todos los asientos de la página"
+        />
+        <span className="folio-n">Nº</span>
+      </span>
+      <span role="columnheader">Documento</span>
+      <span role="columnheader">Apellido y nombre</span>
+      <span role="columnheader">Contacto</span>
+      <span role="columnheader">Estado</span>
+      <span role="columnheader">Trabado en</span>
+      <span role="columnheader">Comentario</span>
+      <span role="columnheader" />
+    </div>
+  )
+}
+
+/** Banda de etapa del embudo. La activa lleva regla pesada y el violeta. */
+function BandaEtapa({ etapa, cantidad, activa }: {
+  etapa: string
+  cantidad: number
+  activa: boolean
+}) {
+  return (
+    <div className="stage" {...(activa ? { "data-active": "" } : {})}>
+      <h3>{etapa}</h3>
+      <span className="n">{cantidad}</span>
+      <span className="axis" aria-hidden="true" />
     </div>
   )
 }

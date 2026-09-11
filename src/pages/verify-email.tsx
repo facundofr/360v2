@@ -2,9 +2,11 @@ import { useState } from "react"
 import { useParams, useSearchParams, Link } from "react-router-dom"
 import axios from "axios"
 import { toast } from "sonner"
-import { MailCheck, MailWarning, Loader2 } from "lucide-react"
+import { AlertTriangle, MailCheck, MailWarning, Loader2 } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Compuerta } from "@/features/auth/components/Compuerta"
 import { ENDPOINTS } from "@/lib/config"
 
 export default function VerifyEmailPage() {
@@ -35,74 +37,60 @@ export default function VerifyEmailPage() {
     }
   }
 
+  /* El ícono es el estado. Antes el estado se decía pintando toda la cabecera
+     de la tarjeta —verde, rojo o violeta— con el texto en blanco encima: un
+     plano de color del tamaño de un tercio de la pantalla para comunicar una
+     palabra, y además gastaba el violeta, que en esta app significa ACCIÓN. */
+  const Icono = status === "loading" ? Loader2 : status === "error" ? MailWarning : MailCheck
+
   return (
-    <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl">
-        <CardHeader
-          className={`rounded-t-lg text-center space-y-2 p-6 text-white ${
-            status === "success"
-              ? "bg-state-ok"
-              : status === "error"
-                ? "bg-destructive"
-                : "bg-primary"
-          }`}
-        >
-          <div className="flex justify-center">
-            {status === "loading" ? (
-              <Loader2 className="size-10 animate-spin opacity-90" />
-            ) : status === "success" ? (
-              <MailCheck className="size-10 opacity-90" />
-            ) : status === "error" ? (
-              <MailWarning className="size-10 opacity-90" />
-            ) : (
-              <MailCheck className="size-10 opacity-90" />
-            )}
-          </div>
-          <CardTitle className="text-xl">Verificación de Email</CardTitle>
-          <CardDescription className="text-white/80">
-            {status === "idle" && "Haz clic en el botón para verificar tu cuenta"}
-            {status === "loading" && "Verificando..."}
-            {status === "success" && message}
-            {status === "error" && message}
-          </CardDescription>
-        </CardHeader>
+    <Compuerta
+      icono={Icono}
+      titulo="Verificación de email"
+      descripcion={
+        status === "idle" ? "Confirmá tu cuenta para poder entrar."
+          : status === "loading" ? "Verificando…"
+          : status === "success" ? message
+          : undefined
+      }
+    >
+      {status === "idle" && (
+        <Button className="h-9 w-full" onClick={handleVerification}>
+          Verificar cuenta
+        </Button>
+      )}
 
-        <CardContent className="p-6 space-y-4 text-center">
-          {status === "idle" && (
-            <Button onClick={handleVerification} className="w-full">
-              Verificar cuenta
-            </Button>
-          )}
+      {status === "loading" && (
+        <p className="flex items-center justify-center gap-2 text-[12.5px] text-muted-foreground">
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+          Procesando verificación…
+        </p>
+      )}
 
-          {status === "loading" && (
-            <div className="flex items-center justify-center gap-2 text-muted-foreground">
-              <Loader2 className="size-4 animate-spin" />
-              <span>Procesando verificación...</span>
-            </div>
-          )}
+      {status === "success" && (
+        <p className="text-center text-[12px] text-muted-foreground">
+          Te llevamos al{" "}
+          <Link to="/login" className="font-semibold text-primary hover:underline">
+            inicio de sesión
+          </Link>{" "}
+          en unos segundos.
+        </p>
+      )}
 
-          {status === "success" && (
-            <p className="text-sm text-muted-foreground">
-              Serás redirigido automáticamente al{" "}
-              <Link to="/login" className="text-primary hover:underline">
-                inicio de sesión
-              </Link>
-              .
-            </p>
-          )}
-
-          {status === "error" && (
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                El enlace puede haber expirado. Solicita uno nuevo desde la pantalla de registro.
-              </p>
-              <Button variant="outline" asChild>
-                <Link to="/signup">Ir al registro</Link>
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+      {status === "error" && (
+        <div className="grid gap-3.5">
+          <Alert variant="destructive">
+            <AlertTriangle aria-hidden="true" />
+            <AlertDescription>
+              <b>{message}</b>
+              Los enlaces de verificación caducan. Pedí uno nuevo desde el registro.
+            </AlertDescription>
+          </Alert>
+          <Button variant="outline" className="h-9 w-full" asChild>
+            <Link to="/signup">Ir al registro</Link>
+          </Button>
+        </div>
+      )}
+    </Compuerta>
   )
 }
